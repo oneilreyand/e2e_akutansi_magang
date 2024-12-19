@@ -1,0 +1,23 @@
+{
+  "name": "e2e_akutansi_magang",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oneilreyand/e2e_akutansi_magang.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oneilreyand/e2e_akutansi_magang/issues"
+  },
+  "homepage": "https://github.com/oneilreyand/e2e_akutansi_magang#readme",
+  "devDependencies": {
+    "cypress": "^13.17.0"
+  }
+}
