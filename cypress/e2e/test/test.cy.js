@@ -74,6 +74,6 @@ describe('test website cashflow assist id bagian login', () => {
         cy.get('#password')
             .should('be.visible')
             .and('have.value', 'password')
-
     })
+    // test case 7
 })
