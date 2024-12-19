@@ -64,7 +64,7 @@ describe('test website cashflow assist id bagian login', () => {
             .should('be.visible')
     })
     // test case 6
-    it.only('memeriksa icon mata pada password', () => {
+    it('memeriksa icon mata pada password', () => {
         cy.get('#password')
             .should('be.visible')
             .type('password')
@@ -76,4 +76,7 @@ describe('test website cashflow assist id bagian login', () => {
             .and('have.value', 'password')
     })
     // test case 7
+    it.only('mencoba menekan checkbox remember me', () => {
+        cy.get('.PrivateSwitchBase-input').click()
+    })
 })
