@@ -5,12 +5,14 @@ describe('Login Page', () => {
         cy.get('#email')
             .should('be.visible')
             .clear()
+        cy.log('Kolom email dikosongkan')
         cy.get('[data-testid="login-submit-button"]')
             .click()
+        cy.log('Tombol login diklik')
         cy.get('#email-helper-text')
             .should("be.visible")
             .contains('Email adalah bidang yang diperlukan')
-            
+        cy.log('Peringatan bahwa email diperlukan tampil dengan benar')    
     })
 
     it('Jika password kosong muncul warning bahwa password required', () => {
@@ -18,77 +20,126 @@ describe('Login Page', () => {
         cy.get('#password')
             .should('be.visible')
             .clear()
+        cy.log('Kolom password dikosongkan')
         cy.get('[data-testid="login-submit-button"]')
             .click()
+        cy.log('Tombol login diklik')
         cy.get('#password-helper-text')
             .should("be.visible")
-            .contains('Password adalah bidang yang diperlukan')       
+            .contains('Password adalah bidang yang diperlukan')
+        cy.log('Peringatan bahwa password diperlukan tampil dengan benar')       
     })
 
-    it('Jika alamat email di isi dengan domain yang tidak valid maka muncul warning alamat email harus valid', () => {
+    it('Jika alamat email diisi dengan domain yang tidak valid maka muncul warning alamat email harus valid', () => {
         cy.visit('https://cashflow.assist.id/')
         cy.get('#email')
             .should('be.visible')
             .type('invalidEmail')
+        cy.log('Email dengan domain tidak valid diisi')
         cy.get('[data-testid="login-submit-button"]')
             .click()
+        cy.log('Tombol login diklik')
         cy.get('#email-helper-text')
             .should("be.visible")
             .contains('Email harus menjadi email yang valid')
-            
+        cy.log('Peringatan bahwa email harus valid tampil dengan benar')    
     })
 
-    it('Jika alamat email di isi dengan domain yang valid namun password kosong maka muncul warning bahwa password required', () => {
+    it('Jika alamat email diisi dengan domain yang valid namun password kosong maka muncul warning bahwa password required', () => {
         cy.visit('https://cashflow.assist.id/')
         cy.get('#email')
             .should('be.visible')
             .type('validEmail@gmail.com')
+        cy.log('Email dengan domain valid diisi')
         cy.get('[data-testid="login-submit-button"]')
             .click()
+        cy.log('Tombol login diklik')
         cy.get('#password-helper-text')
             .should("be.visible")
-            .contains('Password adalah bidang yang diperlukan')    
-            
+            .contains('Password adalah bidang yang diperlukan')  
+        cy.log('Peringatan bahwa password diperlukan tampil dengan benar')  
     })
 
-    it('Jika alamat email di isi dengan domain yang valid dan password di isi namun password salah maka muncul warning bahwa password required', () => {
+    it('Jika alamat email diisi dengan domain yang valid dan password diisi namun password salah maka muncul warning bahwa password salah', () => {
         cy.visit('https://cashflow.assist.id/')
         cy.get('#email')
             .should('be.visible')
             .type('validEmail@gmail.com')
+        cy.log('Email dengan domain valid diisi')
         cy.get('#password')
             .should('be.visible')
             .type('1234567890')
+        cy.log('Password salah diisi')
         cy.get('[data-testid="login-submit-button"]')
             .click()
+        cy.log('Tombol login diklik')
         cy.get('.MuiAlert-message')
-            .should('be.visible')  
-            
+            .should('be.visible')
+            .contains('Login failed: Error: Account not found')  
+        cy.log('Peringatan bahwa password salah tampil dengan benar')  
     })
 
-    // it.only('Fitur sembunyikan password bila di tekan iconnya akan berubah ', () => {
-    //     cy.visit('https://cashflow.assist.id/')
-    //     cy.get('.MuiInputAdornment-root > .MuiButtonBase-root')
-    //         .click()
-    //     cy.get('.MuiInputAdornment-root > .MuiButtonBase-root')
-    //         .should('have.attr', 'data-testid', 'VisibilityIcon')
-
-            
+    it('Fitur sembunyikan password bila ditekan iconnya akan berubah', () => {
+        cy.visit('https://cashflow.assist.id/')
+        cy.get('[data-testid="VisibilityIcon"]')
+            .should('be.visible') 
+            .click() 
+        cy.log('Ikon visibility ditekan')
+        cy.get('[data-testid="VisibilityOffIcon"]')
+            .invoke('attr', 'data-testid')
+            .should('equal', 'VisibilityOffIcon') 
+        cy.log('Ikon berubah menjadi VisibilityOffIcon') 
     })
 
-    it.only('Fitur sembunyikan password bila ditekan, akan memperlihatkan password', () => {
-        cy.visit('https://cashflow.assist.id/');
-        cy.get('#password')
-            .click();
+    it('Fitur sembunyikan password bila ditekan, akan memperlihatkan text password', () => {
+        cy.visit('https://cashflow.assist.id/')
         cy.get('#password')
             .type('asal123')
-            .should('have.attr', 'type', 'password');
+            .should('have.attr', 'type', 'password')
+        cy.log('Password diketik dan masih dalam mode tersembunyi')
         cy.wait(1000)
-        cy.get('.MuiInputAdornment-root > .MuiButtonBase-root')
-            .click();
+        cy.get('[data-testid="VisibilityIcon"]')
+            .click()
+        cy.log('Ikon visibility ditekan')
         cy.get('#password')
-            .should('have.attr', 'type', 'text');
+            .should('have.attr', 'type', 'text')
+        cy.log('Password terlihat setelah ikon ditekan')
     })
     
-            
-  })
+    it('Fitur checkbox "ingat saya" bila di tekan akan menjadi true', () => {
+        cy.visit('https://cashflow.assist.id/')
+        cy.get('.PrivateSwitchBase-input[name="rememberMe"]')
+            .should('not.be.checked')
+        cy.log('Kondisi awal belum ditekan maka uncheck')
+        cy.get('.PrivateSwitchBase-input[name="rememberMe"]')
+            .click()
+            .should('be.checked')
+        cy.log('Checkbox ditekan maka akan check')
+
+    })
+
+    it('Fitur lupa password', () => {
+        cy.visit('https://cashflow.assist.id/')
+        cy.get('[data-testid="login-forgot-password"]')
+            .should('exist')
+            .click()
+        cy.log('ketika lupa password di klik')
+        cy.url().should('include', '/auth/forgot-password')
+        cy.log('mendeteksi perpindahan halaman')
+
+
+    })
+
+    it('Fitur daftar baru', () => {
+        cy.visit('https://cashflow.assist.id/')
+        cy.get('[data-testid="login-register-button"]')
+            .should('exist')
+            .click()
+        cy.log('ketika "daftar sekarang" di klik')
+        cy.url().should('include', '/auth/register')
+        cy.log('mendeteksi perpindahan halaman')
+
+
+    })
+
+})
