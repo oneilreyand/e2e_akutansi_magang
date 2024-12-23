@@ -23,3 +23,12 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// menambahkan customc command untuk login
+Cypress.Commands.add("loginWithUI", (email, password) => {
+    cy.visit("https://cashflow.assist.id/auth/login")
+    cy.get('#email').should('be.visible').type(email)
+    cy.get('#password').should('be.visible').type(password)
+    cy.get('[data-testid="login-submit-button"]').should('be.visible').click()
+    cy.url().should("include", "https://cashflow.assist.id/admin/dashboard")
+})

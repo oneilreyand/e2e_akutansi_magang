@@ -325,3 +325,18 @@ describe("test website cashflow bagian register", () => {
 
     })
 })
+
+describe("Pengujian Login aplikasi", () => {
+    beforeEach(() => {
+        cy.loginWithUI("damaresya947@gmail.com", "12345678")
+    })
+
+    context("Challenge 2", () => {
+        it.only("Case 36 : mencoba membuat command baru", () => {
+            cy.url().should("eq", "https://cashflow.assist.id/admin/dashboard")
+        })
+    })
+
+})
+
+
