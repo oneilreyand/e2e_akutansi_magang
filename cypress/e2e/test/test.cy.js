@@ -297,7 +297,22 @@ describe("test website cashflow bagian register", () => {
             cy.get('[data-testid="register-submit-button"]').should("be.visible").click()
             cy.log("form tidak menerima huruf dan simbol, jika dipaksakan maka akan otomatis berubah menjadi angka 0")
         })
-        it("Case 32 : Mengisi email dengan simbol", () => {
+        it("Case 32 : mengisi nomor handphone dengan berawal 08", () => {
+            cy.get('#name').type("damares ya@12132")
+            cy.get('#company_name').type("perusahaan saya")
+            cy.get('#phone').type("081234567890")
+            cy.get('#email').type("test@email.com")
+            cy.get('[data-testid="register-submit-button"]').should("be.visible").click()
+            cy.log("form mengabaikan simbol +")
+        })
+        it.only("Case 33 : mengisi nomor handphone dengan berawal +62", () => {
+            cy.get('#name').type("damares ya@12132")
+            cy.get('#company_name').type("perusahaan saya")
+            cy.get('#phone').type("+6281234567890")
+            cy.get('#email').type("test@email.com")
+            cy.get('[data-testid="register-submit-button"]').should("be.visible").click()
+        })
+        it("Case 34 : Mengisi email dengan simbol", () => {
             cy.get('#name').type("damares ya@12132")
             cy.get('#company_name').type("perusahaan saya")
             cy.get('#phone').type("0asqdkweed@#$")
@@ -306,7 +321,7 @@ describe("test website cashflow bagian register", () => {
             cy.log("form tidak menerima huruf dan simbol, jika dipaksakan maka akan otomatis berubah menjadi angka 0")
             cy.get('#email-helper-text').should("be.visible").contains("Email adalah bidang yang diperlukan")
         })
-        it.only("Case 33 : menguji link ke halaman login", () => {
+        it("Case 35 : menguji link ke halaman login", () => {
             cy.get('[data-testid="register-login-button"]').click()
             cy.url("eq", "https://cashflow.assist.id/auth/login")
         })
