@@ -1,6 +1,5 @@
 describe('AutoLogin', () => {
     beforeEach(() => {
-        
         cy.restoreLocalStorage(); // Memulihkan localStorage sebelum setiap test
         cy.loginWithAPI('rayhanrayandra.work.id@gmail.com', 'Nz6}+#8y');
     });
