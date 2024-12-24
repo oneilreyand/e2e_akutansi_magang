@@ -30,26 +30,24 @@ describe('Metode request untuk Login Request', () => {
       // Tunggu permintaan yang sudah di-intercept
       cy.wait('@loginRequest').then((interception) => {
         // Verifikasi bahwa payload request sesuai dengan struktur API yang diharapkan
-        // expect(interception.request.body).to.deep.equal({
-        //   email: 'rayhanrayandra.work.id@gmail.com',
-        //   password: 'Nz6}+#8y',
-        //   rememberMe: false
-        // })
+        expect(interception.request.body).to.deep.equal({
+          email: 'rayhanrayandra.work.id@gmail.com',
+          password: 'Nz6}+#8y',
+          rememberMe: false
+        })
   
-        // // Verifikasi bahwa status code respons adalah 401 seperti yang di-intercept
-        // expect(interception.response.statusCode).to.equal(500)
+        // Verifikasi bahwa status code respons adalah 401 seperti yang di-intercept
+        expect(interception.response.statusCode).to.equal(500)
         
-        // // Verifikasi bahwa pesan error sesuai dengan respons yang dikembalikan
-        // expect(interception.response.body).to.have.property('message', 'GABISA MASUK LU NYET')
+        // Verifikasi bahwa pesan error sesuai dengan respons yang dikembalikan
+        expect(interception.response.body).to.have.property('message', 'GABISA MASUK LU NYET')
       })
   
       // Verifikasi bahwa tombol login tetap terlihat dan pesan error sesuai ditampilkan
-    //   cy.get('.MuiAlert-message') // Selector tombol login yang sama
-    //     .should('be.visible')
-    //     .and('contain', 'GABISA MASUK LU NYET')
+      cy.get('.MuiAlert-message') // Selector tombol login yang sama
+        .should('be.visible')
+        .and('contain', 'Login failed')
   
-    //   // Verifikasi bahwa user tetap berada di halaman login
-    //   cy.url().should('eq', 'https://cashflow.assist.id/')
     })
   })
   
