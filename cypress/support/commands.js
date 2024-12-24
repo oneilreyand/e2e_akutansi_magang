@@ -27,14 +27,24 @@ Cypress.Commands.add('loginWithUI', (email, password) => {
 
 Cypress.Commands.add('loginWithAPI', (email, password) => {
     cy.request({
-        method: 'POST',
-        url: 'https://cashflow.assist.id/api/login',
-        body: { email, password }
-            })
-        .then((response) => {
-    cy.setCookie('authToken', response.body.token);
+      method: 'POST',
+      url: 'https://api-cashflow.assist.id/api/login',
+      body: {
+        email: email,
+        password: password
+      }
+    }).then((response) => {
+      // Menyimpan token ke cookie
+      cy.setCookie('authToken', response.body.token);
+      
+      // Menyimpan token ke localStorage
+      window.localStorage.setItem('token', response.body.token);
+      
+      // Menyimpan token ke sessionStorage
+      window.sessionStorage.setItem('token', response.body.token);
     });
-});
+  });
+
 //
 //
 // -- This is a child command --
