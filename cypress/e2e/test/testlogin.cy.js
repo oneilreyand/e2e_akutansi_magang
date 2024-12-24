@@ -37,7 +37,7 @@ describe('test website cashflow assist id bagian login', () => {
     })
 
     context("Menguji fungsi fungsi yang ada pada halaman login", () => {
-        it("Case 3 : Mengirimkan form login tanpa mengisi apapun", () => {
+        it("Case 3 : Mengirimkan form login tanpa mengisi apapun ", () => {
             cy.get('[data-testid="login-submit-button"]').should("be.visible").click()
             cy.get('#email-helper-text').should("be.visible").contains("Email adalah bidang yang diperlukan")
             cy.get('#password-helper-text').should("be.visible").contains("Password adalah bidang yang diperlukan")
