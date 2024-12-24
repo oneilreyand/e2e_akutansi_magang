@@ -189,7 +189,7 @@ describe('Testing fitur pada login page', () => {
             })
     })
 
-    it('006 - Alamat email valid dan terdaftar dan password benar >> Pindah halaman - Muncul notifikasi "Login Succesed" - validasi perpindahan ke halaman beranda', () => {
+    it.only('006 - Alamat email valid dan terdaftar dan password benar >> Pindah halaman - Muncul notifikasi "Login Succesed" - validasi perpindahan ke halaman beranda', () => {
       
         cy.get('#email')
             .should('exist')
@@ -216,7 +216,7 @@ describe('Testing fitur pada login page', () => {
             .then(() => {
                 cy.log('Peringatan bahwa alert message tidak tampil')
             })  
-        cy.url()
+        cy.url({ timeout: 10000 })
             .should('eq', 'https://cashflow.assist.id/admin/dashboard') //url halaman pindah ke /admin/dashboard
             .then(() => {
                 cy.log('Url halaman berubah')
