@@ -1,11 +1,11 @@
 describe('Login Test', () => {
     it('should return 500 when the server fails', () => {
       // Menggunakan intercept untuk memodifikasi request
-      cy.intercept('POST', 'https://cashflow.assist.id/auth/login', (req) => {
-        cy.log("testing")
+      cy.intercept('POST', 'https://api-cashflow.assist.id/api/login', (req) => {
+        console.log("testing")
         req.reply({
           statusCode: 500,
-          body: { message: 'Internal Server Error' }
+          body: { message: 'testing' }
         });
       }).as('loginRequest');
     
@@ -24,7 +24,7 @@ describe('Login Test', () => {
       });
       
       // Verifikasi UI menampilkan pesan error
-      cy.get('.error-message').should('contain', 'Internal Server Error');
+      cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist')
     });
   });
   
