@@ -1,11 +1,7 @@
 describe('AutoLogin', () => {
     beforeEach(() => {
-        cy.restoreLocalStorage(); // Memulihkan localStorage sebelum setiap test
+        cy.getCookie('authToken'); // Memulihkan cookie sebelum setiap test
         cy.loginWithAPI('rayhanrayandra.work.id@gmail.com', 'Nz6}+#8y');
-    });
-
-    afterEach(() => {
-        cy.saveLocalStorage(); // Menyimpan localStorage setelah setiap test
     });
 
     it('Mengakses halaman dashboard', () => {
