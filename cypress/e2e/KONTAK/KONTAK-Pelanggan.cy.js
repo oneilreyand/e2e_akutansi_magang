@@ -331,7 +331,7 @@ describe("Check Komponen Pelanggan", () => {
     });
   });
 
-  context.only('Pengujiann Pagination',() => {
+  context('Pengujiann Pagination',() => {
     it('Label', () => {
       cy.get('h5').should('exist');
     });
