@@ -289,10 +289,20 @@ describe("Pengujian website cashflow bagian kontak", () => {
             cy.get('.css-1j4fk1t').click()
             cy.get('.MuiIconButton-colorError').click()
             cy.get('#fk_grup').contains("vendor obat asist 2, vendor obat asist 3")
+            // menekan tombol silang untuk membatalkan 
             cy.get('#fk_grup').click()
             cy.get('.css-1j4fk1t').click()
-            // cy.get('#\:r14\:').type("grup pengujian 1")
-            cy.log("error karena jika ingin menambahkan grup baru, input grup baru hanya tersedia secara manual. ketika dielemen diseleksi menggunakan cypress maka elemen tidak ditemukan")
+            cy.get('[placeholder="Masukkan data baru"]').type("grup pengujian 1")
+            cy.get('.MuiIconButton-colorError').click()
+            cy.get('#fk_grup').contains("vendor obat asist 2, vendor obat asist 3")
+            // menekan tombol ceklis untuk menambahkan grup baru
+            cy.get('#fk_grup').click()
+            cy.get('.css-1j4fk1t').click()
+            cy.get('[placeholder="Masukkan data baru"]').type("grup pengujian 1")
+            cy.get('.css-euo9o1').click()
+            cy.get('#fk_grup').click()
+            cy.get('[data-value="5c0a4d62-c67f-11ef-b637-9183449c0953"]').should("exist").contains("grup pengujian 1")
+            cy.log("tes sudah diuji dan berhasil untuk menambahkan grup")
         });
 
         it("Case 11 : Menguji tabel informasi umum pada kolom nama lengkap", () => {
@@ -321,22 +331,24 @@ describe("Pengujian website cashflow bagian kontak", () => {
             cy.get('#tipe_identitas').click()
             cy.get('[data-value="sim"]').click()
             cy.get('#tipe_identitas').contains("SIM")
-            // cy.get('#tipe_identitas').click()
-            // cy.get('#\:rb\: > .Mui-selected').click()
-            // cy.get('#tipe_identitas').contains("Paspor")
+            cy.get('#tipe_identitas').click()
+            cy.get('[data-value="paspor"]').click()
+            cy.get('#tipe_identitas').contains("Paspor")
             cy.get('#no_identitas').type("mengisi dengan huruf dan simbol @#$@$")
             cy.get('#no_identitas').type("0293748323912")
-            cy.log("Pada bagian tipe identitas, pemilihan paspor tidak dapat dilakukan melalui cypress tetapi dapat dilakukan secara manual. identitas tidak bisa diisi dengan huruf dan simbol, hanya menerima angka")
+            cy.log("tes sudah dijalankan dan sukses")
         });
 
         it("Case 13 : Menguji pengisian alamat email pada tabel informasi umum", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts/create")
-            // cy.get('#email\.0').should("be.visible").type("testing@email.com")
+            // cy.get('#email.0').should("be.visible").type("testing@email.com")
+            cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com');
             // tambah email
             cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should("be.visible").click()
             // cy.get('#email\.1').should("be.visible").type("testing2@email.com")
             cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > :nth-child(2) > .MuiButtonBase-root').click()
-            cy.log("input email tidak bisa di seleksi melalui cypress (element not found), namun masih bisa diuji secara manual")
+            // //cy.log("input email tidak bisa di seleksi melalui cypress (element not found), namun masih bisa diuji secara manual")
+            cy.log("Email sudah bisa diseleksi menggunakan cypress dengan cara mengambil dari placeholder")
         });
 
         it("Case 14 : Menguji pengisian nama perusahaan pada tabel informasi akun", () => {
@@ -376,54 +388,75 @@ describe("Pengujian website cashflow bagian kontak", () => {
 
         it("Case 18 : Menguji alamat penagihan pada tabel informasi umum", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts/create")
-            cy.wait(10000)
+            cy.wait(1000)
             // cy.get('#\:rk\:').should("be.visible").type("testing 234")
+            // cy.get(".MuiInputBase-input MuiOutlinedInput-input css-9jacqo").should("be.visible").type("testing 124")
+            cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
             cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
             cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
-            cy.log("alamat penagihan tidak dapat diseleksi menggunakan cypress, namun masih bisa diisi secara manual. checkbox pada alamat penagihan dapat ditekan")
+            // //cy.log("alamat penagihan tidak dapat diseleksi menggunakan cypress, namun masih bisa diisi secara manual. checkbox pada alamat penagihan dapat ditekan")
+            cy.log("elemen berhasil diseleksi menggunakan cypress dan berfungsi dengan baik")
         });
 
         it("Case 19 : Menguji alamat pengiriman pada tabel informasi umum", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts/create")
             // cy.get('#\:rk\:').should("be.visible").type("testing 234")
-            cy.wait(10000)
+            cy.get('[placeholder="Masukkan alamat pengiriman"]').should("be.visible").type("testing area 51")
+            cy.wait(1000)
             cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
             cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
-            cy.log("alamat pengriman tidak dapat diseleksi menggunakan cypress, namun masih bisa diisi secara manual. checkbox pada alamat pengiriman dapat ditekan")
+            // //cy.log("alamat pengriman tidak dapat diseleksi menggunakan cypress, namun masih bisa diisi secara manual. checkbox pada alamat pengiriman dapat ditekan")
+            cy.log("elemen berhasil diseleksi menggunakan cypress dan berfungsi dengan baik")
         });
 
         it("Case 20 : menguji tabel informasi bank yang ada pada halaman create contact", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts/create")
             // cy.get('#data_bank\[0\]\.bank_name').should("be.visible").type("bca")
+            cy.get('[placeholder="Masukkan nama bank"]').should("exist").type("Bank indonesia")
             // cy.get('#data_bank\[0\]\.bank_branch').should("be.visible").type("Pekanbaru")
+            cy.get('[placeholder="Masukkan cabang"]').should("be.visible").type("Banyak")
             // cy.get('#data_bank\[0\]\.holder_name').should("be.visible").type("saya sendiri")
+            cy.get('[placeholder="Masukkan nama pemegang akun"]').should("be.visible").type("Luthfi")
             // cy.get('#data_bank\[0\]\.rek_no').should("be.visible").type("1234567")
+            cy.get('[placeholder="Masukkan nomor rekening"]').should("be.visible").type("menguji dengan huruf dan simbol !@!#")
+            cy.get('[placeholder="Masukkan nomor rekening"]').should("be.visible").type("12345678910291")
             cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should("be.visible").click()
             // cy.get('#data_bank\[1\]\.bank_name').should("be.visible").type("bca")
+            cy.get('[name="data_bank[1].bank_name"]').should("exist").type("Bank indo")
             // cy.get('#data_bank\[1\]\.bank_branch').should("be.visible").type("Pekanbaru")
+            cy.get('[name="data_bank[1].bank_branch"]').should("be.visible").type("10")
             // cy.get('#data_bank\[1\]\.holder_name').should("be.visible").type("saya sendiri")
+            cy.get('[name="data_bank[1].holder_name"]').should("be.visible").type("luthfi kedua")
             // cy.get('#data_bank\[1\]\.rek_no').should("be.visible").type("1234567")
-            cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > :nth-child(2) > .MuiButtonBase-root').should("be.visible").click()
-            cy.log("form pada bagian informasi bank tidak dapat di seleksi oleh cypress dengan alasan tidak bisa ditemukan, namun masih bisa diisi secara manual")
+            cy.get('[name="data_bank[1].rek_no"]').should("be.visible").type("129832328736")
+            cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should("be.visible").click()
+            cy.get('[name="data_bank[2].bank_name"]').should("be.visible").type("bank ketiga")
+            cy.get('.css-1ov46kg > :nth-child(3) > .MuiButtonBase-root').click()
+            // cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > :nth-child(2) > .MuiButtonBase-root').should("be.visible").click()
+            // //cy.log("form pada bagian informasi bank tidak dapat di seleksi oleh cypress dengan alasan tidak bisa ditemukan, namun masih bisa diisi secara manual")
+            cy.log("elemen berhasil diuji dan berfungsi dengan baik")
         });
 
         it("Case 21 : menguji tabel informasi pemetaan akun", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts/create")
-            cy.get('[data-testid="input-fk_akun_piutang"] > .MuiInputBase-root').should("be.visible").click()
-            // cy.get('[data-value="1-10007-test akun reyand"]').click()
-            // cy.get('[data-testid="input-fk_akun_piutang"] > .MuiInputBase-root').contains("1-10007-test akun reyand")
-            cy.get('#piutang_max').should("be.visible").click().type("menguji dengan huruf dan simbol !%^&")
-            cy.get('#piutang_max').should("be.visible").click().type("210823787812")
+            // cy.get('#fk_akun_piutang').should("be.visible").click()
+            // cy.get('#fk_akun_piutang').should("be.visible").click().and("have.attr", "placeholder", "Masukkan piutang maksimum").type("menguji dengan huruf dan simbol")
+            cy.get('#fk_akun_piutang').click();
+            cy.contains('li', '1-10007 - test akun reyand').click();
+            // dengan angka
+            cy.get('#piutang_max').type("9128329834")
+            // checkbox
             cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
             cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
-            cy.log("akun piutang tidak dapat dipilih melalui cypress, namun masih bisa dipilih secara manual")
+            // cy.log("")
         });
 
         it("Case 22 : menguji syarat pembayaran utama yang ada pada table informasi pemetaan akun", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts/create")
-            cy.get('#syarat_pembayaran').should("be.visible").click()
-            // cy.get('#\:ru\: > [tabindex="-1"]').should("exist").click()
-            cy.log("input syarat pembayaran utama tidak bisa di seleksi menggunakan cypress, namun masih bisa dengan cara manual")
+            cy.get('#syarat_pembayaran').click()
+            cy.contains('li', 'termin sebulan 15').click();
+            cy.get('#syarat_pembayaran').should("be.visible").contains("termin sebulan 15")
+            cy.log()
         });
 
         it("Case 23 : menguji tombol batal yang ada pada form", () => {
@@ -440,27 +473,198 @@ describe("Pengujian website cashflow bagian kontak", () => {
             cy.log("form tidak dapat dikirim jika ada data yang dibutuhkan kosong, dan akan muncul pop up peringatan")
         });
 
-        it("Case 25 : menguji form secara keseluruhan dengan data yang dikirimkan valid dengan tipe kontak karyawan", () => {
+        it("Case 25 : mengirimkan form secara keseluruhan dengan data yang dikirimkan valid dengan tipe kontak karyawan", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts/create")
+        cy.get('#tipe_kontak').should("be.visible").click()
+        cy.get('[data-value="karyawan"]').click()
+        cy.get('#fk_grup').should("be.visible").click()
+        cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
+        cy.get('[data-value="453ec850-a658-11ef-8f78-25bebcc62186"]').click()
+        cy.get('#fk_grup').contains("vendor obat asist 2, vendor obat asist 3")
+        cy.get('.css-1j4fk1t').click()
+        cy.get('#sapaan').should("be.visible").click()
+        cy.get('[data-value="bapak"]').click()
+        cy.get('#sapaan').contains("Bapak")
+        cy.get('#nama').should("be.visible").type("percobaan ")
+        cy.get('#tipe_identitas').should("be.visible").click()
+        cy.get('[data-value="ktp"]').click()
+        cy.get('#tipe_identitas').contains("KTP")
+        cy.get('#no_identitas').type("1212121212121212")
+        cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com');
+        cy.get('#nama_perusahaan').should("be.visible").type("perusahaan testing 1")
+        cy.get('#no_hp').type("1234567890")
+        cy.get('#no_telp').type("1234567890")
+        cy.get('#no_fax').type("1234567890")
+        cy.get('#no_npwp').type("12345678901234567890")
+        cy.get('#nitku').click().type("12345678")
+        cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
+        cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+        cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+        cy.get('[placeholder="Masukkan alamat pengiriman"]').should("be.visible").type("testing area 51")
+        cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+        cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+        cy.get('[placeholder="Masukkan nama bank"]').should("exist").type("Bank indonesia")
+        cy.get('[placeholder="Masukkan cabang"]').should("be.visible").type("Banyak")
+        cy.get('[placeholder="Masukkan nama pemegang akun"]').should("be.visible").type("Luthfi")
+        cy.get('[placeholder="Masukkan nomor rekening"]').should("be.visible").type("12345678910291")
+        cy.get('#fk_akun_piutang').click();
+        cy.contains('li', '1-10007 - test akun reyand').click();
+        cy.get('#piutang_max').type("9128329834")
+        cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+        cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+        cy.get('#syarat_pembayaran').click()
+        cy.contains('li', 'termin sebulan 15').click();
+        cy.get('#syarat_pembayaran').should("be.visible").contains("termin sebulan 15")
+        cy.get('.MuiButton-contained').should("be.visible").click()
+        cy.get('.MuiSnackbar-root > .MuiPaper-root').should("not.exist")
+        cy.log("belum bisa mengirimkan data dan memberikan respon request body invalid")
+    });
+
+    it("Case 26 : mengirimkan form secara keseluruhan dengan data yang dikirimkan valid dengan tipe kontak karyawan", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts/create")
+        cy.get('#tipe_kontak').should("be.visible").click()
+        cy.get('[data-value="karyawan"]').click()
+        cy.get('#fk_grup').should("be.visible").click()
+        cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
+        cy.get('[data-value="453ec850-a658-11ef-8f78-25bebcc62186"]').click()
+        cy.get('#fk_grup').contains("vendor obat asist 2, vendor obat asist 3")
+        cy.get('.css-1j4fk1t').click()
+        cy.get('#sapaan').should("be.visible").click()
+        cy.get('[data-value="bapak"]').click()
+        cy.get('#sapaan').contains("Bapak")
+        cy.get('#nama').should("be.visible").type("percobaan ")
+        cy.get('#tipe_identitas').should("be.visible").click()
+        cy.get('[data-value="ktp"]').click()
+        cy.get('#tipe_identitas').contains("KTP")
+        cy.get('#no_identitas').type("1212121212121212")
+        cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com');
+        cy.get('#nama_perusahaan').should("be.visible").type("perusahaan testing 1")
+        cy.get('#no_hp').type("1234567890")
+        cy.get('#no_telp').type("1234567890")
+        cy.get('#no_fax').type("1234567890")
+        cy.get('#no_npwp').type("12345678901234567890")
+        cy.get('#nitku').click().type("12345678")
+        cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
+        cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+        cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+        cy.get('[placeholder="Masukkan alamat pengiriman"]').should("be.visible").type("testing area 51")
+        cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+        cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+        cy.get('[placeholder="Masukkan nama bank"]').should("exist").type("Bank indonesia")
+        cy.get('[placeholder="Masukkan cabang"]').should("be.visible").type("Banyak")
+        cy.get('[placeholder="Masukkan nama pemegang akun"]').should("be.visible").type("Luthfi")
+        cy.get('[placeholder="Masukkan nomor rekening"]').should("be.visible").type("12345678910291")
+        cy.get('#fk_akun_piutang').click();
+        cy.contains('li', '1-10007 - test akun reyand').click();
+        cy.get('#piutang_max').type("9128329834")
+        cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+        cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+        cy.get('#syarat_pembayaran').click()
+        cy.contains('li', 'termin sebulan 15').click();
+        cy.get('#syarat_pembayaran').should("be.visible").contains("termin sebulan 15")
+        cy.get('.MuiButton-contained').should("be.visible").click()
+        cy.get('.MuiSnackbar-root > .MuiPaper-root').should("not.exist")
+        cy.log("belum bisa mengirimkan data dan memberikan respon request body invalid")
+    });
+
+
+    it("Case 27 : mengirimkan form dengan dengan tidak mengisi bagian pemilihan grup yang dimana grup bersifat required", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts/create")
-            // cy.get('#tipe_kontak').should("be.visible").click()
-            // cy.get('[data-value="karyawan"]').click()
-            // // cy.get('#fk_grup').should("be.visible").click()
-            // // cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
-            // cy.get('#sapaan').should("be.visible").click()
-            // cy.get('[data-value="bapak"]').click()
-            // cy.get('#tipe_identitas').should("be.visible").click()
-            // cy.get('[data-value="ktp"]').click()
-            // cy.get('#nama_perusahaan').should("be.visible").type("perusahaan testing 1")
-            // cy.get('#no_hp').type("1234567890")
-            // cy.get('#no_telp').type("1234567890")
-            // cy.get('#no_fax').type("1234567890")
-            // cy.get('#no_npwp').type("12345678901234567890")
-            // cy.get('#nitku').click().type("12345678")
-            // cy.get('.MuiSnackbar-root > .MuiPaper-root').should("exist")
-            cy.log("tidak semua data yang bisa diisi melalui cypress maka ada beberapa input yang harus ditambahkan secara manual, ketika semua data valid sudah terisi dan dikirimkan maka akan muncul peringatan request body is invalid")
+            cy.get('#tipe_kontak').should("be.visible").click()
+            cy.get('[data-value="karyawan"]').click()
+            // cy.get('#fk_grup').should("be.visible").click()
+            // cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
+            // cy.get('[data-value="453ec850-a658-11ef-8f78-25bebcc62186"]').click()
+            // cy.get('#fk_grup').contains("vendor obat asist 2, vendor obat asist 3")
+            // cy.get('.css-1j4fk1t').click()
+            cy.get('#sapaan').should("be.visible").click()
+            cy.get('[data-value="bapak"]').click()
+            cy.get('#sapaan').contains("Bapak")
+            cy.get('#nama').should("be.visible").type("percobaan ")
+            cy.get('#tipe_identitas').should("be.visible").click()
+            cy.get('[data-value="ktp"]').click()
+            cy.get('#tipe_identitas').contains("KTP")
+            cy.get('#no_identitas').type("1212121212121212")
+            cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com');
+            cy.get('#nama_perusahaan').should("be.visible").type("perusahaan testing 1")
+            cy.get('#no_hp').type("1234567890")
+            cy.get('#no_telp').type("1234567890")
+            cy.get('#no_fax').type("1234567890")
+            cy.get('#no_npwp').type("12345678901234567890")
+            cy.get('#nitku').click().type("12345678")
+            cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
+            cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+            cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+            cy.get('[placeholder="Masukkan alamat pengiriman"]').should("be.visible").type("testing area 51")
+            cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+            cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+            cy.get('[placeholder="Masukkan nama bank"]').should("exist").type("Bank indonesia")
+            cy.get('[placeholder="Masukkan cabang"]').should("be.visible").type("Banyak")
+            cy.get('[placeholder="Masukkan nama pemegang akun"]').should("be.visible").type("Luthfi")
+            cy.get('[placeholder="Masukkan nomor rekening"]').should("be.visible").type("12345678910291")
+            cy.get('#fk_akun_piutang').click();
+            cy.contains('li', '1-10007 - test akun reyand').click();
+            cy.get('#piutang_max').type("9128329834")
+            cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+            cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+            cy.get('#syarat_pembayaran').click()
+            cy.contains('li', 'termin sebulan 15').click();
+            cy.get('#syarat_pembayaran').should("be.visible").contains("termin sebulan 15")
+            cy.get('.MuiButton-contained').should("be.visible").click()
+            cy.get('.MuiFormControl-fullWidth > .MuiTypography-root').should("be.visible").contains("Grup Kontak harus diisi")
+            cy.get('.MuiSnackbar-root > .MuiPaper-root').should("exist").contains("Mohon periksa kembali form")
+            cy.log("form tidak akan bisa dikirimkan karena grup merupakan data yang wajib diisi")
         });
 
-        it("Case 26 : memeriksa ui yang tersedia pada navigasi lainnya", () => {
+        it("Case 28 : mengirimkan form dengan dengan tidak mengisi bagian nama lengkap yang dimana nama lengkap tidak required", () => {
+            cy.visit("https://cashflow.assist.id/admin/contacts/create")
+            cy.get('#tipe_kontak').should("be.visible").click()
+            cy.get('[data-value="karyawan"]').click()
+            cy.get('#fk_grup').should("be.visible").click()
+            cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
+            cy.get('[data-value="453ec850-a658-11ef-8f78-25bebcc62186"]').click()
+            cy.get('#fk_grup').contains("vendor obat asist 2, vendor obat asist 3")
+            cy.get('.css-1j4fk1t').click()
+            cy.get('#sapaan').should("be.visible").click()
+            cy.get('[data-value="bapak"]').click()
+            cy.get('#sapaan').contains("Bapak")
+            cy.get('#nama').should("be.visible")  //.type("percobaan ")
+            cy.get('#tipe_identitas').should("be.visible").click()
+            cy.get('[data-value="ktp"]').click()
+            cy.get('#tipe_identitas').contains("KTP")
+            cy.get('#no_identitas').type("1212121212121212")
+            cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com');
+            cy.get('#nama_perusahaan').should("be.visible").type("perusahaan testing 1")
+            cy.get('#no_hp').type("1234567890")
+            cy.get('#no_telp').type("1234567890")
+            cy.get('#no_fax').type("1234567890")
+            cy.get('#no_npwp').type("12345678901234567890")
+            cy.get('#nitku').click().type("12345678")
+            cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
+            cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+            cy.get('[data-testid="input-isDetailAlamatPenagihan"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+            cy.get('[placeholder="Masukkan alamat pengiriman"]').should("be.visible").type("testing area 51")
+            cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+            cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+            cy.get('[placeholder="Masukkan nama bank"]').should("exist").type("Bank indonesia")
+            cy.get('[placeholder="Masukkan cabang"]').should("be.visible").type("Banyak")
+            cy.get('[placeholder="Masukkan nama pemegang akun"]').should("be.visible").type("Luthfi")
+            cy.get('[placeholder="Masukkan nomor rekening"]').should("be.visible").type("12345678910291")
+            cy.get('#fk_akun_piutang').click();
+            cy.contains('li', '1-10007 - test akun reyand').click();
+            cy.get('#piutang_max').type("9128329834")
+            cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("exist").click()
+            cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should("be.checked")
+            cy.get('#syarat_pembayaran').click()
+            cy.contains('li', 'termin sebulan 15').click();
+            cy.get('#syarat_pembayaran').should("be.visible").contains("termin sebulan 15")
+            cy.get('.MuiButton-contained').should("be.visible").click()
+            cy.get('#nama-helper-text').should("be.visible").contains("Nama Lengkap harus diisi")
+            cy.get('.MuiSnackbar-root > .MuiPaper-root').should("exist").contains("Mohon periksa kembali form")
+            cy.log("form tidak akan bisa dikirimkan karena grup merupakan data yang wajib diisi")
+        });
+
+        it(" : memeriksa ui yang tersedia pada navigasi lainnya", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts")
             cy.get('#simple-tab-3').should("be.visible").click()
 
@@ -491,7 +695,7 @@ describe("Pengujian website cashflow bagian kontak", () => {
 
         });
 
-        it("Case 27 : menguji form secara keseluruhan dengan data yang dikirimkan valid dengan tipe kontak lainnta", () => {
+        it(" : menguji form secara keseluruhan dengan data yang dikirimkan valid dengan tipe kontak lainnta", () => {
             cy.visit("https://cashflow.assist.id/admin/contacts/create")
             // cy.get('#tipe_kontak').should("be.visible").click()
             // cy.get('[data-value="karyawan"]').click()

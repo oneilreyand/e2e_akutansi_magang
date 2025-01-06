@@ -1,0 +1,3 @@
+1. ketika detail kontak pada jejak navigasi ditekan maka akan mengarah ke halaman kontak tidak ke detail kontak (kesalahan)
+2. form menerima ktp sim dan paspor dapat diisi dengan 2 digit (kesalahan)
+3. tidak bisa mencari kontak yang ada menggunakan id

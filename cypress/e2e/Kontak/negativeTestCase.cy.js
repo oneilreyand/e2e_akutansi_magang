@@ -3,7 +3,7 @@ describe("Negative test case dalam cashflow assist id bagian kontak", () => {
         cy.loginWithUI("damaresya947@gmail.com", "12345678")
     });
 
-    it.only("Case 1 : Mengirim form tambah kontak tanpa mengisi data apapun", () => {
+    it("Case 1 : Mengirim form tambah kontak tanpa mengisi data apapun", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts/create")
         cy.get('.MuiButton-contained').should("be.visible").click()
 
@@ -249,9 +249,89 @@ describe("Negative test case dalam cashflow assist id bagian kontak", () => {
 
         cy.log("Piutang tidak menerima angka yang tidak valid")
 
+        cy.get('.MuiSnackbar-root > .MuiPaper-root').should("exist")
+    });
+
+    it("Case 7 : mencoba mengisi KTP dengan nilai yang salah", () => {
+        // todo mengisi nomor ktp dengan 2 digit
+
+        cy.visit("https://cashflow.assist.id/admin/contacts/create")
+        cy.get('#fk_grup').should("be.visible").click()
+        cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
+        cy.get('.css-1j4fk1t').click()
+        cy.get('#nama').should("be.visible").type("hello world ")
+        cy.get('#tipe_identitas').should("be.visible").click()
+        cy.get('[data-value="ktp"]').click()
+        cy.get('#tipe_identitas').contains("KTP")
+        cy.get('#no_identitas').type("01")
+        cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com')
+        cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
+        cy.get('.MuiButton-contained').should("be.visible").click()
+
+        // ! form menerima nomor ktp meski hanya 2 digit
+
+        // todo mengisi nomor ktp dengan > 16 digit
+        cy.visit("https://cashflow.assist.id/admin/contacts/create")
+        // cy.get('.css-aidtzz > .MuiButtonBase-root').should("exist").click()
+        cy.get('#fk_grup').should("be.visible").click()
+        cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
+        cy.get('.css-1j4fk1t').click()
+        cy.get('#nama').should("be.visible").type("lutihe ")
+        cy.get('#tipe_identitas').should("be.visible").click()
+        cy.get('[data-value="ktp"]').click()
+        cy.get('#tipe_identitas').contains("KTP")
+        cy.get('#no_identitas').type("01348238748273498238029834")
+        cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com')
+        cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
+        cy.get('.MuiButton-contained').should("be.visible").click()
+
+        // ! form menerima nomor ktp meski lebih dari 16 digit
+
+        cy.log("form seharusnya tidak menerima nomor ktp apabila lebih atau kurang dari 16 digit")
+
+    });
+
+    it("Case 8 : mencoba mengisi nilai sim", () => {
+        // todo mengisi nilai sim dengan 2 digit
+        cy.visit("https://cashflow.assist.id/admin/contacts/create")
+        cy.get('#fk_grup').should("be.visible").click()
+        cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
+        cy.get('.css-1j4fk1t').click()
+        cy.get('#nama').should("be.visible").type("lutihe ")
+        cy.get('#tipe_identitas').should("be.visible").click()
+        cy.get('[data-value="sim"]').click()
+        cy.get('#tipe_identitas').contains("SIM")
+        cy.get('#no_identitas').type("00")
+        cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com')
+        cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
+        cy.get('.MuiButton-contained').should("be.visible").click()
+
+        // ! form menerima nomor sim meski hanya 2 digit
+        cy.log("form seharusnya tidak menerima nomor sim apabila lebih atau kurang dari 16 digit jika mengikuti standar indonesia terbaru yang dimana nomor sim sesuai dengan nik")
+
+    });
+
+    it("Case 9 : mencoba mengisi nilai paspor", () => {
+        // todo mengisi nilai paspor dengan 2 digit
+        cy.visit("https://cashflow.assist.id/admin/contacts/create")
+        cy.get('#fk_grup').should("be.visible").click()
+        cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
+        cy.get('.css-1j4fk1t').click()
+        cy.get('#nama').should("be.visible").type("lutihe ")
+        cy.get('#tipe_identitas').should("be.visible").click()
+        cy.get('[data-value="paspor"]').click()
+        cy.get('#tipe_identitas').contains("Paspor")
+        cy.get('#no_identitas').type("00")
+        cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com')
+        cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
+        cy.get('.MuiButton-contained').should("be.visible").click()
+
+        // ! form menerima nomor paspor meski hanya 2 digit
     });
 
     // * sejauh ini masih aman terkendali
+
+
 
 
 })
