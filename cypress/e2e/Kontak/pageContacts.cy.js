@@ -624,7 +624,6 @@ describe("Pengujian website cashflow bagian kontak", () => {
         cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').should("be.visible").and("have.text", "testing@example.com1234567890")
 
         // todo periksa data yang ada pada tabel lainnya
-        // mengambil data dari kolom email dan no hp
         cy.get('#simple-tab-3').should("be.visible").click()
         cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(4)').should("be.visible").and("have.text", "testing@example.com1234567890")
         cy.wait(4000)

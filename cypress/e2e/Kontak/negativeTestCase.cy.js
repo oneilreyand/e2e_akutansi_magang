@@ -17,7 +17,7 @@ describe("Negative test case dalam cashflow assist id bagian kontak", () => {
         cy.get('#nama-helper-text').should("be.visible").contains("Nama Lengkap harus diisi")
 
         // ? alamat email bersifat wajib tapi dimana pemberitahuannya?
-        
+
         // ! pemberitahuan bahwa alamat penagihan harus bersifat wajib
         cy.get(':nth-child(2) > .MuiCardContent-root > .css-1i24z3d').should("be.visible").contains("Alamat Penagihan harus diisi")
 
@@ -28,16 +28,16 @@ describe("Negative test case dalam cashflow assist id bagian kontak", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts/create")
         cy.get('#nama').should("be.visible").type("nama menggunakan angka 123 @#$%")
         cy.get('.MuiButton-contained').should("be.visible").click()
-        
+
         // ! pemberitahuan bahwa form harus diisi dengan benar
         cy.get('.MuiSnackbar-root > .MuiPaper-root').should("exist").contains("Mohon periksa kembali form")
-        
+
         // ! pemberitahuan bahwa nama lengkap harus diisi dengan benar (hanya menerima huruf dan spasi)
         cy.get('#nama-helper-text').should("be.visible").contains("Nama Lengkap hanya boleh berisi huruf dan spasi")
-        
+
         cy.log("Form tidak bisa terkirim karena nama lengkap mengandung angka dan simbol")
     });
-    
+
     it("Case 3 : Mengirim alamat email yang tidak valid", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts/create")
         // todo tanpa @
@@ -109,13 +109,13 @@ describe("Negative test case dalam cashflow assist id bagian kontak", () => {
         // todo menggunakan angka dan simbol
         cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("123 @!@#@#")
         cy.get('.MuiButton-contained').should("be.visible").click()
-        
+
         // ! pemberitahuan bahwa form harus diisi dengan benar muncul karena data required tidak diisi
         cy.get('.MuiSnackbar-root > .MuiPaper-root').should("exist").contains("Mohon periksa kembali form")
         cy.log("form menerima alamat penagihan hanya diisi dengan angka dan simbol")
     });
 
-    it("Case 5 : Mengisi dan mengirim form dengan nomor hp dan telepon yang tidak valid" ,() => {
+    it("Case 5 : Mengisi dan mengirim form dengan nomor hp dan telepon yang tidak valid", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts/create")
 
         // todo nomor hp dan telepon lebih dari 13 digit
@@ -143,13 +143,13 @@ describe("Negative test case dalam cashflow assist id bagian kontak", () => {
         // todo mencoba bilangan quadriliun
         cy.get('#piutang_max').should("be.visible").type("100000000000000")
         cy.get('.MuiButton-contained').should("be.visible").click()
-        
+
         cy.get('#piutang_max').should("be.visible").clear()
-        
+
         // todo mencoba bilangan quintiliun
         cy.get('#piutang_max').should("be.visible").type("100000000000000000")
         cy.get('.MuiButton-contained').should("be.visible").click()
-        
+
         cy.get('#piutang_max').should("be.visible").clear()
 
         // todo mencoba bilangan minus
@@ -201,7 +201,7 @@ describe("Negative test case dalam cashflow assist id bagian kontak", () => {
 
         // ! peringatan bahwa angka piutang tidak valid
         cy.get('.MuiSnackbar-root > .MuiPaper-root').should("exist")
-        
+
         cy.reload()
 
         // todo mengisi semua data tetapi bagian piutang maksimum menjadi sextiliun (10^21)
@@ -329,9 +329,206 @@ describe("Negative test case dalam cashflow assist id bagian kontak", () => {
         // ! form menerima nomor paspor meski hanya 2 digit
     });
 
-    // * sejauh ini masih aman terkendali
+    it("Case 10 : Mencoba mencari data yang ada pada tabel dengan menggunakan id pada tabel karyawan", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts")
+        cy.wait(1000)
+        cy.get('#simple-tab-2').should("be.visible").click()
+
+        // todo menggunakan id yang tersedia
+        const idYangDicari = '41fd7172-c8b1-11ef-b4d6-814f37804472'; 
+        let idDitemukan = false; 
+        cy.get('.css-k27tlm > .MuiPaper-root').each(($row) => {
+            const idBaris = $row.find('td').first().text().trim();
+
+            if (idBaris === idYangDicari) {
+                idDitemukan = true;
+                cy.log(`ID ${idYangDicari} ditemukan!`);
+                cy.wrap($row).find('td').eq(2).should('have.text', '41fd7172-c8b1-11ef-b4d6-814f37804472'); 
+                return false; 
+            }
+        }).then(() => {
+
+            if (!idDitemukan) {
+                cy.log(`ID ${idYangDicari} tidak ditemukan.`);
+            }
+        });
+    });
+
+    it("Case 11 : Mencoba mencari data yang ada pada tabel lainnya menggunakan nama lengkap yang ada", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts")
+        cy.wait(1000)
+        cy.get('#simple-tab-2').should("be.visible").click()
+
+        // todo mencari data menggunakan kolom pencarian
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root').should("be.visible").type("Percobaan")
+        cy.get('.css-k27tlm > .MuiPaper-root').then(($el) => {
+            if ($el.length <= 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+
+        cy.reload()
+        cy.get('#simple-tab-2').should("be.visible").click()
+
+        // todo langsung mengambil data yang ada ditabel
+
+        cy.get('.css-k27tlm > .MuiPaper-root').contains("Percobaan").then(($el) => {
+            if ($el.length >= 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+    });
+
+    it("Case 12: Mencoba mencari data yang ada pada tabel karyawan menggunakan grup kontak yang ada", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts")
+        cy.wait(1000)
+        cy.get('#simple-tab-2').should("be.visible").click()
+
+        // todo mencari data menggunakan kolom pencarian
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root').type("grup baru")
+        cy.get('.css-k27tlm > .MuiPaper-root').then(($el) => {
+            if ($el.length <= 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+        cy.log("Data dalam tabel tidak bisa dicari jika menggunakan grup kontak")
+    });
+
+    it("Case 13 : Mencoba mencari data yang ada pada tabel karyawan menggunakan email yang ada", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts")
+        cy.wait(1000)
+        cy.get('#simple-tab-2').should("be.visible").click()
+
+        // todo mencari data menggunakan kolom pencarian
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root').type("testing@example.com")
+        cy.get('.css-k27tlm > .MuiPaper-root').then(($el) => {
+            if ($el.length > 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
 
 
+        cy.reload()
+        cy.get('#simple-tab-2').should("be.visible").click()
 
+        // todo langsung mengambil data yang ada ditabel
 
-})
+        cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(4)').and("have.text", "testing@example.com1234567890").then(($el) => {
+            if ($el.length > 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+
+        cy.log("Data dalam tabel bisa dicari jika menggunakan email")
+    });
+
+    it("Case 14 : Mencoba mencari data yang ada pada tabel karyawan menggunakan nomor hp yang ada", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts")
+        cy.wait(1000)
+        cy.get('#simple-tab-2').should("be.visible").click()
+
+        // todo mencari data menggunakan kolom pencarian
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root').type("123567890")
+        cy.get('.css-k27tlm > .MuiPaper-root').then(($el) => {
+            if ($el.length <= 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+        cy.log("Data dalam tabel tidak bisa dicari jika menggunakan no hp")
+    });
+
+    it("Case 15 : Mencoba mencari data yang ada pada tabel lainnya menggunakan grup kontak yang ada", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts")
+        cy.wait(1000)
+        cy.get('#simple-tab-3').should("be.visible").click()
+
+        // todo mencari data menggunakan kolom pencarian
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root').type("grup baru")
+        cy.get('.css-k27tlm > .MuiPaper-root').then(($el) => {
+            if ($el.length <= 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+        cy.log("Data dalam tabel tidak bisa dicari jika menggunakan grup kontak")
+    });
+
+    it("Case 16 : Mencoba mencari data yang ada pada tabel karyawan menggunakan nama lengkap yang ada", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts")
+        cy.wait(1000)
+        cy.get('#simple-tab-3').should("be.visible").click()
+
+        // todo mencari data menggunakan kolom pencarian
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root').should("be.visible").type("Percobaan")
+        cy.get('.css-k27tlm > .MuiPaper-root').then(($el) => {
+            if ($el.length <= 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+
+        cy.reload()
+        cy.get('#simple-tab-3').should("be.visible").click()
+
+        // todo langsung mengambil data yang ada ditabel
+
+        cy.get('.css-k27tlm > .MuiPaper-root').contains("Fake Contact").then(($el) => {
+            if ($el.length >= 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+    });
+
+    it("Case 17: Mencoba mencari data yang ada pada tabel lainnya menggunakan email yang ada", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+      
+        cy.get('#simple-tab-3').should("be.visible").click();
+      
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root').type("j@e");
+      
+        cy.get('.css-k27tlm > .MuiPaper-root').then(($el) => {
+          if ($el.length > 0) {
+            cy.log('Elemen ditemukan.');
+          } else {
+            cy.log('Elemen tidak ditemukan.');
+          }
+        });
+    });
+
+    it("Case 18 : Mencoba mencari data yang ada pada tabel lainnya menggunakan nomor hp yang ada", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts")
+        cy.wait(1000)
+        cy.get('#simple-tab-3').should("be.visible").click()
+
+        // todo mencari data menggunakan kolom pencarian
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root').type("123567890")
+        cy.get('.css-k27tlm > .MuiPaper-root').then(($el) => {
+            if ($el.length <= 0) {
+                cy.log(`Elemen ditemukan.`);
+            } else {
+                cy.log(`Elemen tidak ditemukan.`);
+            }
+          });
+        cy.log("Data dalam tabel tidak bisa dicari jika menggunakan no hp")
+    });
+      
+
+    
+
+});
