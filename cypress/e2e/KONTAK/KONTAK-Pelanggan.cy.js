@@ -386,38 +386,37 @@ describe("Check Komponen Pelanggan", () => {
     });
 
     it.only("Page 3 : Label Menampilkan 21 - ${limitData} dari ${totalData} data", () => {
-      // Klik pada tombol pagination (Page 3)
-      cy.intercept("GET", "/api/kontak/list*").as("getKontak");
-      cy.intercept("GET", "/api/kontak/list*").as("getKontak1");
-      cy.get(".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root", {
-        Timeout: 10000,
-      }).click();
+      // Intercept request untuk endpoint kontak
+      // cy.intercept("GET", "/api/kontak/list*").as("getKontak");
+      cy.intercept("GET", "/api/kontak/list*skip=20*").as("getKontak");
 
-      // Ambil token autentikasi dari cookie
-
-      // Intercept request untuk menangkap URL dan query string parameters
-
-      // Tunggu request selesai dan dapatkan URL dari request yang diintercept
-      cy.wait("@getKontak1").then((interception) => {
+    
+      // Klik pada tombol pagination untuk halaman 3
+      cy.get(".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root", { timeout: 10000 }).click();
+    
+      // Tunggu request selesai
+      cy.wait("@getKontak").then((interception) => {
         // Ambil URL request yang diintercept
         const requestUrl = new URL(interception.request.url);
-        cy.log(`url : ${requestUrl}`);
-
+        cy.log(`Intercepted URL: ${requestUrl}`);
+    
         // Ambil nilai parameter "skip" dari query string
-        const skipValue = requestUrl.searchParams.get("skip");
-        const startData = parseInt(skipValue) + 1; // Mulai dari data ke-21 jika skip=20
-
+        const skipValue = parseInt(requestUrl.searchParams.get("skip") || "0", 10);
+        const startData = skipValue + 1;
+    
         // Ambil totalData dan limitData dari respons API
         const totalData = interception.response.body.totalData;
         const limitData = interception.response.body.results.length;
-
+        const endData = skipValue + limitData;
+    
         // Verifikasi label yang muncul di UI
         cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
           "have.text",
-          `Menampilkan ${startData} - ${limitData} dari ${totalData} data`
+          `Menampilkan ${startData} - ${endData} dari ${totalData} data`
         );
       });
     });
+    
 
     it("Pagination pada awal page seharusnya menyembunyikan page > 5 dan memunculkan page terakhir", () => {
       cy.getCookie("authToken").then((cookie) => {
