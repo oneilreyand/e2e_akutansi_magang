@@ -385,26 +385,37 @@ describe("Check Komponen Pelanggan", () => {
       });
     });
 
-    it("Page 3 : Label Menampilkan 21 - ${limitData} dari ${totalData} data", () => {
-      cy.get(".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root").click();
-      cy.getCookie("authToken").then((cookie) => {
-        const token = cookie?.value;
-        cy.request({
-          method: "GET",
-          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((response) => {
-          const totalData = response.body.totalData;
-          const limitData = response.body.results.length;
-          const limitDataPage3 = limitData + 20;
+    it.only("Page 3 : Label Menampilkan 21 - ${limitData} dari ${totalData} data", () => {
+      // Klik pada tombol pagination (Page 3)
+      cy.intercept("GET", "/api/kontak/list*").as("getKontak");
+      cy.intercept("GET", "/api/kontak/list*").as("getKontak1");
+      cy.get(".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root", {
+        Timeout: 10000,
+      }).click();
 
-          cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
-            "have.text",
-            `Menampilkan 21 - ${limitDataPage3} dari ${totalData} data`
-          );
-        });
+      // Ambil token autentikasi dari cookie
+
+      // Intercept request untuk menangkap URL dan query string parameters
+
+      // Tunggu request selesai dan dapatkan URL dari request yang diintercept
+      cy.wait("@getKontak1").then((interception) => {
+        // Ambil URL request yang diintercept
+        const requestUrl = new URL(interception.request.url);
+        cy.log(`url : ${requestUrl}`);
+
+        // Ambil nilai parameter "skip" dari query string
+        const skipValue = requestUrl.searchParams.get("skip");
+        const startData = parseInt(skipValue) + 1; // Mulai dari data ke-21 jika skip=20
+
+        // Ambil totalData dan limitData dari respons API
+        const totalData = interception.response.body.totalData;
+        const limitData = interception.response.body.results.length;
+
+        // Verifikasi label yang muncul di UI
+        cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+          "have.text",
+          `Menampilkan ${startData} - ${limitData} dari ${totalData} data`
+        );
       });
     });
 
@@ -502,13 +513,13 @@ describe("Check Komponen Pelanggan", () => {
       });
     });
 
-    it.only("Pagination pada end page seharusnya menampilkan page paling akhir, menyembunyikan halaman yang < 5 dari page terakhir", () => {
-      cy.get('.MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root').click()
+    it("Pagination pada end page seharusnya menampilkan page paling akhir, menyembunyikan halaman yang < 5 dari page terakhir", () => {
+      cy.get(".MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root").click();
       cy.getCookie("authToken").then((cookie) => {
         const token = cookie?.value;
         cy.request({
           method: "GET",
-          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          url: "api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -553,7 +564,7 @@ describe("Check Komponen Pelanggan", () => {
         });
       });
     });
-    
+
     it("Menekan next page mengubah posisi page ke page selanjutnya", () => {
       cy.get('button[aria-label="Go to next page"]').click();
       cy.getCookie("authToken").then((cookie) => {
