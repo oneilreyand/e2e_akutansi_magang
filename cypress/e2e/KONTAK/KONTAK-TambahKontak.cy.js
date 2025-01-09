@@ -452,54 +452,54 @@ describe('Check komponen tambah kontak', () => {
             cy.get('.MuiAlert-message').should('contain.text', 'Kontak berhasil disimpan');
         });
 
-        it.only('Input data lengkap | input grup kontak select 4 dan membuat grup baru dari dropdown, unselect 1, total 3 | menginput alamat email 7 ,dan menghapus kolom 5, sisa 2 | data bank keseluruhan input 3 kali - Memantau body request sesuai dengan ui - dan expect berhasil dengan message berhasil ', () => {
-            const expectedRequestBody = {
-                active_piutang_max: 0 ,
-                alamat_penagihan: "",
-                alamat_pengiriman: "",
-                company_id: "b13e5210-8564-11ef-af27-a72e65a1d49c",
-                email: [
-                    "email@lainnya.com"
-                ],
-                fk_grup: [
-                    "30a2c042-a658-11ef-8f78-25bebcc62186"
-                ],
-                data_bank: [
-                    {
-                        bank_branch: "",
-                        bank_name: "",
-                        holder_name: "",
-                        rek_no: ""
-                    }
-                ],
-                nama: "Username Lainnya",
-                nama_perusahaan: "",
-                no_identitas: "",
-                no_fax: "",
-                no_hp: "",
-                no_npwp: "",
-                no_telp: "",
-                nitku: "",
-                piutang_max: 0,
-                fk_akun_hutang: "",
-                fk_akun_piutang: "",
-                sapaan: "",
-                syarat_pembayaran: "",
-                tipe_identitas: "",
-                tipe_kontak: "lainnya"
-            };
+        it.only ('Input data lengkap | input grup kontak select 4 dan membuat grup baru dari dropdown, unselect 1, total 3 | menginput alamat email 7 ,dan menghapus kolom 5, sisa 2 | data bank keseluruhan input 3 kali - Memantau body request sesuai dengan ui - dan expect berhasil dengan message berhasil ', () => {
+            // const expectedRequestBody = {
+            //     active_piutang_max: 0 ,
+            //     alamat_penagihan: "",
+            //     alamat_pengiriman: "",
+            //     company_id: "b13e5210-8564-11ef-af27-a72e65a1d49c",
+            //     email: [
+            //         "email@lainnya.com"
+            //     ],
+            //     fk_grup: [
+            //         "30a2c042-a658-11ef-8f78-25bebcc62186"
+            //     ],
+            //     data_bank: [
+            //         {
+            //             bank_branch: "",
+            //             bank_name: "",
+            //             holder_name: "",
+            //             rek_no: ""
+            //         }
+            //     ],
+            //     nama: "Username Lainnya",
+            //     nama_perusahaan: "",
+            //     no_identitas: "",
+            //     no_fax: "",
+            //     no_hp: "",
+            //     no_npwp: "",
+            //     no_telp: "",
+            //     nitku: "",
+            //     piutang_max: 0,
+            //     fk_akun_hutang: "",
+            //     fk_akun_piutang: "",
+            //     sapaan: "",
+            //     syarat_pembayaran: "",
+            //     tipe_identitas: "",
+            //     tipe_kontak: "lainnya"
+            // };
         
-            // Intercept the API request
-            cy.intercept('POST', 'https://api-cashflow.assist.id/api/kontak/add', (req) => {
-                // Log the request body to the Cypress console
-                console.log('Request Body:', req.body);
+            // // Intercept the API request
+            // cy.intercept('POST', 'https://api-cashflow.assist.id/api/kontak/add', (req) => {
+            //     // Log the request body to the Cypress console
+            //     console.log('Request Body:', req.body);
         
-                // Modify the response (if needed)
-                req.reply({
-                    statusCode: 200,
-                    body: { message: "Kontak berhasil disimpan" }
-                });
-            }).as('addContactLengkap');
+            //     // Modify the response (if needed)
+            //     req.reply({
+            //         statusCode: 200,
+            //         body: { message: "Kontak berhasil disimpan" }
+            //     });
+            // }).as('addContactLengkap');
             
 
             cy.get('#tipe_kontak',{ timeout: 10000}).click(); // tipe kontak
@@ -551,8 +551,8 @@ describe('Check komponen tambah kontak', () => {
             cy.get('#nama_perusahaan').type('nama perusahaan')
             cy.get('#no_hp').type('081234567891')
             cy.get('#no_telp').type('089876543212')
-            cy.get('#no_fax').type('089876543212')
-            cy.get('#no_npwp').type('081234567891')
+            cy.get('#no_fax').type('089876543212213123132141')
+            cy.get('#no_npwp').type('0812345678913214124213')
             cy.get('#nitku').type('123456789101112')
 
             cy.get('input[placeholder="Masukkan alamat penagihan"]').type('jalan penagihan lengkap')

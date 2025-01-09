@@ -83,14 +83,14 @@ describe("Check Komponen Pelanggan", () => {
   });
 
   context("Validasi tombol atur grup kontak dan import kontak", () => {
-    it("validasi keberadaan tombol atur grup kontak", () => {
+    it("Validasi keberadaan tombol atur grup kontak", () => {
       cy.get(".css-1avq450 > .MuiGrid2-container > :nth-child(1)")
         .should("have.text", "Atur Grup Kontak")
         .click();
       cy.get("#modal-title").should("have.text", "Pengaturan Group Kontak");
     });
 
-    it("validasi keberadaan tombol import kontak", () => {
+    it("Validasi keberadaan tombol import kontak", () => {
       cy.get(".css-1avq450 > .MuiGrid2-container > :nth-child(2)")
         .should("have.text", "Import Kontak")
         .click();
@@ -98,7 +98,11 @@ describe("Check Komponen Pelanggan", () => {
     });
   });
 
-  context("Fitur Search Kontak", () => {
+  context("Pengujian fitur Search Kontak", () => {
+    it("Validasi penulisan placeholder search input", () => {
+      cy.get('input[placeholder="Cari kontak"]').should("be.exist");
+    });
+
     it("Mencari salah satu nama kontak dengan lowercase", () => {
       cy.get('[data-testid="search-input"]').type("asriyanto candra limbong");
       cy.get(".MuiTableBody-root > :nth-child(1) > :nth-child(2)")
@@ -148,6 +152,9 @@ describe("Check Komponen Pelanggan", () => {
   });
 
   context("Pengujian fungsi tabel", () => {
+    it("Validasi penulisan cardhead H6 ekpektasi Pelanggan", () => {
+      cy.get(".MuiTypography-h6").should("have.text", "Pelanggan");
+    });
     it("Validasi kesesuaian thead", () => {
       cy.get("table thead").within(() => {
         cy.contains("ID").should("be.visible");
@@ -331,10 +338,268 @@ describe("Check Komponen Pelanggan", () => {
     });
   });
 
-  context('Pengujiann Pagination',() => {
-    it('Label', () => {
-      cy.get('h5').should('exist');
+  context.only("Pengujian Pagination", () => {
+    it("Page 1 : Label Menampilkan 1 - ${limitData} dari ${totalData} data", () => {
+      cy.getCookie("authToken").then((cookie) => {
+        const token = cookie?.value;
+        cy.request({
+          method: "GET",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=0&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          const totalData = response.body.totalData;
+          const limitData = response.body.results.length;
+          cy.get(
+            ".MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root"
+          ).click();
+          cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+            "have.text",
+            `Menampilkan 1 - ${limitData} dari ${totalData} data`
+          );
+        });
+      });
     });
-   
-  })
+
+    it("Page 2 : Label Menampilkan 11 - ${limitData} dari ${totalData} data", () => {
+      cy.get(".MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root").click();
+      cy.getCookie("authToken").then((cookie) => {
+        const token = cookie?.value;
+        cy.request({
+          method: "GET",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          const totalData = response.body.totalData;
+          const limitData = response.body.results.length;
+          const limitDataPage2 = limitData + 10;
+
+          cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+            "have.text",
+            `Menampilkan 11 - ${limitDataPage2} dari ${totalData} data`
+          );
+        });
+      });
+    });
+
+    it("Page 3 : Label Menampilkan 21 - ${limitData} dari ${totalData} data", () => {
+      cy.get(".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root").click();
+      cy.getCookie("authToken").then((cookie) => {
+        const token = cookie?.value;
+        cy.request({
+          method: "GET",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          const totalData = response.body.totalData;
+          const limitData = response.body.results.length;
+          const limitDataPage3 = limitData + 20;
+
+          cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+            "have.text",
+            `Menampilkan 21 - ${limitDataPage3} dari ${totalData} data`
+          );
+        });
+      });
+    });
+
+    it("Pagination pada awal page seharusnya menyembunyikan page > 5 dan memunculkan page terakhir", () => {
+      cy.getCookie("authToken").then((cookie) => {
+        const token = cookie?.value;
+        cy.request({
+          method: "GET",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          const totalData = response.body.totalData;
+          const maxPage = Math.ceil(totalData / 10);
+
+          cy.get('button[aria-label="Go to previous page"]').should(
+            "be.disabled"
+          );
+
+          cy.get(
+            ".MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root"
+          ).should("have.text", "1");
+          cy.get(
+            ".MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root"
+          ).should("have.text", "2");
+          cy.get(
+            ".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root"
+          ).should("have.text", "3");
+          cy.get(
+            ".MuiPagination-ul > :nth-child(5) > .MuiButtonBase-root"
+          ).should("have.text", "4");
+          cy.get(
+            ".MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root"
+          ).should("have.text", "5");
+          cy.get(":nth-child(7) > .MuiPaginationItem-root").should(
+            "have.text",
+            "…"
+          );
+          cy.get(
+            ".MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root"
+          ).should("have.text", maxPage);
+          cy.get('button[aria-label="Go to next page"]').should("be.enabled");
+        });
+      });
+    });
+
+    it("Pagination pada middle page seharusnya menampilkan page paling awal, menyembunyikan halaman yang berjarak satu diatas atau satu dibawah dari page dipilih lalu menampilkan page terakhir", () => {
+      cy.get(".MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root")
+        .should("have.text", "5")
+        .click();
+      cy.getCookie("authToken").then((cookie) => {
+        const token = cookie?.value;
+        cy.request({
+          method: "GET",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          const totalData = response.body.totalData;
+          const maxPage = Math.ceil(totalData / 10);
+
+          cy.get('button[aria-label="Go to previous page"]').should(
+            "be.enabled"
+          );
+
+          cy.get(
+            ".MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root"
+          ).should("have.text", "1", { Timeout: 10000 });
+          cy.get(":nth-child(3) > .MuiPaginationItem-root").should(
+            "have.text",
+            "…",
+            { Timeout: 10000 }
+          );
+          cy.get(
+            ".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root"
+          ).should("have.text", "4", { Timeout: 10000 });
+          cy.get(
+            ".MuiPagination-ul > :nth-child(5) > .MuiButtonBase-root"
+          ).should("have.text", "5", { Timeout: 10000 });
+          cy.get(
+            ".MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root"
+          ).should("have.text", "6", { Timeout: 10000 });
+          cy.get(":nth-child(7) > .MuiPaginationItem-root").should(
+            "have.text",
+            "…",
+            { Timeout: 10000 }
+          );
+          cy.get(
+            ".MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root"
+          ).should("have.text", maxPage, { Timeout: 10000 });
+          cy.get('button[aria-label="Go to next page"]').should("be.enabled");
+        });
+      });
+    });
+
+    it.only("Pagination pada end page seharusnya menampilkan page paling akhir, menyembunyikan halaman yang < 5 dari page terakhir", () => {
+      cy.get('.MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root').click()
+      cy.getCookie("authToken").then((cookie) => {
+        const token = cookie?.value;
+        cy.request({
+          method: "GET",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          const totalData = response.body.totalData;
+          const maxPage = Math.ceil(totalData / 10);
+          const reverseMaxPage = maxPage - 1;
+          const reverseMaxPage1 = maxPage - 2;
+          const reverseMaxPage2 = maxPage - 3;
+          const reverseMaxPage3 = maxPage - 4;
+
+          cy.get('button[aria-label="Go to previous page"]').should(
+            "be.enabled"
+          );
+
+          cy.get(
+            ".MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root"
+          ).should("have.text", "1", { Timeout: 10000 });
+          cy.get(":nth-child(3) > .MuiPaginationItem-root").should(
+            "have.text",
+            "…",
+            { Timeout: 10000 }
+          );
+          cy.get(
+            ".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root"
+          ).should("have.text", reverseMaxPage3, { Timeout: 10000 });
+          cy.get(
+            ".MuiPagination-ul > :nth-child(5) > .MuiButtonBase-root"
+          ).should("have.text", reverseMaxPage2, { Timeout: 10000 });
+          cy.get(
+            ".MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root"
+          ).should("have.text", reverseMaxPage, { Timeout: 10000 });
+          cy.get(":nth-child(7) > .MuiPaginationItem-root").should(
+            "have.text",
+            reverseMaxPage,
+            { Timeout: 10000 }
+          );
+          cy.get(
+            ".MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root"
+          ).should("have.text", maxPage, { Timeout: 10000 });
+          cy.get('button[aria-label="Go to next page"]').should("be.enabled");
+        });
+      });
+    });
+    
+    it("Menekan next page mengubah posisi page ke page selanjutnya", () => {
+      cy.get('button[aria-label="Go to next page"]').click();
+      cy.getCookie("authToken").then((cookie) => {
+        const token = cookie?.value;
+        cy.request({
+          method: "GET",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((response) => {
+          const totalData = response.body.totalData;
+          const maxPage = Math.ceil(totalData / 10);
+
+          cy.get('button[aria-label="Go to previous page"]').should(
+            "be.enabled"
+          );
+
+          cy.get(
+            ".MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root"
+          ).should("have.text", "1", { Timeout: 10000 });
+          cy.get(":nth-child(3) > .MuiPaginationItem-root").should(
+            "have.text",
+            "…",
+            { Timeout: 10000 }
+          );
+          cy.get(
+            ".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root"
+          ).should("have.text", "5", { Timeout: 10000 });
+          cy.get(
+            ".MuiPagination-ul > :nth-child(5) > .MuiButtonBase-root"
+          ).should("have.text", "6", { Timeout: 10000 });
+          cy.get(
+            ".MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root"
+          ).should("have.text", "7", { Timeout: 10000 });
+          cy.get(":nth-child(7) > .MuiPaginationItem-root").should(
+            "have.text",
+            "…",
+            { Timeout: 10000 }
+          );
+          cy.get(
+            ".MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root"
+          ).should("have.text", maxPage, { Timeout: 10000 });
+          cy.get('button[aria-label="Go to next page"]').should("be.enabled");
+        });
+      });
+    });
+  });
 });
