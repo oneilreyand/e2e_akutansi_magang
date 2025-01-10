@@ -34,7 +34,7 @@ describe("Check Komponen Pelanggan", () => {
   });
 
   context("Pengujian fungsi pada tab jenis kontak", () => {
-    it("Tab pelanggan ke tab suplier", () => {
+    it("Perpindahan tab pelanggan ke tab suplier", () => {
       cy.get("#simple-tab-0")
         .should("contain", "Pelanggan")
         .and("be.visible")
@@ -48,7 +48,7 @@ describe("Check Komponen Pelanggan", () => {
       cy.get(".MuiTypography-h6").contains("Suplier");
     });
 
-    it("Tab pelanggan ke tab karyawan", () => {
+    it("Perpindahan tab pelanggan ke tab karyawan", () => {
       cy.get("#simple-tab-0")
         .should("contain", "Pelanggan")
         .and("be.visible")
@@ -61,7 +61,7 @@ describe("Check Komponen Pelanggan", () => {
         .click();
       cy.get(".MuiTypography-h6").contains("Karyawan");
     });
-    it("tab pelanggan ke tab lainnya", () => {
+    it("Perpindahan tab pelanggan ke tab lainnya", () => {
       cy.get("#simple-tab-0")
         .should("contain", "Pelanggan")
         .and("be.visible")
@@ -103,7 +103,49 @@ describe("Check Komponen Pelanggan", () => {
       cy.get('input[placeholder="Cari kontak"]').should("be.exist");
     });
 
-    it("Mencari salah satu nama kontak dengan lowercase", () => {
+    it("Memeriksa pagination ketika mencari data yang ditemukan hanya 1 maka pagination menyesuaikan dengan jumlah kontak yaitu 1", () => {
+      cy.intercept(
+        "GET",
+        "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&keyword=jangan+duplikat&skip=0*"
+      ).as("searchKontak");
+      cy.get('input[placeholder="Cari kontak"]').type("jangan duplikat");
+      cy.wait("@searchKontak").then((interception) => {
+        const requestUrl = new URL(interception.request.url);
+        cy.log(`Intercepted URL: ${requestUrl}`);
+
+        // Ambil nilai parameter "skip" dari query string
+        const skipValue = parseInt(
+          requestUrl.searchParams.get("skip") || "0",
+          10
+        );
+
+        // Ambil totalData dan limitData dari respons API
+        const totalData = interception.response.body.totalData;
+        const limitData = interception.response.body.results.length;
+        const startData = totalData === 0 ? 0 : skipValue + 1;
+        const endData = skipValue + limitData;
+
+        /* PAGINATIONS */
+        cy.get(".MuiPagination-ul > :nth-child(1)")
+          .find("button")
+          .should("exist")
+          .and("be.disabled"); //arrow previous
+        cy.get(".MuiPagination-ul > :nth-child(2)").should("exist");
+        cy.get(".MuiPagination-ul > :nth-child(3)").should("not.exist"); //element lain dengan expect not exist
+        cy.get(".MuiPagination-ul > :nth-child(4)").should("not.exist"); //element lain dengan expect not exist
+        cy.get(".MuiPagination-ul > :nth-child(5)").should("not.exist"); //element lain dengan expect not exist
+        cy.get(".MuiPagination-ul > :nth-child(6)").should("not.exist"); //element lain dengan expect not exist
+        cy.get(".MuiPagination-ul > :nth-child(7)").should("not.exist"); //element lain dengan expect not exist
+
+        /* PAGINATION TEXT*/
+        cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+          "have.text",
+          `Menampilkan ${startData} - ${endData} dari ${totalData} data`
+        );
+      });
+    });
+
+    it("Mencari salah satu nama kontak dengan lowercase menampilkan nama dengan format yang benar", () => {
       cy.get('[data-testid="search-input"]').type("asriyanto candra limbong");
       cy.get(".MuiTableBody-root > :nth-child(1) > :nth-child(2)")
         .invoke("text") // Mengambil teks elemen
@@ -111,7 +153,7 @@ describe("Check Komponen Pelanggan", () => {
         .should("eq", "Asriyanto Candra Limbong");
     });
 
-    it("Mencari salah satu nama kontak dengan uppercase", () => {
+    it("Mencari salah satu nama kontak dengan uppercase menampilkan nama dengan format yang benar", () => {
       cy.get('[data-testid="search-input"]').type("ASRIYANTO CANDRA LIMBONG");
       cy.get(".MuiTableBody-root > :nth-child(1) > :nth-child(2)")
         .invoke("text") // Mengambil teks elemen
@@ -119,14 +161,14 @@ describe("Check Komponen Pelanggan", () => {
         .should("eq", "Asriyanto Candra Limbong");
     });
 
-    it("Mencari salah satu nama kontak dengan mengetikkan nama depan", () => {
+    it("Mencari salah satu nama kontak dengan mengetikkan nama depan menampilkan nama dengan format yang benar", () => {
       cy.get('[data-testid="search-input"]').type("ASRIYANTO");
       cy.get(".MuiTableBody-root > :nth-child(1) > :nth-child(2)")
         .invoke("text") // Mengambil teks elemen
         .then((text) => text.trim()) // Memangkas spasi sebelum memeriksa
         .should("eq", "Asriyanto Candra Limbong");
     });
-    it("Mencari salah satu nama kontak dengan mengetikkan nama belakang", () => {
+    it("Mencari salah satu nama kontak dengan mengetikkan nama belakang menampilkan nama dengan format yang benar", () => {
       cy.get('[data-testid="search-input"]').type("LIMBONG");
       cy.get(".MuiTableBody-root > :nth-child(1) > :nth-child(2)")
         .invoke("text") // Mengambil teks elemen
@@ -134,7 +176,7 @@ describe("Check Komponen Pelanggan", () => {
         .should("eq", "Asriyanto Candra Limbong");
     });
 
-    it("Mencari salah satu nama kontak dengan mengetikkan nama tengah", () => {
+    it("Mencari salah satu nama kontak dengan mengetikkan nama tengah menampilkan nama dengan format yang benar", () => {
       cy.get('[data-testid="search-input"]').type("CANDRA");
       cy.get(".MuiTableBody-root > :nth-child(1) > :nth-child(2)")
         .invoke("text") // Mengambil teks elemen
@@ -221,6 +263,39 @@ describe("Check Komponen Pelanggan", () => {
           // Validasi jumlah baris tabel sesuai dengan data API
           expect(apiData).to.have.length(10);
         });
+      });
+    });
+
+    it("Apabila data kosong dari api maka isi tabel kosong", () => {
+      cy.intercept("GET", "/api/kontak/list*skip=0*", {
+        statusCode: 200, // Status sukses
+        body: {
+          results: [],
+          totalData: 0, // Total data
+        },
+      }).as("getKontak");
+
+      cy.wait("@getKontak").then((interception) => {
+        cy.get(
+          ".MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root"
+        ).should("have.text", "Tidak ada data");
+        const requestUrl = new URL(interception.request.url);
+        cy.log(`Intercepted URL: ${requestUrl}`);
+
+        // Ambil nilai parameter "skip" dari query string
+        const skipValue = parseInt(
+          requestUrl.searchParams.get("skip") || "0",
+          10
+        );
+        // Ambil totalData dan limitData dari respons API
+        const totalData = interception.response.body.totalData;
+        const limitData = interception.response.body.results.length;
+        const startData = totalData === 0 ? 0 : skipValue + 1;
+        const endData = skipValue + limitData;
+        cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+          "have.text",
+          `Menampilkan ${startData} - ${endData} dari ${totalData} data`
+        );
       });
     });
 
@@ -338,77 +413,58 @@ describe("Check Komponen Pelanggan", () => {
     });
   });
 
-  context.only("Pengujian Pagination", () => {
+  context("Pengujian Pagination", () => {
     it("Page 1 : Label Menampilkan 1 - ${limitData} dari ${totalData} data", () => {
-      cy.getCookie("authToken").then((cookie) => {
-        const token = cookie?.value;
-        cy.request({
-          method: "GET",
-          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=0&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((response) => {
-          const totalData = response.body.totalData;
-          const limitData = response.body.results.length;
-          cy.get(
-            ".MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root"
-          ).click();
-          cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
-            "have.text",
-            `Menampilkan 1 - ${limitData} dari ${totalData} data`
-          );
-        });
+      cy.intercept("GET", "/api/kontak/list*skip=0*").as("getKontak");
+      cy.wait("@getKontak").then((interception) => {
+        // Ambil URL request yang diintercept
+        const requestUrl = new URL(interception.request.url);
+        cy.log(`Intercepted URL: ${requestUrl}`);
+
+        // Ambil nilai parameter "skip" dari query string
+        const skipValue = parseInt(
+          requestUrl.searchParams.get("skip") || "0",
+          10
+        );
+
+        // Ambil totalData dan limitData dari respons API
+        const totalData = interception.response.body.totalData;
+        const limitData = interception.response.body.results.length;
+        const startData = totalData === 0 ? 0 : skipValue + 1;
+        const endData = skipValue + limitData;
+        cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+          "have.text",
+          `Menampilkan ${startData} - ${endData} dari ${totalData} data`
+        );
       });
     });
 
-    it("Page 2 : Label Menampilkan 11 - ${limitData} dari ${totalData} data", () => {
-      cy.get(".MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root").click();
-      cy.getCookie("authToken").then((cookie) => {
-        const token = cookie?.value;
-        cy.request({
-          method: "GET",
-          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((response) => {
-          const totalData = response.body.totalData;
-          const limitData = response.body.results.length;
-          const limitDataPage2 = limitData + 10;
-
-          cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
-            "have.text",
-            `Menampilkan 11 - ${limitDataPage2} dari ${totalData} data`
-          );
-        });
-      });
-    });
-
-    it.only("Page 3 : Label Menampilkan 21 - ${limitData} dari ${totalData} data", () => {
-      // Intercept request untuk endpoint kontak
-      // cy.intercept("GET", "/api/kontak/list*").as("getKontak");
+    it("Page 3 : Label Menampilkan 21 - ${limitData} dari ${totalData} data", () => {
       cy.intercept("GET", "/api/kontak/list*skip=20*").as("getKontak");
 
-    
       // Klik pada tombol pagination untuk halaman 3
-      cy.get(".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root", { timeout: 10000 }).click();
-    
+      cy.get(".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root", {
+        timeout: 10000,
+      }).click();
+
       // Tunggu request selesai
       cy.wait("@getKontak").then((interception) => {
         // Ambil URL request yang diintercept
         const requestUrl = new URL(interception.request.url);
         cy.log(`Intercepted URL: ${requestUrl}`);
-    
+
         // Ambil nilai parameter "skip" dari query string
-        const skipValue = parseInt(requestUrl.searchParams.get("skip") || "0", 10);
-        const startData = skipValue + 1;
-    
+        const skipValue = parseInt(
+          requestUrl.searchParams.get("skip") || "0",
+          10
+        );
+
         // Ambil totalData dan limitData dari respons API
         const totalData = interception.response.body.totalData;
         const limitData = interception.response.body.results.length;
+        const startData = totalData === 0 ? 0 : skipValue + 1;
         const endData = skipValue + limitData;
-    
+
         // Verifikasi label yang muncul di UI
         cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
           "have.text",
@@ -416,14 +472,87 @@ describe("Check Komponen Pelanggan", () => {
         );
       });
     });
-    
+
+    it("Jika data api < 10 maka paginiation hanya 1 buah", () => {
+      cy.intercept("GET", "/api/kontak/list*skip=0*", {
+        statusCode: 200, // Status sukses
+        body: {
+          results: [
+            {
+              id: 1,
+              nama: "Kontak A",
+              email_kontak_email: ["kontakA@example.com"],
+            },
+            {
+              id: 2,
+              nama: "Kontak B",
+              email_kontak_email: ["kontakB@example.com"],
+            },
+            {
+              id: 3,
+              nama: "Kontak C",
+              email_kontak_email: ["kontakC@example.com"],
+            },
+            {
+              id: 4,
+              nama: "Kontak D",
+              email_kontak_email: ["kontakD@example.com"],
+            },
+            {
+              id: 5,
+              nama: "Kontak E",
+              email_kontak_email: ["kontakE@example.com"],
+            },
+          ],
+          totalData: 5, // Total data
+        },
+      }).as("getKontak");
+      cy.wait("@getKontak").then((interception) => {
+        // Ambil URL request yang diintercept
+        const requestUrl = new URL(interception.request.url);
+        cy.log(`Intercepted URL: ${requestUrl}`);
+
+        // Ambil nilai parameter "skip" dari query string
+        const skipValue = parseInt(
+          requestUrl.searchParams.get("skip") || "0",
+          10
+        );
+
+        // Ambil totalData dan limitData dari respons API
+        const totalData = interception.response.body.totalData;
+        const limitData = interception.response.body.results.length;
+        const startData = totalData === 0 ? 0 : skipValue + 1;
+        const endData = skipValue + limitData;
+
+        /* PAGINATIONS */
+        cy.get(".MuiPagination-ul > :nth-child(1)")
+          .find("button")
+          .should("exist")
+          .and("be.disabled"); //arrow previous
+        cy.get(".MuiPagination-ul > :nth-child(2)").should("exist");
+        cy.get(".MuiPagination-ul > :nth-child(3)")
+          .find("button")
+          .should("exist")
+          .and("be.disabled"); //arrow next
+        cy.get(".MuiPagination-ul > :nth-child(4)").should("not.exist"); //element lain dengan expect not exist
+        cy.get(".MuiPagination-ul > :nth-child(5)").should("not.exist"); //element lain dengan expect not exist
+        cy.get(".MuiPagination-ul > :nth-child(6)").should("not.exist"); //element lain dengan expect not exist
+        cy.get(".MuiPagination-ul > :nth-child(7)").should("not.exist"); //element lain dengan expect not exist
+
+        /* PAGINATION TEXT*/
+        cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+          "have.text",
+          `Menampilkan ${startData} - ${endData} dari ${totalData} data`
+        );
+      });
+    });
 
     it("Pagination pada awal page seharusnya menyembunyikan page > 5 dan memunculkan page terakhir", () => {
       cy.getCookie("authToken").then((cookie) => {
         const token = cookie?.value;
         cy.request({
           method: "GET",
-          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=0&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -470,7 +599,7 @@ describe("Check Komponen Pelanggan", () => {
         const token = cookie?.value;
         cy.request({
           method: "GET",
-          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=40&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -518,7 +647,7 @@ describe("Check Komponen Pelanggan", () => {
         const token = cookie?.value;
         cy.request({
           method: "GET",
-          url: "api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=0&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -550,7 +679,7 @@ describe("Check Komponen Pelanggan", () => {
           ).should("have.text", reverseMaxPage2, { Timeout: 10000 });
           cy.get(
             ".MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root"
-          ).should("have.text", reverseMaxPage, { Timeout: 10000 });
+          ).should("have.text", reverseMaxPage1, { Timeout: 10000 });
           cy.get(":nth-child(7) > .MuiPaginationItem-root").should(
             "have.text",
             reverseMaxPage,
@@ -559,57 +688,781 @@ describe("Check Komponen Pelanggan", () => {
           cy.get(
             ".MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root"
           ).should("have.text", maxPage, { Timeout: 10000 });
-          cy.get('button[aria-label="Go to next page"]').should("be.enabled");
+          cy.get('button[aria-label="Go to next page"]').should("be.disabled");
         });
       });
     });
 
-    it("Menekan next page mengubah posisi page ke page selanjutnya", () => {
+    it("Menekan next page mengubah posisi page ke page selanjutnya dan mereferesh data pada tabel", () => {
+      cy.intercept("GET", "/api/kontak/list*skip=50*").as("getKontak");
       cy.get('button[aria-label="Go to next page"]').click();
-      cy.getCookie("authToken").then((cookie) => {
-        const token = cookie?.value;
-        cy.request({
-          method: "GET",
-          url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((response) => {
-          const totalData = response.body.totalData;
-          const maxPage = Math.ceil(totalData / 10);
+      cy.get('button[aria-label="Go to next page"]').click();
+      cy.get('button[aria-label="Go to next page"]').click();
+      cy.get('button[aria-label="Go to next page"]').click();
+      cy.get('button[aria-label="Go to next page"]').click();
+      cy.wait("@getKontak").then((interception) => {
+        const requestUrl = new URL(interception.request.url);
+        cy.log(`Intercepted URL: ${requestUrl}`);
 
-          cy.get('button[aria-label="Go to previous page"]').should(
-            "be.enabled"
-          );
+        // Ambil nilai parameter "skip" dari query string
+        const skipValue = parseInt(
+          requestUrl.searchParams.get("skip") || "0",
+          10
+        );
 
-          cy.get(
-            ".MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root"
-          ).should("have.text", "1", { Timeout: 10000 });
-          cy.get(":nth-child(3) > .MuiPaginationItem-root").should(
-            "have.text",
-            "…",
-            { Timeout: 10000 }
-          );
-          cy.get(
-            ".MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root"
-          ).should("have.text", "5", { Timeout: 10000 });
-          cy.get(
-            ".MuiPagination-ul > :nth-child(5) > .MuiButtonBase-root"
-          ).should("have.text", "6", { Timeout: 10000 });
-          cy.get(
-            ".MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root"
-          ).should("have.text", "7", { Timeout: 10000 });
-          cy.get(":nth-child(7) > .MuiPaginationItem-root").should(
-            "have.text",
-            "…",
-            { Timeout: 10000 }
-          );
-          cy.get(
-            ".MuiPagination-ul > :nth-child(8) > .MuiButtonBase-root"
-          ).should("have.text", maxPage, { Timeout: 10000 });
-          cy.get('button[aria-label="Go to next page"]').should("be.enabled");
+        // Ambil totalData dan limitData dari respons API
+        const totalData = interception.response.body.totalData;
+        const limitData = interception.response.body.results.length;
+        const startData = totalData === 0 ? 0 : skipValue + 1;
+        const endData = skipValue + limitData;
+        cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+          "have.text",
+          `Menampilkan ${startData} - ${endData} dari ${totalData} data`
+        );
+
+        cy.get('button[aria-label="Go to previous page"]').should("be.enabled");
+        cy.get('button[aria-label="Go to next page"]').should("be.enabled");
+        // Ambil token dari cookie
+        cy.getCookie("authToken").then((cookie) => {
+          const token = cookie?.value;
+
+          // Pastikan token valid
+          expect(token).to.exist;
+
+          // Gunakan token untuk mendapatkan data API
+          cy.request({
+            method: "GET",
+            url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=50&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((response) => {
+            // Validasi status respons
+            expect(response.status).to.eq(200);
+
+            // Ambil data dari API
+            const apiData = response.body.results;
+
+            // Tunggu untuk memastikan elemen tabel dimuat
+            cy.wait(2000);
+
+            // Validasi konten data di dalam tabel (tbody)
+            cy.get("table tbody tr").each(($row, index) => {
+              const rowData = apiData[index];
+
+              // Pastikan data dari API ada
+              expect(rowData).to.exist;
+
+              cy.wrap($row)
+                .find("td")
+                .then(($cells) => {
+                  // Validasi ID
+                  const idFromTable =
+                    $cells.eq(0).attr("data-id") || $cells.eq(0).text().trim();
+                  const idFromAPI = rowData.id;
+                  expect(idFromTable).to.eq(idFromAPI);
+
+                  // Validasi Nama Lengkap
+                  const namaFromTable = $cells.eq(1).text().trim();
+                  const namaFromAPI = rowData.nama?.trim();
+                  expect(namaFromTable).to.eq(namaFromAPI);
+
+                  // Validasi Grup Kontak
+                  const grupKontakFromAPI =
+                    rowData.grup_kontak_nama?.join(", ");
+                  const grupKontakFromTable = $cells.eq(2).text().trim();
+                  expect(grupKontakFromTable).to.eq(grupKontakFromAPI);
+
+                  // Validasi Email & No Handphone
+                  const emails = rowData.email_kontak_email || []; // Ambil semua email sebagai array
+                  const combinedEmails = emails.join(""); // Gabungkan semua email tanpa spasi
+                  const noHp = rowData.no_hp || ""; // Nomor telepon (kosong jika tidak ada)
+                  const emailNoHpFromAPI = `${combinedEmails}${noHp}`; // Gabungkan email dan nomor telepon
+                  const emailNoHpFromTable = $cells.eq(3).text().trim(); // Ambil data dari tabel
+                  expect(emailNoHpFromTable).to.eq(emailNoHpFromAPI); // Bandingkan hasil tabel dengan API
+
+                  // Validasi Alamat
+                  const alamatFromAPI = rowData.alamat_pengiriman?.trim() || "";
+                  const alamatFromTable = $cells.eq(4).text().trim();
+                  expect(alamatFromTable).to.eq(alamatFromAPI);
+
+                  // Validasi Total Piutang
+                  function formatWithThousandSeparator(value) {
+                    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                  }
+
+                  const totalPiutangFromAPI = formatWithThousandSeparator(
+                    rowData.piutang_max?.toString() || "0"
+                  );
+                  const totalPiutangFromTable = $cells
+                    .eq(5)
+                    .text()
+                    .trim()
+                    .replace(/^Rp\s*/, "");
+                  expect(totalPiutangFromTable).to.eq(totalPiutangFromAPI);
+                });
+            });
+          });
         });
       });
+    });
+
+    it("Menekan previous page mengubah posisi page ke page sebelumnya dan mereferesh data pada tabel", () => {
+      cy.intercept("GET", "/api/kontak/list*skip=0*").as("getKontak");
+      cy.get(".MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root").click();
+      cy.get('button[aria-label="Go to previous page"]').click();
+      cy.get('button[aria-label="Go to previous page"]').click();
+      cy.get('button[aria-label="Go to previous page"]').click();
+      cy.get('button[aria-label="Go to previous page"]').click();
+      cy.wait("@getKontak").then((interception) => {
+        const requestUrl = new URL(interception.request.url);
+        cy.log(`Intercepted URL: ${requestUrl}`);
+
+        // Ambil nilai parameter "skip" dari query string
+        const skipValue = parseInt(
+          requestUrl.searchParams.get("skip") || "0",
+          10
+        );
+
+        // Ambil totalData dan limitData dari respons API
+        const totalData = interception.response.body.totalData;
+        const limitData = interception.response.body.results.length;
+        const startData = totalData === 0 ? 0 : skipValue + 1;
+        const endData = skipValue + limitData;
+        cy.get(".css-1rqlbw1 > .MuiTypography-root").should(
+          "have.text",
+          `Menampilkan ${startData} - ${endData} dari ${totalData} data`
+        );
+
+        cy.get('button[aria-label="Go to previous page"]').should(
+          "be.disabled"
+        );
+        cy.get('button[aria-label="Go to next page"]').should("be.enabled");
+        // Ambil token dari cookie
+        cy.getCookie("authToken").then((cookie) => {
+          const token = cookie?.value;
+
+          // Pastikan token valid
+          expect(token).to.exist;
+
+          // Gunakan token untuk mendapatkan data API
+          cy.request({
+            method: "GET",
+            url: "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&skip=0&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((response) => {
+            // Validasi status respons
+            expect(response.status).to.eq(200);
+
+            // Ambil data dari API
+            const apiData = response.body.results;
+
+            // Tunggu untuk memastikan elemen tabel dimuat
+            cy.wait(2000);
+
+            // Validasi konten data di dalam tabel (tbody)
+            cy.get("table tbody tr").each(($row, index) => {
+              const rowData = apiData[index];
+
+              // Pastikan data dari API ada
+              expect(rowData).to.exist;
+
+              cy.wrap($row)
+                .find("td")
+                .then(($cells) => {
+                  // Validasi ID
+                  const idFromTable =
+                    $cells.eq(0).attr("data-id") || $cells.eq(0).text().trim();
+                  const idFromAPI = rowData.id;
+                  expect(idFromTable).to.eq(idFromAPI);
+
+                  // Validasi Nama Lengkap
+                  const namaFromTable = $cells.eq(1).text().trim();
+                  const namaFromAPI = rowData.nama?.trim();
+                  expect(namaFromTable).to.eq(namaFromAPI);
+
+                  // Validasi Grup Kontak
+                  const grupKontakFromAPI =
+                    rowData.grup_kontak_nama?.join(", ");
+                  const grupKontakFromTable = $cells.eq(2).text().trim();
+                  expect(grupKontakFromTable).to.eq(grupKontakFromAPI);
+
+                  // Validasi Email & No Handphone
+                  const emails = rowData.email_kontak_email || []; // Ambil semua email sebagai array
+                  const combinedEmails = emails.join(""); // Gabungkan semua email tanpa spasi
+                  const noHp = rowData.no_hp || ""; // Nomor telepon (kosong jika tidak ada)
+                  const emailNoHpFromAPI = `${combinedEmails}${noHp}`; // Gabungkan email dan nomor telepon
+                  const emailNoHpFromTable = $cells.eq(3).text().trim(); // Ambil data dari tabel
+                  expect(emailNoHpFromTable).to.eq(emailNoHpFromAPI); // Bandingkan hasil tabel dengan API
+
+                  // Validasi Alamat
+                  const alamatFromAPI = rowData.alamat_pengiriman?.trim() || "";
+                  const alamatFromTable = $cells.eq(4).text().trim();
+                  expect(alamatFromTable).to.eq(alamatFromAPI);
+
+                  // Validasi Total Piutang
+                  function formatWithThousandSeparator(value) {
+                    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                  }
+
+                  const totalPiutangFromAPI = formatWithThousandSeparator(
+                    rowData.piutang_max?.toString() || "0"
+                  );
+                  const totalPiutangFromTable = $cells
+                    .eq(5)
+                    .text()
+                    .trim()
+                    .replace(/^Rp\s*/, "");
+                  expect(totalPiutangFromTable).to.eq(totalPiutangFromAPI);
+                });
+            });
+          });
+        });
+      });
+    });
+  });
+  context("Negative Testcase", () => {
+    it("API list/JenisKontak=pelanggan dipaksa statusCode = 400 , Message error dari backend dan table status code 400", () => {
+      const ErrorMsg = "Error paksa dengan kode 400";
+
+      cy.intercept(
+        "GET",
+        "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan*",
+        {
+          statusCode: 400, // Mock respons dengan status 401 (Unauthorized)
+          body: {
+            message: ErrorMsg, // Pesan error yang ditampilkan saat login gagal
+          },
+        }
+      ).as("code400");
+
+      cy.get(
+        ".MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root"
+      ).should("have.text", "Request failed with status code 400");
+
+      cy.get(".MuiAlert-message").should("have.text", ErrorMsg);
+
+      cy.wait("@code400");
+    });
+
+    it("Memanipulasi body data dari backend list/JenisKontak=pelanggan dengan merusak array key :  email_kontak_email, muncul page deteksi bug", () => {
+      cy.intercept("GET", "/api/kontak/list*skip=0*", {
+        statusCode: 200, // Status sukses
+        body: {
+          results: [
+            {
+              id: 1,
+              nama: "Kontak A",
+              email_kontak_email: "kontakA@example.com", //no array
+            },
+            {
+              id: 2,
+              nama: "Kontak B",
+              email_kontak_email: ["kontakB@example.com"],
+            },
+            {
+              id: 3,
+              nama: "Kontak C",
+              email_kontak_email: "kontakC@example.com", //no array
+            },
+            {
+              id: 4,
+              nama: "Kontak D",
+              email_kontak_email: ["kontakD@example.com"],
+            },
+            {
+              id: 5,
+              nama: "Kontak E",
+              email_kontak_email: ["kontakE@example.com"],
+            },
+          ],
+          totalData: 5, // Total data
+        },
+      }).as("getKontak");
+      cy.wait("@getKontak").then((interception) => {
+        cy.get(".MuiAlert-message").should(
+          "have.text",
+          "ErrorTerjadi kesalahan yang tidak terduga."
+        );
+      });
+    });
+
+    it("Memanipulasi body data dari backend list/JenisKontak=pelanggan dengan mengubah semua value menjadi string kosong", () => {
+      cy.intercept("GET", "/api/kontak/list*skip=0*", {
+        statusCode: 200, // Status sukses
+        body: {
+          results: [
+            {
+              id: "",
+              tipe_kontak: "",
+              nama: "",
+              sapaan: "",
+              tipe_identitas: "",
+              no_identitas: "",
+              nama_perusahaan: "",
+              no_hp: "",
+              no_telp: "",
+              no_fax: "",
+              no_npwp: "",
+              alamat_pengiriman: "",
+              fk_akun_piutang: "",
+              fk_akun_hutang: "",
+              piutang_max: "",
+              syarat_pembayaran: "",
+              created_at: "",
+              created_id: "",
+              updated_at: "",
+              updated_id: "",
+              is_delete: "",
+              deleted_at: "",
+              deleted_id: "",
+              active_piutang: "",
+              nama_bank: "",
+              fk_info_bank: "",
+              alamat_penagihan: "",
+              company_id: "",
+              is_generate: "",
+              nitku: "",
+              syarat_pembayaran_id: "",
+              nama_create: "",
+              email_kontak_email: [""],
+              data_bank_info: [
+                {
+                  rek_no: "",
+                  bank_name: "",
+                  bank_branch: "",
+                  holder_name: "",
+                },
+              ],
+              grup_kontak_nama: [""],
+            },
+            {
+              id: "",
+              tipe_kontak: "",
+              nama: "",
+              sapaan: "",
+              tipe_identitas: "",
+              no_identitas: "",
+              nama_perusahaan: "",
+              no_hp: "",
+              no_telp: "",
+              no_fax: "",
+              no_npwp: "",
+              alamat_pengiriman: "",
+              fk_akun_piutang: "",
+              fk_akun_hutang: "",
+              piutang_max: "",
+              syarat_pembayaran: "",
+              created_at: "",
+              created_id: "",
+              updated_at: "",
+              updated_id: "",
+              is_delete: "",
+              deleted_at: "",
+              deleted_id: "",
+              active_piutang: "",
+              nama_bank: "",
+              fk_info_bank: "",
+              alamat_penagihan: "",
+              company_id: "",
+              is_generate: "",
+              nitku: "",
+              syarat_pembayaran_id: "",
+              nama_create: "",
+              email_kontak_email: [""],
+              data_bank_info: [
+                {
+                  rek_no: "",
+                  bank_name: "",
+                  bank_branch: "",
+                  holder_name: "",
+                },
+              ],
+              grup_kontak_nama: [""],
+            },
+            {
+              id: "",
+              tipe_kontak: "",
+              nama: "",
+              sapaan: "",
+              tipe_identitas: "",
+              no_identitas: "",
+              nama_perusahaan: "",
+              no_hp: "",
+              no_telp: "",
+              no_fax: "",
+              no_npwp: "",
+              alamat_pengiriman: "",
+              fk_akun_piutang: "",
+              fk_akun_hutang: "",
+              piutang_max: "",
+              syarat_pembayaran: "",
+              created_at: "",
+              created_id: "",
+              updated_at: "",
+              updated_id: "",
+              is_delete: "",
+              deleted_at: "",
+              deleted_id: "",
+              active_piutang: "",
+              nama_bank: "",
+              fk_info_bank: "",
+              alamat_penagihan: "",
+              company_id: "",
+              is_generate: "",
+              nitku: "",
+              syarat_pembayaran_id: "",
+              nama_create: "",
+              email_kontak_email: [""],
+              data_bank_info: [
+                {
+                  rek_no: "",
+                  bank_name: "",
+                  bank_branch: "",
+                  holder_name: "",
+                },
+              ],
+              grup_kontak_nama: [""],
+            },
+            {
+              id: "",
+              tipe_kontak: "",
+              nama: "",
+              sapaan: "",
+              tipe_identitas: "",
+              no_identitas: "",
+              nama_perusahaan: "",
+              no_hp: "",
+              no_telp: "",
+              no_fax: "",
+              no_npwp: "",
+              alamat_pengiriman: "",
+              fk_akun_piutang: "",
+              fk_akun_hutang: "",
+              piutang_max: "",
+              syarat_pembayaran: "",
+              created_at: "",
+              created_id: "",
+              updated_at: "",
+              updated_id: "",
+              is_delete: "",
+              deleted_at: "",
+              deleted_id: "",
+              active_piutang: "",
+              nama_bank: "",
+              fk_info_bank: "",
+              alamat_penagihan: "",
+              company_id: "",
+              is_generate: "",
+              nitku: "",
+              syarat_pembayaran_id: "",
+              nama_create: "",
+              email_kontak_email: [""],
+              data_bank_info: [
+                {
+                  rek_no: "",
+                  bank_name: "",
+                  bank_branch: "",
+                  holder_name: "",
+                },
+              ],
+              grup_kontak_nama: [""],
+            },
+            {
+              id: "",
+              tipe_kontak: "",
+              nama: "",
+              sapaan: "",
+              tipe_identitas: "",
+              no_identitas: "",
+              nama_perusahaan: "",
+              no_hp: "",
+              no_telp: "",
+              no_fax: "",
+              no_npwp: "",
+              alamat_pengiriman: "",
+              fk_akun_piutang: "",
+              fk_akun_hutang: "",
+              piutang_max: "",
+              syarat_pembayaran: "",
+              created_at: "",
+              created_id: "",
+              updated_at: "",
+              updated_id: "",
+              is_delete: "",
+              deleted_at: "",
+              deleted_id: "",
+              active_piutang: "",
+              nama_bank: "",
+              fk_info_bank: "",
+              alamat_penagihan: "",
+              company_id: "",
+              is_generate: "",
+              nitku: "",
+              syarat_pembayaran_id: "",
+              nama_create: "",
+              email_kontak_email: [""],
+              data_bank_info: [
+                {
+                  rek_no: "",
+                  bank_name: "",
+                  bank_branch: "",
+                  holder_name: "",
+                },
+              ],
+              grup_kontak_nama: [""],
+            },
+          ],
+
+          totalData: 5, // Total data
+        },
+      }).as("getKontak");
+      cy.wait("@getKontak").then((interception) => {});
+    });
+
+    it("Memanipulasi body data dari backend list/JenisKontak=pelanggan dengan nilai null pada semua value", () => {
+      cy.intercept("GET", "/api/kontak/list*skip=0*", {
+        statusCode: 200, // Status sukses
+        body: {
+          results: [
+            {
+              id: null,
+              tipe_kontak: null,
+              nama: null,
+              sapaan: null,
+              tipe_identitas: null,
+              no_identitas: null,
+              nama_perusahaan: null,
+              no_hp: null,
+              no_telp: null,
+              no_fax: null,
+              no_npwp: null,
+              alamat_pengiriman: null,
+              fk_akun_piutang: null,
+              fk_akun_hutang: null,
+              piutang_max: null,
+              syarat_pembayaran: null,
+              created_at: null,
+              created_id: null,
+              updated_at: null,
+              updated_id: null,
+              is_delete: null,
+              deleted_at: null,
+              deleted_id: null,
+              active_piutang: null,
+              nama_bank: null,
+              fk_info_bank: null,
+              alamat_penagihan: null,
+              company_id: null,
+              is_generate: null,
+              nitku: null,
+              syarat_pembayaran_id: null,
+              nama_create: null,
+              email_kontak_email: [null],
+              data_bank_info: [
+                {
+                  rek_no: null,
+                  bank_name: null,
+                  bank_branch: null,
+                  holder_name: null,
+                },
+              ],
+              grup_kontak_nama: [null],
+            },
+            {
+              id: null,
+              tipe_kontak: null,
+              nama: null,
+              sapaan: null,
+              tipe_identitas: null,
+              no_identitas: null,
+              nama_perusahaan: null,
+              no_hp: null,
+              no_telp: null,
+              no_fax: null,
+              no_npwp: null,
+              alamat_pengiriman: null,
+              fk_akun_piutang: null,
+              fk_akun_hutang: null,
+              piutang_max: null,
+              syarat_pembayaran: null,
+              created_at: null,
+              created_id: null,
+              updated_at: null,
+              updated_id: null,
+              is_delete: null,
+              deleted_at: null,
+              deleted_id: null,
+              active_piutang: null,
+              nama_bank: null,
+              fk_info_bank: null,
+              alamat_penagihan: null,
+              company_id: null,
+              is_generate: null,
+              nitku: null,
+              syarat_pembayaran_id: null,
+              nama_create: null,
+              email_kontak_email: [null],
+              data_bank_info: [
+                {
+                  rek_no: null,
+                  bank_name: null,
+                  bank_branch: null,
+                  holder_name: null,
+                },
+              ],
+              grup_kontak_nama: [null],
+            },
+            {
+              id: null,
+              tipe_kontak: null,
+              nama: null,
+              sapaan: null,
+              tipe_identitas: null,
+              no_identitas: null,
+              nama_perusahaan: null,
+              no_hp: null,
+              no_telp: null,
+              no_fax: null,
+              no_npwp: null,
+              alamat_pengiriman: null,
+              fk_akun_piutang: null,
+              fk_akun_hutang: null,
+              piutang_max: null,
+              syarat_pembayaran: null,
+              created_at: null,
+              created_id: null,
+              updated_at: null,
+              updated_id: null,
+              is_delete: null,
+              deleted_at: null,
+              deleted_id: null,
+              active_piutang: null,
+              nama_bank: null,
+              fk_info_bank: null,
+              alamat_penagihan: null,
+              company_id: null,
+              is_generate: null,
+              nitku: null,
+              syarat_pembayaran_id: null,
+              nama_create: null,
+              email_kontak_email: [null],
+              data_bank_info: [
+                {
+                  rek_no: null,
+                  bank_name: null,
+                  bank_branch: null,
+                  holder_name: null,
+                },
+              ],
+              grup_kontak_nama: [null],
+            },
+            {
+              id: null,
+              tipe_kontak: null,
+              nama: null,
+              sapaan: null,
+              tipe_identitas: null,
+              no_identitas: null,
+              nama_perusahaan: null,
+              no_hp: null,
+              no_telp: null,
+              no_fax: null,
+              no_npwp: null,
+              alamat_pengiriman: null,
+              fk_akun_piutang: null,
+              fk_akun_hutang: null,
+              piutang_max: null,
+              syarat_pembayaran: null,
+              created_at: null,
+              created_id: null,
+              updated_at: null,
+              updated_id: null,
+              is_delete: null,
+              deleted_at: null,
+              deleted_id: null,
+              active_piutang: null,
+              nama_bank: null,
+              fk_info_bank: null,
+              alamat_penagihan: null,
+              company_id: null,
+              is_generate: null,
+              nitku: null,
+              syarat_pembayaran_id: null,
+              nama_create: null,
+              email_kontak_email: [null],
+              data_bank_info: [
+                {
+                  rek_no: null,
+                  bank_name: null,
+                  bank_branch: null,
+                  holder_name: null,
+                },
+              ],
+              grup_kontak_nama: [null],
+            },
+            {
+              id: null,
+              tipe_kontak: null,
+              nama: null,
+              sapaan: null,
+              tipe_identitas: null,
+              no_identitas: null,
+              nama_perusahaan: null,
+              no_hp: null,
+              no_telp: null,
+              no_fax: null,
+              no_npwp: null,
+              alamat_pengiriman: null,
+              fk_akun_piutang: null,
+              fk_akun_hutang: null,
+              piutang_max: null,
+              syarat_pembayaran: null,
+              created_at: null,
+              created_id: null,
+              updated_at: null,
+              updated_id: null,
+              is_delete: null,
+              deleted_at: null,
+              deleted_id: null,
+              active_piutang: null,
+              nama_bank: null,
+              fk_info_bank: null,
+              alamat_penagihan: null,
+              company_id: null,
+              is_generate: null,
+              nitku: null,
+              syarat_pembayaran_id: null,
+              nama_create: null,
+              email_kontak_email: [null],
+              data_bank_info: [
+                {
+                  rek_no: null,
+                  bank_name: null,
+                  bank_branch: null,
+                  holder_name: null,
+                },
+              ],
+              grup_kontak_nama: [null],
+            },
+          ],
+          totalData: 5, // Total data
+        },
+      }).as("getKontak");
+      cy.wait("@getKontak").then((interception) => {});
+    });
+
+    it("Memanipulasi body data dari backend list/JenisKontak=pelanggan dengan 5 objek kosong ", () => {
+      cy.intercept("GET", "/api/kontak/list*skip=0*", {
+        statusCode: 200, // Status sukses
+        body: {
+          results: [{}, {}, {}, {}, {}],
+          totalData: 5, // Total data
+        },
+      }).as("getKontak");
+      cy.wait("@getKontak").then((interception) => {});
     });
   });
 });
