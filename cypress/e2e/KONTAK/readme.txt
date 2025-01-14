@@ -20,3 +20,5 @@ Fitur search lebih memprioritaskan pengambilan data dari alamat email dibandingk
 7.  Pada tab pelanggan, data yang paling atas di tabel adalah data lama, sedangkan pada tab lainnya, data yang diambil adalah data baru berdasarkan tanggal pembuatannya.
 
 8.  Inkonsistensi pada format input nama kontak dan nama pemegang akun bank.
+
+9. Jika selesai menambahkan kontak baru semisal pada kontak suplier seharusnya ketika sudah selesai maka dikembalikan ke halaman pada tab suplier
