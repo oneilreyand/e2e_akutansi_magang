@@ -35,22 +35,35 @@ Cypress.Commands.add("loginWithUI", (email, password) => {
     });
   });
 
-  Cypress.Commands.add('loginWithAPI', (email, password) => {
-    cy.request({
-      method: 'POST',
-      url: 'https://api-cashflow.assist.id/api/login',
-      body: {
-        email: email,
-        password: password
-      }
-    }).then((response) => {
-      // Verifikasi bahwa login berhasil dengan memeriksa response status
-      expect(response.status).to.eq(200);
-  
-      // Simpan token atau data yang diperlukan untuk sesi berikutnya
-      Cypress.env('authToken', response.body.token);
-  
-      // Atur cookie atau localStorage sesuai kebutuhan aplikasi Anda
-      // cy.setCookie('authToken', response.body.token);
-    });
+  // cypress/support/commands.js
+
+// cypress/support/commands.js
+
+Cypress.Commands.add('loginWithApi', (email, password) => {
+  cy.request({
+    method: 'POST',
+    url: 'https://api-cashflow.assist.id/api/login',
+    body: {
+      email: email,
+      password: password
+    }
+  }).then((response) => {
+    // Menyimpan token ke cookie
+    cy.setCookie('authToken', response.body.token);
+    // Menyimpan token ke localStorage
+    window.localStorage.setItem('token', response.body.token);
+    // Menyimpan token ke sessionStorage
+    // window.sessionStorage.setItem('token', response.body.token);
   });
+});
+
+
+
+
+
+
+
+
+
+  
+  
