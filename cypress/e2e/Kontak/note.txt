@@ -1,6 +1,0 @@
-1. ketika detail kontak pada jejak navigasi ditekan maka akan mengarah ke halaman kontak tidak ke detail kontak (kesalahan)
-2. form menerima ktp sim dan paspor dapat diisi dengan 2 digit (kesalahan)
-3. tidak bisa mencari kontak yang ada menggunakan id
-4. tidak bisa mencari kontak menggunakan nomor hp, grup kontak
-5. ketika navigasi detail kontak ditekan maka seharusnya mengarah ke halaman detail kontak, tetapi malah mengarah ke halaman edit kontak yang dimana halamannya tidak menampilkan apa apa
-6. ketika berada di halaman edit kontak, pada bagian tipe kontak, seharusnya berisi Karyawan karena kontak yang dipilih itu bertipe kontak karyawan. namun hasilnya adalah tipe kontak pelanggan 

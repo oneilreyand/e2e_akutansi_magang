@@ -345,7 +345,7 @@ describe("Menguji Bagian Karyawan pada website Cashflow Assist id dihalaman Kont
 
     it("Case 12 : Memeriksa data di tabel bahwa tidak boleh lebih dari 10", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
-        
+
         // todo pergi ke bagian karyawan
         cy.get('#simple-tab-2').should("be.visible").contains("Karyawan").click();
 
@@ -353,10 +353,10 @@ describe("Menguji Bagian Karyawan pada website Cashflow Assist id dihalaman Kont
         cy.get('table tbody').find('tr').not(':first').should('have.length.greaterThan', 0);
         cy.get('table tbody').find('tr').not(':first').should('have.length.at.most', 10);
         cy.wait(2000)
-        
+
     });
 
-    it("Case 13 : Mencoba untuk pergi kehalama detail kontak dengan menggunakan salah satu data yang ada di tabel", () => {
+    it("Case 13 : Mencoba untuk pergi kehalaman detail kontak dengan menggunakan salah satu data yang ada di tabel", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
 
         // todo pergi ke bagian karyawan
@@ -374,17 +374,44 @@ describe("Menguji Bagian Karyawan pada website Cashflow Assist id dihalaman Kont
 
     it("Case 14 : Mencoba mencari data yang ada menggunakan kolom pencarian di tabel karyawan", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
+        
+        cy.get('#simple-tab-2').should("be.visible").contains("Karyawan").click();
+    
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root')
+            .should("be.visible")
+            .type("Nyoba je");
+    
+        // Tunggu beberapa detik untuk memastikan data muncul
+        cy.wait(5000);  // Menunggu lebih lama untuk memastikan data terupdate
+    
+        // Memastikan ada baris di tabel setelah pencarian
+        cy.get('table tbody tr').should('have.length.greaterThan', 0).then(rows => {
+            const foundRows = rows.slice(0);  // Mengambil semua baris hasil pencarian (termasuk header)
+    
+            if (foundRows.length > 0) {
+                // Karena kita hanya mengharapkan 1 baris hasil pencarian, kita periksa baris pertama
+                cy.wrap(foundRows)
+                    .eq(0)  // Mengakses baris pertama (satu-satunya hasil)
+                    .find('td')
+                    .eq(1)  // Mengakses kolom kedua (index dimulai dari 0)
+                    .should('have.text', 'Nyoba Je');
+            } else {
+                cy.log("data yang dicari tidak ditemukan");
+            };
+        });
+        cy.wait(2000)
+    });
+    
+    it("Case 15 : Memeriksa tabel header pada bagian karyawan", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
 
         cy.get('#simple-tab-2').should("be.visible").contains("Karyawan").click();
-
-        cy.get('[data-testid="search-input"] > .MuiInputBase-root').should("be.visible").type("Nyoba je")
-        
-        cy.get('table tbody tr').not(':first').then(rows => {
-            if (rows.length > 0) {
-                cy.wrap(rows).eq(1).find('td').eq('1').should('have.text', 'Nyoba je');
-            } else {
-                cy.log("data yang dicari tidak ditemukan")
-            }
-        })
-    })
+        cy.get('table th').eq(0).should("be.visible").contains("ID")
+        cy.get('table th').eq(1).should("be.visible").contains("Nama Lengkap")
+        cy.get('table th').eq(2).should("be.visible").contains("Grup Kontak")
+        cy.get('table th').eq(3).should("be.visible").contains("Email & No Handphone")
+        cy.get('table th').eq(4).should("be.visible").contains("Alamat")
+        cy.get('table th').eq(5).should("be.visible").contains("Total Piutang")
+    });
+    
 });

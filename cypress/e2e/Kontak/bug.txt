@@ -1,0 +1,7 @@
+1. tabel tidak mengakses seluruh data melainkan hanya dipisahkan oleh pagination yang hanya menampung max 10 data jadi jika sebuah kondisi berada di pagination 1(default) sedangkan kita ingin mencari data yang dimana data tersebut ada di pagination 2 maka data tidak akan ditemukan
+
+2. ketika membuat kontak dengan tipe kontak karyawan, lalu dibagian tipe identitas. saat memilih tipe identitas SIM dan kemudian SIM tersebut diisi dengan 2 digit maka helper text yang muncul adalah "Nomor KTP harus 16 digit" sama halnya dengan ketika memilih paspor
+
+3. ketika berada di halaman detail kontak, url langsung mengandung id data (/admin/contacts/idData). sebaiknya juga menambahkan detail (/admin/contacts/detail/idData)
+
+4. pada halaman detail kontak, data pada UI dan response API berbeda. jika pengguna membuat kontak dengan nama ("Akun Nyoba Doang ") dan menyimpannya maka pada UI spasi akan dihapus sedangkan response akan tetap sama dengan data yang diinput.

@@ -360,17 +360,43 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
 
     it("Case 14 : Mencoba mencari data yang ada menggunakan kolom pencarian di tabel Lainnya", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
+    
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+    
+        cy.get('[data-testid="search-input"] > .MuiInputBase-root')
+            .should("be.visible")
+            .type("Jane Dhoe Edit");
+    
+        // Tunggu beberapa detik untuk memastikan data muncul
+        cy.wait(5000);  // Menunggu lebih lama untuk memastikan data terupdate
+    
+        // Memastikan ada baris di tabel setelah pencarian
+        cy.get('table tbody tr').should('have.length.greaterThan', 0).then(rows => {
+            const foundRows = rows.slice(0);  // Mengambil semua baris hasil pencarian (termasuk header)
+    
+            if (foundRows.length > 0) {
+                // Karena kita hanya mengharapkan 1 baris hasil pencarian, kita periksa baris pertama
+                cy.wrap(foundRows)
+                    .eq(0)  // Mengakses baris pertama (satu-satunya hasil)
+                    .find('td')
+                    .eq(1)  // Mengakses kolom kedua (index dimulai dari 0)
+                    .should('have.text', 'Jane Dhoe Edit');
+            } else {
+                cy.log("data yang dicari tidak ditemukan");
+            }
+        });
+        cy.wait(2000)
+    });
+
+    it("Case 15 : Memeriksa tabel header pada bagian Lainnya", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
 
         cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
-
-        cy.get('[data-testid="search-input"] > .MuiInputBase-root').should("be.visible").type("Jane Dhoe Edit")
-        
-        cy.get('table tbody tr').not(':first').then(rows => {
-            if (rows.length > 0) {
-                cy.wrap(rows).eq(1).find('td').eq('1').should('have.text', 'Jane Dhoe Edit');
-            } else {
-                cy.log("data yang dicari tidak ditemukan")
-            }
-        })
-    })
+        cy.get('table th').eq(0).should("be.visible").contains("ID")
+        cy.get('table th').eq(1).should("be.visible").contains("Nama Lengkap")
+        cy.get('table th').eq(2).should("be.visible").contains("Grup Kontak")
+        cy.get('table th').eq(3).should("be.visible").contains("Email & No Handphone")
+        cy.get('table th').eq(4).should("be.visible").contains("Alamat")
+        cy.get('table th').eq(5).should("be.visible").contains("Total Piutang")
+    });
 });

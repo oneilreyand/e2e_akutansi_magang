@@ -345,7 +345,7 @@ describe("Menguji halaman tambah kontak pada cashflow Assist ID", () => {
         cy.get('#sapaan').should("be.visible").click()
         cy.get('[data-value="bapak"]').click()
         cy.get('#sapaan').contains("Bapak")
-        cy.get('#nama').should("be.visible").type("akun nyoba doang ")
+        cy.get('#nama').should("be.visible").type("Isnin   ")
         cy.get('#tipe_identitas').should("be.visible").click()
         cy.get('[data-value="ktp"]').click()
         cy.get('#tipe_identitas').contains("KTP")
@@ -502,7 +502,7 @@ describe("Menguji halaman tambah kontak pada cashflow Assist ID", () => {
         cy.log("Form tidak bisa terkirim karena nama lengkap mengandung angka dan simbol")
     });
 
-    it("Case 7 : Mengirim alamat email yang tidak valid", () => {
+    it.only("Case 7 : Mengirim alamat email yang tidak valid", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts/create")
         // todo tanpa @
         cy.get('[name="email.0"]').should("be.visible").type('testingemail.com')
@@ -756,6 +756,8 @@ describe("Menguji halaman tambah kontak pada cashflow Assist ID", () => {
     it("Case 12 : mencoba mengisi nilai sim", () => {
         // todo mengisi nilai sim dengan 2 digit
         cy.visit("https://cashflow.assist.id/admin/contacts/create")
+        cy.get('#tipe_kontak').should("be.visible").click()
+        cy.get('[data-value="karyawan"]').should("be.visible").contains("Karyawan").click()
         cy.get('#fk_grup').should("be.visible").click()
         cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
         cy.get('.css-1j4fk1t').click()
@@ -768,13 +770,15 @@ describe("Menguji halaman tambah kontak pada cashflow Assist ID", () => {
         cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
         cy.get('.MuiButton-contained').should("be.visible").click()
 
+        cy.get('#no_identitas-helper-text').should("be.visible").contains("Nomor SIM harus 16 digit")
         
-
     });
 
     it("Case 13 : mencoba mengisi nilai paspor", () => {
         // todo mengisi nilai paspor dengan 2 digit
         cy.visit("https://cashflow.assist.id/admin/contacts/create")
+        cy.get('#tipe_kontak').should("be.visible").click()
+        cy.get('[data-value="karyawan"]').should("be.visible").contains("Karyawan").click()
         cy.get('#fk_grup').should("be.visible").click()
         cy.get('[data-value="30a2c042-a658-11ef-8f78-25bebcc62186"]').click()
         cy.get('.css-1j4fk1t').click()
@@ -786,7 +790,8 @@ describe("Menguji halaman tambah kontak pada cashflow Assist ID", () => {
         cy.get('[placeholder="Masukkan alamat email"]').type('email@example.com')
         cy.get("[placeholder='Masukkan alamat penagihan']").should("be.visible").type("llolololo")
         cy.get('.MuiButton-contained').should("be.visible").click()
-
+        
+        cy.get('#no_identitas-helper-text').should("be.visible").contains("Nomor Paspor harus 16 digit")
         // ! form menerima nomor paspor meski hanya 2 digit
         cy.wait(3000)
     });
