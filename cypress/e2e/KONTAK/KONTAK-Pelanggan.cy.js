@@ -5,6 +5,59 @@ describe("Check Komponen Tab Pelanggan", () => {
     cy.visit("https://cashflow.assist.id/admin/contacts");
   });
 
+  context('Pengujian sidebar', () => {
+    it('Kontak ke beranda', () => {
+      cy.get('[data-testid="drawer-item-dashboard"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/dashboard')
+      cy.get('h5').contains('Beranda')
+    });
+    it('Kontak ke laporan', () => {
+      cy.get('[data-testid="drawer-item-reports"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/reports')
+      cy.get('h5').contains('Laporan')
+    });
+    it('Kontak ke kas & bank', () => {
+      cy.get('[data-testid="drawer-item-cash-bank"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/cash-bank')
+      cy.get('h5').contains('Kas & Bank')
+    });
+    it('Kontak ke penjualan', () => {
+      cy.get('[data-testid="drawer-item-sales"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/sales')
+      cy.get('h5').contains('Penjualan')
+    });
+    it('Kontak ke pembelian', () => {
+      cy.get('[data-testid="drawer-item-purchases"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/purchases')
+      cy.get('h5').contains('Pembelian')
+    });
+    it('Kontak ke biaya', () => {
+      cy.get('[data-testid="drawer-item-expenses"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/expenses')
+      cy.get('h5').contains('Biaya')
+    });
+    it('Kontak ke produk', () => {
+      cy.get('[data-testid="drawer-item-products"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/products')
+      cy.get('h5').contains('Produk')
+    });
+    it('Kontak ke aset', () => {
+      cy.get('[data-testid="drawer-item-assets"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/assets')
+      cy.get('h5').contains('Aset')
+    });
+    it('Kontak ke daftar akun', () => {
+      cy.get('[data-testid="drawer-item-accounts"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/accounts')
+      cy.get('h5').contains('Akun')
+    });
+    it('Kontak ke pengaturan', () => {
+      cy.get('[data-testid="drawer-item-settings"]').click()
+      cy.url().should('eq','https://cashflow.assist.id/admin/settings')
+      cy.get('h5').contains('Pengaturan')
+    });
+  })
+
   it("Case 1 : Validasi kesesuaian judul H5", () => {
     cy.get(".MuiTypography-h5 > span")
       .should("be.visible")

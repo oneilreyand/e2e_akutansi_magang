@@ -21,4 +21,6 @@ Fitur search lebih memprioritaskan pengambilan data dari alamat email dibandingk
 
 8.  Inkonsistensi pada format input nama kontak dan nama pemegang akun bank.
 
-9. Jika selesai menambahkan kontak baru semisal pada kontak suplier seharusnya ketika sudah selesai maka dikembalikan ke halaman pada tab suplier
+9. Jika selesai menambahkan kontak baru semisal pada kontak suplier seharusnya ketika sudah selesai maka dikembalikan ke halaman tab suplier
+
+10. Inkonsistensi pada label yang berperan sebagai pengganti placeholder pada halaman tambah kontak: 1.NITKU seharusnya berwarna hitam,2. no telepon dan no hp tidak memiliki label placeholder, 3.Alamat penagihan dan alamat pengiriman tidak memiliki label placeholder,4. Label placeholder No rekening berwarna hitam.5. Label placeholder piutang maksimum berwarna hitam
