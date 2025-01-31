@@ -1170,7 +1170,7 @@ describe("Check Komponen Tab Pelanggan", () => {
       });
     });
   });
-  context.only("Negative Testcase", () => {
+  context("Negative Testcase", () => {
     it("API list/JenisKontak=pelanggan dipaksa statusCode = 400 , Message error dari backend dan table status code 400", () => {
       const ErrorMsg = "Error paksa dengan kode 400";
 

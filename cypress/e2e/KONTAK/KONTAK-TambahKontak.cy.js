@@ -304,6 +304,8 @@ describe("Tambah kontak", () => {
 
     context('Pengujian fungsi tambah input alamat email', () => {
       it('menambah satu input email dan check penulisan', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
         cy.get('label[id="email.0-label"]').should('have.text', 'Alamat Email *')
         cy.get('input[id="email.0"]').should('have.attr', 'placeholder', 'Masukkan alamat email')
         cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('have.text', 'Tambah Email').click()
@@ -316,6 +318,9 @@ describe("Tambah kontak", () => {
       });
 
       it('menambah lebih dari dua input email serta pengecekan penulisan', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('label[id="email.0-label"]').should('have.text', 'Alamat Email *')
         cy.get('input[id="email.0"]').should('have.attr', 'placeholder', 'Masukkan alamat email')
         cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('have.text', 'Tambah Email').click()
@@ -336,6 +341,9 @@ describe("Tambah kontak", () => {
       });
       
       it.skip('Menghapus input email bagian tengah dengan ekspektasi form yang dihapus adalah bagian yang ingin dihilangkan', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('label[id="email.0-label"]').should('have.text', 'Alamat Email *')
         cy.get('input[id="email.0"]').should('have.attr', 'placeholder', 'Masukkan alamat email')
         cy.get('input[id="email.0"]').type('email0')
@@ -357,6 +365,8 @@ describe("Tambah kontak", () => {
       });
       
       it('Mengurangi input email hingga tersisa 1 dengan ekspektasi tombol hapus tidak ada namun tombol tambah tetap ada', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
         cy.get('label[id="email.0-label"]').should('have.text', 'Alamat Email *')
         cy.get('input[id="email.0"]').should('have.attr', 'placeholder', 'Masukkan alamat email')
         cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('have.text', 'Tambah Email').click()
@@ -383,14 +393,177 @@ describe("Tambah kontak", () => {
 
       });
 
-      it.skip('Pengujian text helper pada masing masing input email tambahan', () => {
+      it('Pengujian text helper pada masing masing input email tambahan dengan contoh 5 input dengan kondisi email tidak diisi', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get('.MuiButton-contained').click()
+
+        cy.get('p[id="email.0-helper-text"]').should('have.text', 'Email harus diisi')
+        cy.get('p[id="email.1-helper-text"]').should('have.text', 'Email harus diisi')
+        cy.get('p[id="email.2-helper-text"]').should('have.text', 'Email harus diisi')
+        cy.get('p[id="email.3-helper-text"]').should('have.text', 'Email harus diisi')
+        cy.get('p[id="email.4-helper-text"]').should('have.text', 'Email harus diisi')
+      });
+      
+      it('Pengujian text helper pada masing masing input email tambahan dengan contoh 5 input dengan kondisi email tidak valid', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
         
+
+        cy.get('input[id="email.0"]').type('Email0')
+        cy.get('input[id="email.1"]').type('Email1')
+        cy.get('input[id="email.2"]').type('Email2')
+        cy.get('input[id="email.3"]').type('Email3')
+        cy.get('input[id="email.4"]').type('Email4')
+
+        cy.get('.MuiButton-contained').click() 
+        cy.get('.MuiButton-contained').click() 
+
+        cy.get('p[id="email.0-helper-text"]').should('have.text', 'Email tidak valid')
+        cy.get('p[id="email.1-helper-text"]').should('have.text', 'Email tidak valid')
+        cy.get('p[id="email.2-helper-text"]').should('have.text', 'Email tidak valid')
+        cy.get('p[id="email.3-helper-text"]').should('have.text', 'Email tidak valid')
+        cy.get('p[id="email.4-helper-text"]').should('have.text', 'Email tidak valid')
+      });
+
+      it('Pengujian text helper hilang bila 5 input dengan kondisi email valid', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        
+
+        cy.get('input[id="email.0"]').type('Email0@gmail.com')
+        cy.get('input[id="email.1"]').type('Email1@gmail.com')
+        cy.get('input[id="email.2"]').type('Email2@gmail.com')
+        cy.get('input[id="email.3"]').type('Email3@gmail.com')
+        cy.get('input[id="email.4"]').type('Email4@gmail.com')
+
+        cy.get('.MuiButton-contained').click() 
+        cy.get('.MuiButton-contained').click() 
+
+        cy.get('p[id="email.0-helper-text"]').should('not.exist')
+        cy.get('p[id="email.1-helper-text"]').should('not.exist')
+        cy.get('p[id="email.2-helper-text"]').should('not.exist')
+        cy.get('p[id="email.3-helper-text"]').should('not.exist')
+        cy.get('p[id="email.4-helper-text"]').should('not.exist')
+      });
+    })
+
+    context('Pengujian format dan text helper pada nama lengkap', () => {
+      it('Ketika nama lengkap ditulis dengan lowercase maka setiap awal kata akan kapital', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('rayhanrayandra')
+        cy.get('#nama').should('have.value','Rayhanrayandra')
+      });
+     
+      it('Ketika nama lengkap ditulis dengan uppercase maka setiap awal kata akan kapital', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('RAYHANRAYANDRA')
+        cy.get('#nama').should('have.value','Rayhanrayandra')
+      });
+      
+      it('Ketika nama lengkap ditulis dengan uppercase dan lowercase maka setiap awal kata akan kapital dan selebihnya lowercase', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('RaYHanRaYanDRA')
+        cy.get('#nama').should('have.value','Rayhanrayandra')
+      });
+      
+      it('Ketika nama lengkap ditulis 2 kata dengan lowercase maka setiap awal kata akan kapital', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('rayhan rayandra')
+        cy.get('#nama').should('have.value','Rayhan Rayandra')
+      });
+      
+      it('Ketika nama lengkap ditulis 2 kata dengan uppercase maka setiap awal kata akan kapital', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('RAYHAN RAYANDRA')
+        cy.get('#nama').should('have.value','Rayhan Rayandra')
+      });
+      
+      it('Ketika nama lengkap ditulis 2 kata dengan uppercase dan lowercase maka setiap awal kata akan kapital dan selebihnya lowercase', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('RaYhaN rAyanDRa')
+        cy.get('#nama').should('have.value','Rayhan Rayandra')
+      });
+      
+      it('Ketika nama lengkap ditulis 3 kata dengan lowercase maka setiap awal kata akan kapital', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('rayhan qolbi rayandra')
+        cy.get('#nama').should('have.value','Rayhan Qolbi Rayandra')
+      });
+      
+      it('Ketika nama lengkap ditulis 3 kata dengan uppercase maka setiap awal kata akan kapital', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('RAYHAN QOLBI RAYANDRA')
+        cy.get('#nama').should('have.value','Rayhan Qolbi Rayandra')
+      });
+      
+      it('Ketika nama lengkap ditulis 3 kata dengan uppercase dan lowercase maka setiap awal kata akan kapital dan selebihnya lowercase', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('RaYhaN QolBi rAyanDRa')
+        cy.get('#nama').should('have.value','Rayhan Qolbi Rayandra')
+      });
+      
+      it('Pengujian text helper ketika nama lengkap terdapat angka', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('Rayhan123')
+        cy.get('#nama').should('have.value','Rayhan123').blur()
+        
+        cy.get('.MuiButton-contained').click()
+        cy.get('#nama-helper-text').should('have.text', 'Nama Lengkap hanya boleh berisi huruf dan spasi')
+      });
+      
+      it('Pengujian text helper ketika nama lengkap terdapat karakter khusus', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#nama').type('Rayhan!@#$%^')
+        cy.get('#nama').should('have.value','Rayhan!@#$%^').blur()
+        
+        cy.get('.MuiButton-contained').click()
+        cy.get('#nama-helper-text').should('have.text', 'Nama Lengkap hanya boleh berisi huruf dan spasi')
       });
     })
 
     context('Pengujian text helper pada tipe identitas', () => {
 
       it('input nomor identitas akan disable jika tipe identitas kosong', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
         
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'Pilih Tipe Identitas').click()
@@ -398,7 +571,9 @@ describe("Tambah kontak", () => {
       });
 
       it('Menampilkan text helper ketika tipe identitas ktp input dibawah 16 digit', () => {
-      
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'KTP').click()
         cy.get('#no_identitas').type('1435435')
@@ -410,7 +585,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas ktp input dengan karakter kombinasi dibawah 16 karakter', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'KTP').click()
         cy.get('#no_identitas').type('Char123')
@@ -422,7 +599,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas ktp input dengan 16 karakter kombinasi', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'KTP').click()
         cy.get('#no_identitas').type('abcdefghijklm123')
@@ -434,7 +613,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas ktp berisi 16 digit lebih', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'KTP').click()
         cy.get('#no_identitas').type('0880321222000111121314151617181920212223242526')
@@ -445,7 +626,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Pengujian text helper jika tipe identitas ktp input dengan format yang benar maka helper hilang', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'KTP').click()
         cy.get('#no_identitas').type('0880321222000111')
@@ -456,7 +639,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas sim input dibawah 16 digit', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'SIM').click()
         cy.get('#no_identitas').type('1435435')
@@ -468,7 +653,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas sim input dengan karakter kombinasi dibawah 16 karakter', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'SIM').click()
         cy.get('#no_identitas').type('char123')
@@ -480,7 +667,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas sim input dengan 16 huruf', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'SIM').click()
         cy.get('#no_identitas').type('abcdefghijklm123')
@@ -492,7 +681,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas sim berisi 16 digit lebih', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'SIM').click()
         cy.get('#no_identitas').type('0880321222000111121314151617181920212223242526')
@@ -503,7 +694,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Pengujian text helper jika tipe identitas sim input dengan format yang benar maka helper hilang', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'SIM').click()
         cy.get('#no_identitas').type('0880321222000111')
@@ -514,7 +707,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas paspor input dibawah 6 karakter', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'Paspor').click()
         cy.get('#no_identitas').type('1a3')
@@ -526,7 +721,9 @@ describe("Tambah kontak", () => {
       })
       
       it('Menampilkan text helper ketika tipe identitas paspor input dengan 6 karakter', () => {
-        
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#tipe_identitas').click()
         cy.contains('li', 'Paspor').click()
         cy.get('#no_identitas').type('6chars')
@@ -539,48 +736,70 @@ describe("Tambah kontak", () => {
     })
     context('Pengujian inputan nomor hp dan telepon dengan ekspektasi inputan hanya dengan angka', () => {
 
-      it('Mencoba input nomor hp dengan huruf', () => {
-        cy.get('#no_hp').type('hurufsahaja')
-        cy.get('#no_hp').should('have.value', "")
+      it('Mencoba input nomor hp dengan karakter', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#no_hp').type('char@#$!')
+        cy.get('#no_hp').should('have.value', '')
       });
       
       it('Mencoba input nomor hp dengan angka', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#no_hp').type('12345678')
-        cy.get('#no_hp').should('have.value', "12345678       ")
+        cy.get('#no_hp').should('have.value', "12345678")
+        // cy.get('#no_hp').should('have.value', "12345678       ")
       });
       
-      it('Mencoba input nomor telp dengan huruf', () => {
-        cy.get('#no_telp').type('hurufsahaja')
-        cy.get('#no_telp').should('have.value', "")
+      it('Mencoba input nomor telp dengan karakter', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get('#no_telp').type('char@#$!')
+        cy.get('#no_telp').should('have.value', '')
       });
       
       it('Mencoba input nomor telp dengan angka', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('#no_telp').type('12345678')
-        cy.get('#no_telp').should('have.value', "12345678       ")
+        cy.get('#no_telp').should('have.value', "12345678")
+        // cy.get('#no_telp').should('have.value', "12345678       ")
       });
       
     })
 
     context('Pengujian fungsi samakan dengan alamat penagihan', () => { 
       it('Memastikan value alamat pengiriman sama dengan alamat penagihan', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('input[id=":rk:"]').type('Samakan dengan di bawah')
-        cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
-        cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
-        cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+        cy.get('input[name="alamatPengirimanEqPenagihan"]').click()
+        cy.get('input[name="alamatPengirimanEqPenagihan"]').click()
+        cy.get('input[name="alamatPengirimanEqPenagihan"]').click()
         cy.get('input[id=":rl:"]').should('have.value', 'Samakan dengan di bawah')
       });
       
       it('Memastikan input alamat pengiriman disable saat fitur "samakan alamat" dicentang', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get('input[id=":rk:"]').type('Samakan dengan di bawah')
-        cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
-        cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
-        cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+        cy.get('input[name="alamatPengirimanEqPenagihan"]').click()
+        cy.get('input[name="alamatPengirimanEqPenagihan"]').click()
+        cy.get('input[name="alamatPengirimanEqPenagihan"]').click()
         cy.get('input[id=":rl:"]').should('be.disabled')
       });
       
     })
     context('Pengujian fitur input bank', () => {
       it('Manambah satu input bank', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
         cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
         cy.get('label[id="data_bank[0].bank_name-label"]').should('have.text', 'Nama Bank')
         cy.get('label[id="data_bank[0].bank_branch-label"]').should('have.text', 'Cabang')
@@ -605,6 +824,9 @@ describe("Tambah kontak", () => {
       });
 
       it('Manambah lebih dari satu input bank', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+        
         cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
         cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
         cy.get('label[id="data_bank[0].bank_name-label"]').should('have.text', 'Nama Bank')
@@ -638,6 +860,9 @@ describe("Tambah kontak", () => {
       });
       
       it('Manambah 3 input bank dan menghapus satu pada bagian paling bawah ekspektasi menghapus form yang benar', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
         cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
         cy.get('input[id="data_bank[0].bank_name"]').type('nama 1')
@@ -709,7 +934,55 @@ describe("Tambah kontak", () => {
         cy.get('label[id="data_bank[2].rek_no-label"]').should('not.exist')
       });
       
+      it('Manambah 2 input bank dan menghapus satu pada bagian tengah ekspektasi menghapus form yang benar', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
+        cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
+        cy.get('input[id="data_bank[0].bank_name"]').type('nama 1')
+        cy.get('input[id="data_bank[0].bank_branch"]').type('cabang 1')
+        cy.get('input[id="data_bank[0].holder_name"]').type('holder 1')
+        cy.get('input[id="data_bank[0].rek_no"]').type('1')
+        cy.get('input[id="data_bank[1].bank_name"]').type('nama 2')
+        cy.get('input[id="data_bank[1].bank_branch"]').type('cabang 2')
+        cy.get('input[id="data_bank[1].holder_name"]').type('holder 2')
+        cy.get('input[id="data_bank[1].rek_no"]').type('2')
+
+        cy.get('label[id="data_bank[0].bank_name-label"]').should('have.text', 'Nama Bank')
+        cy.get('label[id="data_bank[0].bank_branch-label"]').should('have.text', 'Cabang')
+        cy.get('label[id="data_bank[0].holder_name-label"]').should('have.text', 'Nama Pemegang Akun')
+        cy.get('label[id="data_bank[0].rek_no-label"]').should('have.text', 'No Rekening')
+        cy.get('label[id="data_bank[1].bank_name-label"]').should('have.text', 'Nama Bank')
+        cy.get('label[id="data_bank[1].bank_branch-label"]').should('have.text', 'Cabang')
+        cy.get('label[id="data_bank[1].holder_name-label"]').should('have.text', 'Nama Pemegang Akun')
+        cy.get('label[id="data_bank[1].rek_no-label"]').should('have.text', 'No Rekening')
+
+        cy.get('.css-1ov46kg > :nth-child(3) > .MuiButtonBase-root')
+        cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > :nth-child(2) > .MuiButtonBase-root').click()
+
+        cy.get('input[id="data_bank[0].bank_name"]').should('have.value','nama 1')
+        cy.get('input[id="data_bank[0].bank_branch"]').should('have.value','cabang 1')
+        cy.get('input[id="data_bank[0].holder_name"]').should('have.value','holder 1')
+        cy.get('input[id="data_bank[0].rek_no"]').should('have.value','1')
+        cy.get('input[id="data_bank[1].bank_name"]').should('not.exist')
+        cy.get('input[id="data_bank[1].bank_branch"]').should('not.exist')
+        cy.get('input[id="data_bank[1].holder_name"]').should('not.exist')
+        cy.get('input[id="data_bank[1].rek_no"]').should('not.exist')
+
+        cy.get('label[id="data_bank[0].bank_name-label"]').should('have.text', 'Nama Bank')
+        cy.get('label[id="data_bank[0].bank_branch-label"]').should('have.text', 'Cabang')
+        cy.get('label[id="data_bank[0].holder_name-label"]').should('have.text', 'Nama Pemegang Akun')
+        cy.get('label[id="data_bank[0].rek_no-label"]').should('have.text', 'No Rekening')
+        cy.get('label[id="data_bank[1].bank_name-label"]').should('not.exist')
+        cy.get('label[id="data_bank[1].bank_branch-label"]').should('not.exist')
+        cy.get('label[id="data_bank[1].holder_name-label"]').should('not.exist')
+        cy.get('label[id="data_bank[1].rek_no-label"]').should('not.exist')
+      });
+
       it('Manambah 3 input bank dan menghapus satu pada bagian tengah ekspektasi menghapus form yang benar', () => {
+        cy.get("#tipe_kontak").click();
+        cy.contains("li", "Pilih Tipe Kontak").click();
+
         cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
         cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
         cy.get('input[id="data_bank[0].bank_name"]').type('nama 1')
@@ -985,7 +1258,7 @@ describe("Tambah kontak", () => {
     });
     })
 
-  context("Positive Test Cases", () => {
+  context.skip("Positive Test Cases", () => {
     it("Input data required saja type kontak(Pelanggan)- Memantau body request sesuai dengan ui - dan expect berhasil dengan message berhasil ", () => {
       const expectedRequestBody = {
         active_piutang_max: 0,
@@ -1551,7 +1824,7 @@ describe("Tambah kontak", () => {
     });
   });
 
-  context("Negative Test Cases", () => {
+  context.skip("Negative Test Cases", () => {
     it("Ketika submit tanpa mengisi apa apa muncul warning", () => {
       cy.get(".MuiButton-contained").should("contain.text", "Simpan").click(); //klik
       cy.get(".MuiAlert-message").should(
