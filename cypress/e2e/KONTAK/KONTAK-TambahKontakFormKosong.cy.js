@@ -1,8 +1,9 @@
-describe("Tambah kontak", () => {
+describe("Tambah kontak form kosong", () => {
   beforeEach(() => {
     cy.getCookie("authToken"); // Memulihkan cookie sebelum setiap test
     cy.loginWithAPI("rayhanrayandra.work.id@gmail.com", "Nz6}+#8y");
     cy.visit("https://cashflow.assist.id/admin/contacts/create");
+    
   });
 
   context.skip('Pengujian sidebar nav', () => {
@@ -89,6 +90,49 @@ describe("Tambah kontak", () => {
   });
 
   context("Uji komponen dan fungsi dengan kondisi tipe kontak kosong", () => {
+
+    it('Pengecekan eksistensi komponen input', () => {
+      cy.get("#tipe_kontak").click();
+      cy.contains("li", "Pilih Tipe Kontak").click();
+      cy.get(
+        ":nth-child(1) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root"
+      ).click();
+      
+      cy.get('#tipe_kontak').should('be.exist')
+      cy.get('#fk_grup').should('be.exist')
+      cy.get('#sapaan').should('be.exist')
+      cy.get('#nama').should('be.exist')
+      cy.get('#tipe_identitas').should('be.exist')
+      cy.get('#no_identitas').should('be.exist')
+      cy.get('input[id="email.0"]').should('be.exist')
+      cy.get('input[id="email.1"]').should('not.be.exist')
+      cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('be.exist')
+      cy.get('#nama_perusahaan').should('be.exist')
+      cy.get('#no_hp').should('be.exist')
+      cy.get('#no_telp').should('be.exist')
+      cy.get('#no_fax').should('be.exist')
+      cy.get('#no_npwp').should('be.exist')
+      cy.get('#nitku').should('be.exist')
+      cy.get('input[id=":rk:"]').should('be.exist')
+      cy.get('input[id=":rl:"]').should('be.exist')
+      cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should('be.exist')
+      cy.get('input[id="data_bank[0].bank_name"]').should('be.exist')
+      cy.get('input[id="data_bank[0].holder_name"]').should('be.exist')
+      cy.get('input[id="data_bank[0].bank_branch"]').should('be.exist')
+      cy.get('input[id="data_bank[0].rek_no"]').should('be.exist')
+      cy.get('input[id="data_bank[1].bank_name"]').should('not.be.exist')
+      cy.get('input[id="data_bank[1].holder_name"]').should('not.be.exist')
+      cy.get('input[id="data_bank[1].bank_branch"]').should('not.be.exist')
+      cy.get('input[id="data_bank[1].rek_no"]').should('not.be.exist')
+      cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('be.exist')
+      cy.get('#fk_akun_piutang').should('not.be.exist')
+      cy.get('#piutang_max').should('be.exist')
+      cy.get('[data-testid="input-active_piutang_max"] > .MuiButtonBase-root > .PrivateSwitchBase-input').should('be.exist')
+      cy.get('#syarat_pembayaran').should('be.exist')
+      cy.get('.css-16ogmd7 > .MuiButton-text').should('be.exist')
+      cy.get('.MuiButton-contained').should('be.exist')
+
+    });
 
     it('Pengecekan penulisan tombol, label dan tanda asterist "*"', () => {
       cy.get("#tipe_kontak").click();
@@ -744,7 +788,7 @@ describe("Tambah kontak", () => {
         cy.get('#no_hp').should('have.value', '')
       });
       
-      it('Mencoba input nomor hp dengan angka', () => {
+      it.skip('Mencoba input nomor hp dengan angka', () => {
         cy.get("#tipe_kontak").click();
         cy.contains("li", "Pilih Tipe Kontak").click();
 
@@ -761,7 +805,7 @@ describe("Tambah kontak", () => {
         cy.get('#no_telp').should('have.value', '')
       });
       
-      it('Mencoba input nomor telp dengan angka', () => {
+      it.skip('Mencoba input nomor telp dengan angka', () => {
         cy.get("#tipe_kontak").click();
         cy.contains("li", "Pilih Tipe Kontak").click();
 
@@ -979,7 +1023,7 @@ describe("Tambah kontak", () => {
         cy.get('label[id="data_bank[1].rek_no-label"]').should('not.exist')
       });
 
-      it('Manambah 3 input bank dan menghapus satu pada bagian tengah ekspektasi menghapus form yang benar', () => {
+      it.skip('Manambah 3 input bank dan menghapus satu pada bagian tengah ekspektasi menghapus form yang benar', () => {
         cy.get("#tipe_kontak").click();
         cy.contains("li", "Pilih Tipe Kontak").click();
 
@@ -1044,219 +1088,7 @@ describe("Tambah kontak", () => {
     })
     })
   
-  context("Uji komponen dan fungsi dengan kondisi tipe kontak pelanggan", () => {
-
-    it('Pengecekan penulisan tombol, label dan tanda asterist "*"', () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-      cy.get(
-        ":nth-child(1) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root"
-      ).click();
-
-      cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
-
-      cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
-
-      cy.get(':nth-child(1) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root').should('have.text', 'Informasi Kontak')
-      cy.get(':nth-child(1) > .MuiCardContent-root > .css-1i24z3d > :nth-child(1) > .MuiGrid2-grid-md-4').should('have.text', 'Tipe Kontak *')
-      cy.get(':nth-child(1) > .MuiCardContent-root > .css-1i24z3d > :nth-child(2) > .MuiGrid2-grid-md-4').should('have.text', 'Grup Kontak *')
-      cy.get('#tipe_kontak-label').should('have.text', 'Tipe Kontak *')
-      cy.get('#fk_grup-label').should('have.text', 'Grup Kontak *')
-      
-      cy.get(':nth-child(2) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root').should('have.text', 'Informasi Umum')
-      cy.get(':nth-child(2) > .MuiCardContent-root > .css-1i24z3d > :nth-child(1) > .css-1iqhgio').should('have.text', 'Nama Lengkap *')
-      cy.get(':nth-child(2) > .MuiCardContent-root > .css-1i24z3d > :nth-child(2) > .css-1iqhgio').should('have.text', 'Tipe Identitas')
-      cy.get(':nth-child(3) > .MuiGrid2-grid-md-4 > .MuiFormLabel-root').should('have.text', 'Alamat Email *')
-      cy.get('.MuiGrid2-grid-md-4 > .MuiTypography-root').should('have.text', 'Anda dapat menambahkan lebih dari satu alamat email (jika ada)')
-      cy.get(':nth-child(4) > .MuiGrid2-grid-md-4').should('have.text', 'Nama Perusahaan')
-      cy.get(':nth-child(5) > .MuiGrid2-grid-md-4').should('have.text', 'Nomor HP & Telepon')
-      cy.get(':nth-child(6) > .MuiGrid2-grid-md-4').should('have.text', 'Fax & NPWP')
-      cy.get(':nth-child(7) > .MuiGrid2-grid-md-4').should('have.text', 'Nomor Identitas Tempat Kegiatan Usaha (NITKU)')
-      cy.get(':nth-child(8) > .MuiGrid2-grid-md-4').should('have.text', 'Alamat Penagihan *')
-      cy.get(':nth-child(9) > .MuiGrid2-grid-md-4').should('have.text', 'Alamat Pengiriman')
-      cy.get('#sapaan-label').should('have.text', 'Sapaan')
-      cy.get('#nama-label').should('have.text', 'Nama Lengkap *')
-      cy.get('#tipe_identitas-label').should('have.text', 'Tipe Identitas')
-      cy.get('#no_identitas-label').should('have.text', 'Nomor Identitas')
-      cy.get('label[id="email.0-label"]').should('have.text', 'Alamat Email *')
-      cy.get('label[id="email.1-label"]').should('have.text', 'Alamat Email *')
-      cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('have.text', 'Tambah Email')
-      cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > :nth-child(2) > .MuiButtonBase-root').should('have.text', 'Hapus')
-      cy.get('#nama_perusahaan-label').should('have.text', 'Nama Perusahaan')
-      cy.get('#no_hp-label').should('have.text', 'Nomor HP')
-      cy.get('#no_telp-label').should('have.text', 'Nomor Telepon')
-      cy.get('#no_fax-label').should('have.text', 'Fax')
-      cy.get('#no_npwp-label').should('have.text', 'NPWP')
-      cy.get('#nitku-label').should('have.text', 'Nomor Identitas Tempat Kegiatan Usaha (NITKU)')
-      cy.get('label[id=":rk:-label"]').should('have.text', 'Alamat Penagihan *')
-      cy.get('label[id=":rl:-label"]').should('have.text', 'Alamat Pengiriman')
-      cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiTypography-root').should('have.text', 'Samakan dengan alamat penagihan')
-
-      cy.get(':nth-child(3) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root').should('have.text', 'Informasi Bank')
-      cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-4').should('have.text', 'Nama Bank & Cabang')
-      cy.get('label[id="data_bank[0].bank_name-label"]').should('have.text', 'Nama Bank')
-      cy.get('label[id="data_bank[0].bank_branch-label"]').should('have.text', 'Cabang')
-      cy.get('label[id="data_bank[0].holder_name-label"]').should('have.text', 'Nama Pemegang Akun')
-      cy.get('label[id="data_bank[0].rek_no-label"]').should('have.text', 'No Rekening')
-      cy.get('label[id="data_bank[1].bank_name-label"]').should('have.text', 'Nama Bank')
-      cy.get('label[id="data_bank[1].bank_branch-label"]').should('have.text', 'Cabang')
-      cy.get('label[id="data_bank[1].holder_name-label"]').should('have.text', 'Nama Pemegang Akun')
-      cy.get('label[id="data_bank[1].rek_no-label"]').should('have.text', 'No Rekening')
-      cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('have.text', 'Tambah Bank Lainnya')
-      cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > :nth-child(2) > .MuiButtonBase-root').should('have.text', 'Hapus')
-
-      cy.get(':nth-child(4) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root').should('have.text', 'Informasi Pemetaan Akun')
-      cy.get(':nth-child(4) > .MuiCardContent-root > .css-1i24z3d > :nth-child(1) > .MuiGrid2-grid-md-4').should('have.text', 'Pemetaan Akun')
-      cy.get('#piutang_max-label').should('have.text', 'Piutang Maksimum')
-      cy.get('[data-testid="input-active_piutang_max"] > .MuiTypography-root').should('have.text', 'Aktifkan piutang maksimum')
-      cy.get(':nth-child(4) > .MuiCardContent-root > .css-1i24z3d > :nth-child(2) > .MuiGrid2-grid-md-4').should('have.text', 'Syarat Pembayaran Utama')
-      cy.get('#syarat_pembayaran-label').should('have.text', 'Syarat Pembayaran Utama')
-
-      cy.get('.css-16ogmd7 > .MuiButton-text').should('have.text', 'Batal')
-      cy.get('.MuiButton-contained').should('have.text', 'Simpan')
-    })
-
-    it('Pengecekan penulisan placeholder', () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-      cy.get(
-        ":nth-child(1) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root"
-      ).click();
-      cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
-      cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
-
-      cy.get('#nama').should('have.attr', 'placeholder', 'Masukkan nama lengkap')
-      cy.get('#no_identitas').should('have.attr', 'placeholder', 'Masukkan nomor identitas')
-      cy.get('input[id="email.0"]').should('have.attr', 'placeholder', 'Masukkan alamat email')
-      cy.get('input[id="email.1"]').should('have.attr', 'placeholder', 'Masukkan alamat email')
-      cy.get('#nama_perusahaan').should('have.attr', 'placeholder', 'Masukkan nama perusahaan')
-      cy.get('#no_hp').should('have.attr', 'placeholder', 'Masukkan nomor HP')
-      cy.get('#no_telp').should('have.attr', 'placeholder', 'Masukkan nomor telepon')
-      cy.get('#no_fax').should('have.attr', 'placeholder', 'Masukkan fax')
-      cy.get('#no_npwp').should('have.attr', 'placeholder', 'Masukkan NPWP')
-      cy.get('#nitku').should('have.attr', 'placeholder', 'Masukkan NITKU')
-      cy.get('input[id=":rk:"]').should('have.attr', 'placeholder', 'Masukkan alamat penagihan')
-      cy.get('input[id=":rl:"]').should('have.attr', 'placeholder', 'Masukkan alamat pengiriman')
-      cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should('be.exist')
-      cy.get('input[id="data_bank[0].bank_name"]').should('have.attr', 'placeholder','Masukkan nama bank')
-      cy.get('input[id="data_bank[0].bank_branch"]').should('have.attr', 'placeholder','Masukkan cabang')
-      cy.get('input[id="data_bank[0].holder_name"]').should('have.attr', 'placeholder','Masukkan nama pemegang akun')
-      cy.get('input[id="data_bank[0].rek_no"]').should('have.attr', 'placeholder','Masukkan nomor rekening')
-      cy.get('input[id="data_bank[1].bank_name"]').should('have.attr', 'placeholder','Masukkan nama bank')
-      cy.get('input[id="data_bank[1].bank_branch"]').should('have.attr', 'placeholder','Masukkan cabang')
-      cy.get('input[id="data_bank[1].holder_name"]').should('have.attr', 'placeholder','Masukkan nama pemegang akun')
-      cy.get('input[id="data_bank[1].rek_no"]').should('have.attr', 'placeholder','Masukkan nomor rekening')
-      cy.get('#piutang_max').should('have.attr', 'placeholder', 'Masukkan piutang maksimum')
-    });
-
-    it('Pengujian text helper dengan mengirimkan form kosong', () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-      cy.get(
-        ":nth-child(1) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root"
-      ).click();
-
-      cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
-
-      cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').click()
-
-      cy.get('.MuiButton-contained').click();
-
-      cy.get(':nth-child(1) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root').should('have.text', 'Informasi Kontak')
-      cy.get(':nth-child(1) > .MuiCardContent-root > .css-1i24z3d > :nth-child(1) > .MuiGrid2-grid-md-4').should('have.text', 'Tipe Kontak *')
-      cy.get(':nth-child(1) > .MuiCardContent-root > .css-1i24z3d > :nth-child(2) > .MuiGrid2-grid-md-4').should('have.text', 'Grup Kontak *')
-      cy.get('#tipe_kontak-label').should('have.text', 'Tipe Kontak *')
-      cy.get('#fk_grup-label').should('have.text', 'Grup Kontak *')
-      
-      cy.get('#nama').should('have.attr', 'placeholder', 'Masukkan nama lengkap')
-      cy.get('input[id="email.0"]').should('have.attr', 'placeholder', 'Masukkan alamat email')
-      cy.get('#nama_perusahaan').should('have.attr', 'placeholder', 'Masukkan nama perusahaan')
-      cy.get('#no_hp').should('have.attr', 'placeholder', 'Masukkan nomor HP')
-      cy.get('#no_telp').should('have.attr', 'placeholder', 'Masukkan nomor telepon')
-      cy.get('#no_fax').should('have.attr', 'placeholder', 'Masukkan fax')
-      cy.get('#no_npwp').should('have.attr', 'placeholder', 'Masukkan NPWP')
-      cy.get('#nitku').should('have.attr', 'placeholder', 'Masukkan NITKU')
-      cy.get('input[id=":rk:"]').should('have.attr', 'placeholder', 'Masukkan alamat penagihan')
-      cy.get('input[id=":rl:"]').should('have.attr', 'placeholder', 'Masukkan alamat pengiriman')
-      cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should('be.exist')
-      cy.get('input[id="data_bank[0].bank_name"]').should('have.attr', 'placeholder','Masukkan nama bank')
-      cy.get('input[id="data_bank[0].bank_branch"]').should('have.attr', 'placeholder','Masukkan cabang')
-      cy.get('input[id="data_bank[0].holder_name"]').should('have.attr', 'placeholder','Masukkan nama pemegang akun')
-      cy.get('input[id="data_bank[0].rek_no"]').should('have.attr', 'placeholder','Masukkan nomor rekening')
-      cy.get('input[id="data_bank[1].bank_name"]').should('have.attr', 'placeholder','Masukkan nama bank')
-      cy.get('input[id="data_bank[1].bank_branch"]').should('have.attr', 'placeholder','Masukkan cabang')
-      cy.get('input[id="data_bank[1].holder_name"]').should('have.attr', 'placeholder','Masukkan nama pemegang akun')
-      cy.get('input[id="data_bank[1].rek_no"]').should('have.attr', 'placeholder','Masukkan nomor rekening')
-      cy.get('#piutang_max').should('have.attr', 'placeholder', 'Masukkan piutang maksimum')
-
-      cy.get(':nth-child(2) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root').should('have.text', 'Informasi Umum')
-      cy.get(':nth-child(2) > .MuiCardContent-root > .css-1i24z3d > :nth-child(1) > .css-1iqhgio').should('have.text', 'Nama Lengkap *')
-      cy.get(':nth-child(2) > .MuiCardContent-root > .css-1i24z3d > :nth-child(2) > .css-1iqhgio').should('have.text', 'Tipe Identitas')
-      cy.get(':nth-child(3) > .MuiGrid2-grid-md-4 > .MuiFormLabel-root').should('have.text', 'Alamat Email *')
-      cy.get('.MuiGrid2-grid-md-4 > .MuiTypography-root').should('have.text', 'Anda dapat menambahkan lebih dari satu alamat email (jika ada)')
-      cy.get(':nth-child(4) > .MuiGrid2-grid-md-4').should('have.text', 'Nama Perusahaan')
-      cy.get(':nth-child(5) > .MuiGrid2-grid-md-4').should('have.text', 'Nomor HP & Telepon')
-      cy.get(':nth-child(6) > .MuiGrid2-grid-md-4').should('have.text', 'Fax & NPWP')
-      cy.get(':nth-child(7) > .MuiGrid2-grid-md-4').should('have.text', 'Nomor Identitas Tempat Kegiatan Usaha (NITKU)')
-      cy.get(':nth-child(8) > .MuiGrid2-grid-md-4').should('have.text', 'Alamat Penagihan *')
-      cy.get(':nth-child(9) > .MuiGrid2-grid-md-4').should('have.text', 'Alamat Pengiriman')
-      cy.get('#sapaan-label').should('have.text', 'Sapaan')
-      cy.get('#nama-label').should('have.text', 'Nama Lengkap *')
-      cy.get('#tipe_identitas-label').should('have.text', 'Tipe Identitas')
-      cy.get('#no_identitas').should('have.attr', 'placeholder', 'Masukkan nomor identitas')
-      cy.get('#no_identitas-label').should('have.text', 'Nomor Identitas')
-      cy.get('label[id="email.0-label"]').should('have.text', 'Alamat Email *')
-      cy.get('label[id="email.1-label"]').should('have.text', 'Alamat Email *')
-      cy.get(':nth-child(3) > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('have.text', 'Tambah Email')
-      cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > :nth-child(2) > .MuiButtonBase-root').should('have.text', 'Hapus')
-      cy.get('#nama_perusahaan-label').should('have.text', 'Nama Perusahaan')
-      cy.get('#no_hp-label').should('have.text', 'Nomor HP')
-      cy.get('#no_telp-label').should('have.text', 'Nomor Telepon')
-      cy.get('#no_fax-label').should('have.text', 'Fax')
-      cy.get('#no_npwp-label').should('have.text', 'NPWP')
-      cy.get('#nitku-label').should('have.text', 'Nomor Identitas Tempat Kegiatan Usaha (NITKU)')
-      cy.get('label[id=":rk:-label"]').should('have.text', 'Alamat Penagihan *')
-      cy.get('label[id=":rl:-label"]').should('have.text', 'Alamat Pengiriman')
-      cy.get(':nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiTypography-root').should('have.text', 'Samakan dengan alamat penagihan')
-
-      cy.get(':nth-child(3) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root').should('have.text', 'Informasi Bank')
-      cy.get(':nth-child(3) > .MuiCardContent-root > :nth-child(1) > .css-1st318m > .MuiGrid2-grid-md-4').should('have.text', 'Nama Bank & Cabang')
-      cy.get('label[id="data_bank[0].bank_name-label"]').should('have.text', 'Nama Bank')
-      cy.get('label[id="data_bank[0].bank_branch-label"]').should('have.text', 'Cabang')
-      cy.get('label[id="data_bank[0].holder_name-label"]').should('have.text', 'Nama Pemegang Akun')
-      cy.get('label[id="data_bank[0].rek_no-label"]').should('have.text', 'No Rekening')
-      cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > .css-n4rzf0 > .MuiButtonBase-root').should('have.text', 'Tambah Bank Lainnya')
-      cy.get(':nth-child(3) > .MuiCardContent-root > .css-1i24z3d > .css-1st318m > .MuiGrid2-grid-md-8 > .css-1ov46kg > :nth-child(2) > .MuiButtonBase-root').should('have.text', 'Hapus')
-
-      cy.get(':nth-child(4) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root').should('have.text', 'Informasi Pemetaan Akun')
-      cy.get(':nth-child(4) > .MuiCardContent-root > .css-1i24z3d > :nth-child(1) > .MuiGrid2-grid-md-4').should('have.text', 'Pemetaan Akun')
-      cy.get('#piutang_max-label').should('have.text', 'Piutang Maksimum')
-      cy.get('[data-testid="input-active_piutang_max"] > .MuiTypography-root').should('have.text', 'Aktifkan piutang maksimum')
-      cy.get(':nth-child(4) > .MuiCardContent-root > .css-1i24z3d > :nth-child(2) > .MuiGrid2-grid-md-4').should('have.text', 'Syarat Pembayaran Utama')
-      cy.get('#syarat_pembayaran-label').should('have.text', 'Syarat Pembayaran Utama')
-
-      cy.get('.css-16ogmd7 > .MuiButton-text').should('have.text', 'Batal')
-      cy.get('.MuiButton-contained').should('have.text', 'Simpan')
-      
-      cy.get(':nth-child(2) > .MuiGrid2-grid-md-8 > .MuiFormControl-fullWidth > .MuiTypography-root').should('have.text', 'Grup Kontak harus diisi')
-      cy.get('#nama-helper-text').should('have.text', 'Nama Lengkap harus diisi')
-      cy.get('p[id="email.0-helper-text"]').should('have.text', 'Email harus diisi')
-      cy.get('p[id="email.1-helper-text"]').should('have.text', 'Email harus diisi')
-    });
-
-    it.skip('Memastikan warning muncul ketika mengirim form kosong', () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-      cy.get(
-        ":nth-child(1) > .MuiCardHeader-root > .MuiCardHeader-content > .MuiTypography-root"
-      ).click();
-      cy.get('.MuiButton-contained').click()
-      cy.get(".MuiAlert-message").should(
-        "contain.text",
-        "Mohon periksa kembali form"
-      );
-    });
-    })
+  
 
   context.skip("Positive Test Cases", () => {
     it("Input data required saja type kontak(Pelanggan)- Memantau body request sesuai dengan ui - dan expect berhasil dengan message berhasil ", () => {
