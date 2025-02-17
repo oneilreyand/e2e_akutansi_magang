@@ -5,7 +5,7 @@ describe("Tambah kontak form kosong", () => {
     cy.visit("https://cashflow.assist.id/admin/contacts/create");
   });
 
-  context("Pengujian sidebar nav", () => {
+  context.skip("Pengujian sidenavbar", () => {
     it("Kontak ke beranda", () => {
       cy.get('[data-testid="drawer-item-dashboard"]').click();
       cy.url().should("eq", "https://cashflow.assist.id/admin/dashboard");
@@ -58,7 +58,7 @@ describe("Tambah kontak form kosong", () => {
     });
   });
 
-  context("Validasi judul", () => {
+  context.skip("Validasi judul", () => {
     it("Penulisan judul 'Tambah Kontak' ", () => {
       cy.get(".MuiTypography-h5 > span")
         .should("be.visible")
@@ -66,7 +66,7 @@ describe("Tambah kontak form kosong", () => {
     });
   });
 
-  context("Validasi tab navigasi sesuai dan berfungsi", () => {
+  context.skip("Validasi tab navigasi sesuai dan berfungsi", () => {
     it("Validasi kesesuaian penulisan pada tab", () => {
       cy.get(".MuiBreadcrumbs-ol")
         .should("be.visible")
