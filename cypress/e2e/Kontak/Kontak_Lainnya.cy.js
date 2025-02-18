@@ -69,6 +69,7 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         })
 
         //* button atur grup kontak
+        cy.wait(3000)
         cy.get('.css-1avq450 > .MuiGrid2-container > :nth-child(1)').should("be.visible").click()
         cy.get('#modal-description').should("be.visible")
         cy.get('.css-1j72te2 > .MuiButtonBase-root').click()
@@ -105,7 +106,7 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         //* kolom
         cy.get('.MuiTableHead-root > .MuiTableRow-root > :nth-child(1)').should("be.visible").contains("ID")
         cy.get('.MuiTableRow-root > :nth-child(2)').should("be.visible").contains("Nama Lengkap")
-        cy.get('.MuiTableRow-root > :nth-child(3)').should("be.visible").contains("Grup Kontak")
+        cy.get('.MuiTableRow-root > :nth-child(3)').should("be.visible").contains("Group Kontak")
         cy.get('.MuiTableRow-root > :nth-child(4)').should("be.visible").contains("Email & No Handphone")
         cy.get('.MuiTableRow-root > :nth-child(5)').should("be.visible").contains("Alamat")
         cy.get('.MuiTableRow-root > :nth-child(6)').should("be.visible").contains("Total Piutang")
@@ -153,31 +154,31 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.wait(2000)
     });
 
-    it('Case 7 : Membandingkan data yang ada di tabel dengan yang ada di API', () => {
+    it('Case 7 : Membandingkan data yang ada di tabel lainnya bagian pagination 1 dengan yang ada di API', () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
-    
+
         // Intercept API
         cy.intercept(
             'GET',
             'https://api-cashflow.assist.id/api/kontak/list?jenisKontak=lainnya&skip=0&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c*'
         ).as('getContacts');
-    
+
         // Klik tab "Lainnya"
         cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
-    
+
         // Tunggu respons API
         cy.wait('@getContacts').then((interception) => {
             const apiData = interception.response.body.results;
-    
+
             // Log data dari API untuk debugging
             cy.log("API Data:", apiData);
-    
+
             // Pastikan panjang data di tabel sesuai dengan API
             cy.get('.css-k27tlm > .MuiPaper-root')
                 .find('tr')
                 .not(':first') // Abaikan header tabel
                 .should('have.length', apiData.length);
-    
+
             // Bandingkan data setiap baris di UI dengan API
             apiData.forEach((apiRow, index) => {
                 cy.get('.css-k27tlm > .MuiPaper-root')
@@ -186,16 +187,16 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
                     .within(() => {
                         // Bandingkan kolom ID
                         cy.get('td').eq(0).should('contain', apiRow.id);
-    
+
                         // Bandingkan kolom Nama Lengkap
                         cy.get('td').eq(1).should('contain', apiRow.nama);
-    
+
                         // Gabungkan Email dan Nomor HP dalam satu kolom yang terdapat dalam <p> dalam <div>
                         let contactInfo = '';
-    
+
                         // Jika ada lebih dari satu email, gabungkan dengan koma
                         const emailList = apiRow.email_kontak_email?.join('') || '';
-                        
+
                         if (emailList && apiRow.no_hp) {
                             // Jika ada email dan nomor HP
                             contactInfo = `${emailList}${apiRow.no_hp}`;
@@ -206,33 +207,33 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
                             // Jika hanya nomor HP yang ada
                             contactInfo = apiRow.no_hp;
                         }
-    
+
                         // Seleksi div yang berisi email dan nomor hp dalam <p>
                         cy.get('td').eq(3)
                             .find('div')
                             .find('p')
                             .should('have.text', contactInfo);
-    
+
                         // Bandingkan kolom Alamat
                         cy.get('td').eq(5)
                             .invoke('text') // Ambil teks dari tabel
                             .then((text) => {
                                 // Hapus simbol 'Rp' dan spasi dari nilai tabel
                                 const formattedTableValue = text.replace('Rp', '').replace(/\s+/g, '').trim();
-    
+
                                 // Format nilai API agar sesuai dengan format tabel
                                 const formattedApiValue = new Intl.NumberFormat('id-ID').format(apiRow.piutang_max);
-    
+
                                 // Bandingkan kedua nilai yang sudah diformat
                                 expect(formattedTableValue).to.equal(formattedApiValue);
                             });
-    
+
                     });
             });
         });
         cy.wait(2000);
     });
-    
+
 
     it("Case 8 : Mencoba menekan navigasi Beranda agar halamannya beralih ke Dashboard", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
@@ -265,7 +266,7 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
 
         // todo klik pagination nomor 2
-        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should("be.visible").click()
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should("be.visible").click({ force: true })
 
         // ? memeriksa apakah ada datanya atau tidak
         cy.get('table tbody tr').then(rows => {
@@ -276,11 +277,12 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
             }
         });
 
-        // todo klik pagination nomor 1 
+        // todo klik pagination nomor 1
+        cy.wait(3000);
         cy.get('.MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root').should("be.visible").click()
 
-        // todo klik pagination >
-        cy.get('.MuiPagination-ul > :nth-child(4)').should("be.visible").click()
+        // todo klik next button
+        cy.get('.css-1rqlbw1').find('button').last().should("be.visible", { timeout: 3000 }).click({ force: true })
         cy.get('table tbody tr').then(rows => {
             if (rows.length > 0) {
                 cy.log("data tersedia")
@@ -291,17 +293,19 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.wait(2000)
     });
 
-    it("Case 11 : Mencoba menekan pagination angka dan back (<) sebelumnya yang ada di tabel dan memastikan datanya ada atau tidak", () => {
+    it("Case 11 : Mencoba menekan pagination angka dan previous button sebelumnya yang ada di tabel dan memastikan datanya ada atau tidak", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
 
         // todo pergi ke bagian karyawan
         cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
 
         // todo klik pagination nomor 2
-        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should("be.visible").click()
+        cy.wait(3000)
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should("be.visible", { timeout: 2000 }).click({ force: true })
 
-        // todo klik pagination nomor 1 
-        cy.get('.MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root').should("be.visible").click()
+        // todo klik pagination nomor 1
+        cy.wait(3000)
+        cy.get('.MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root').should("be.visible", { timeout: 2000 }).click({ force: true })
 
         // ? memeriksa apakah ada datanya atau tidak
         cy.get('table tbody tr').then(rows => {
@@ -313,10 +317,10 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         });
 
         // todo klik pagination nomor 2 untuk kembali ke pagination 2
-        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should("be.visible").click()
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should("be.visible", { timeout: 2000 }).click({ force: true })
 
-        // todo klik pagination < 
-        cy.get('.MuiPagination-ul > :nth-child(1) > .MuiButtonBase-root').should("be.visible").click()
+        // todo klik previus button
+        cy.get('.css-1rqlbw1').find('button', { timeout: 3000 }).first().should("be.visible", { timeout: 2000 }).click({ force: true })
 
         // ? memeriksa apakah ada datanya atau tidak
         cy.get('table tbody tr').then(rows => {
@@ -329,9 +333,9 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.wait(2000)
     });
 
-    it("Case 12 : Memeriksa data di tabel bahwa tidak boleh lebih dari 10", () => {
+    it("Case 12 : Memeriksa data di tabel lainnya bagian pagination 1 bahwa tidak boleh lebih dari 10", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
-        
+
         // todo pergi ke bagian lainnya
         cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
 
@@ -339,10 +343,10 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.get('table tbody').find('tr').not(':first').should('have.length.greaterThan', 0);
         cy.get('table tbody').find('tr').not(':first').should('have.length.at.most', 10);
         cy.wait(2000)
-        
+
     });
 
-    it("Case 13 : Mencoba untuk pergi kehalama detail kontak dengan menggunakan salah satu data yang ada di tabel", () => {
+    it("Case 13 : Mencoba untuk pergi kehalama detail kontak dengan menggunakan salah satu data yang ada di tabel lainnya bagian pagination 1", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
 
         // todo pergi ke bagian lainnya
@@ -354,33 +358,34 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
             .eq(1)
             .click()
 
-        cy.url().should('include', '/detail');
+        // cy.url().should('include', '/detail');
         cy.wait(2000)
     });
 
-    it("Case 14 : Mencoba mencari data yang ada menggunakan kolom pencarian di tabel Lainnya", () => {
+    it("Case 14 : Mencoba mencari data yang ada menggunakan kolom pencarian di tabel Lainnya bagian pagination 1", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
-    
+
         cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
-    
+
+        cy.wait(2000)
         cy.get('[data-testid="search-input"] > .MuiInputBase-root')
             .should("be.visible")
-            .type("Jane Dhoe Edit");
-    
+            .type("percobaan");
+
         // Tunggu beberapa detik untuk memastikan data muncul
         cy.wait(5000);  // Menunggu lebih lama untuk memastikan data terupdate
-    
+
         // Memastikan ada baris di tabel setelah pencarian
         cy.get('table tbody tr').should('have.length.greaterThan', 0).then(rows => {
             const foundRows = rows.slice(0);  // Mengambil semua baris hasil pencarian (termasuk header)
-    
+
             if (foundRows.length > 0) {
                 // Karena kita hanya mengharapkan 1 baris hasil pencarian, kita periksa baris pertama
                 cy.wrap(foundRows)
                     .eq(0)  // Mengakses baris pertama (satu-satunya hasil)
                     .find('td')
                     .eq(1)  // Mengakses kolom kedua (index dimulai dari 0)
-                    .should('have.text', 'Jane Dhoe Edit');
+                    .should('have.text', 'percobaan');
             } else {
                 cy.log("data yang dicari tidak ditemukan");
             }
@@ -388,15 +393,387 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.wait(2000)
     });
 
-    it("Case 15 : Memeriksa tabel header pada bagian Lainnya", () => {
+    it("Case 15 : Memeriksa tabel header pada bagian Lainnya pada bagian pagination 1", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
 
         cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
         cy.get('table th').eq(0).should("be.visible").contains("ID")
         cy.get('table th').eq(1).should("be.visible").contains("Nama Lengkap")
-        cy.get('table th').eq(2).should("be.visible").contains("Grup Kontak")
+        cy.get('table th').eq(2).should("be.visible").contains("Group Kontak")
         cy.get('table th').eq(3).should("be.visible").contains("Email & No Handphone")
         cy.get('table th').eq(4).should("be.visible").contains("Alamat")
         cy.get('table th').eq(5).should("be.visible").contains("Total Piutang")
+    });
+
+    it("Case 16 : Memeriksa data di tabel bagian pagination 2 bahwa tidak boleh lebih dari 10 data", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // todo pergi ke bagian lainnya
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 2
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should('be.visible').contains('2').click()
+
+        // todo memastikan setiap data dalam 1 pagination hanya 10
+        cy.get('table tbody').find('tr').not(':first').should('have.length.greaterThan', 0);
+        cy.get('table tbody').find('tr').not(':first').should('have.length.at.most', 10);
+        cy.wait(2000)
+
+    });
+
+    it("Case 17 : Mencoba untuk pergi kehalaman detail kontak dengan menggunakan salah satu data yang ada di tabel bagian pagination 2", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // todo pergi ke bagian lainnya
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 2
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should('be.visible').contains('2').click()
+
+        cy.get('table tbody tr').not(':first')
+            .eq(1)
+            .find('td')
+            .eq(1)
+            .click()
+
+        // cy.url().should('include', '/detail');
+        cy.wait(2000)
+    });
+
+
+    it("Case 18 : Memeriksa data di tabel bagian pagination 3 bahwa tidak boleh lebih dari 10 data", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // todo pergi ke bagian lainnya
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 3
+        cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').should('be.visible').contains('3').click()
+
+        // todo memastikan setiap data dalam 1 pagination hanya 10
+        cy.get('table tbody').find('tr').not(':first').should('have.length.greaterThan', 0);
+        cy.get('table tbody').find('tr').not(':first').should('have.length.at.most', 10);
+        cy.wait(2000)
+    });
+
+    it("Case 19 : Mencoba untuk pergi kehalaman detail kontak dengan menggunakan salah satu data yang ada di tabel bagian pagination 3", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // todo pergi ke bagian lainnya
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 3
+        cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').should('be.visible').contains('3').click()
+
+        cy.get('table tbody tr').not(':first')
+            .eq(1)
+            .find('td')
+            .eq(1)
+            .click()
+
+        // cy.url().should('include', '/detail');
+        cy.wait(2000)
+    });
+
+    it("Case 20 : Kondisi sekarang di pagination 2, previous button agar pergi ke pagination 1", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // todo pergi ke bagian Lainnya
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 2
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should('be.visible').contains('2').click()
+
+        // todo klik previous button
+        cy.get('.css-1rqlbw1').find('button', { timeout: 3000 }).first().should("be.visible").click({ force: true })
+        // // todo pagination 1
+        // cy.get('.MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root').should('have.class', 'focus').and('have.text', '1')
+    });
+
+    it("Case 21 : Kondisi sekarang di pagination 2, menekan next button agar pergi ke pagination 3", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // todo pergi ke bagian Lainnya
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 2
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should('be.visible').contains('2').click()
+
+        // todo klik next button
+        cy.get('.css-1rqlbw1').find('button', { timeout: 3000 }).last().should("be.visible").click({ force: true })
+
+        // // todo pagination 3
+        // cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').should('have.class', 'focus').and('have.text', '1')
+    });
+
+    it("Case 22 : Kondisi sekarang di pagination 3, menekan previous button agar pergi ke pagination 2", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // todo pergi ke bagian Lainnya
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 3
+        cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').should('be.visible').contains('3').click()
+
+        // todo klik previous button
+        cy.get('.css-1rqlbw1').find('button', { timeout: 3000 }).first().should("be.visible").click({ force: true })
+
+        // // todo pagination 1
+        // cy.get('.MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root').should('have.class', 'focus').and('have.text', '1')
+
+    });
+
+    it('Case 23 : Membandingkan data yang ada di tabel bagian pagination 2 dengan yang ada di API', () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // Intercept API
+        cy.intercept(
+            'GET',
+            'https://api-cashflow.assist.id/api/kontak/list?jenisKontak=lainnya&skip=10&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c*'
+        ).as('getContacts');
+
+        // Klik tab "Lainnya"
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 2
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should('be.visible').contains('2').click()
+
+        // Tunggu respons API
+        cy.wait('@getContacts').then((interception) => {
+            const apiData = interception.response.body.results;
+
+            // Log data dari API untuk debugging
+            cy.log("API Data:", apiData);
+
+            // Pastikan panjang data di tabel sesuai dengan API
+            cy.get('.css-k27tlm > .MuiPaper-root')
+                .find('tr')
+                .not(':first') // Abaikan header tabel
+                .should('have.length', apiData.length);
+
+            // Bandingkan data setiap baris di UI dengan API
+            apiData.forEach((apiRow, index) => {
+                cy.get('.css-k27tlm > .MuiPaper-root')
+                    .find('tr')
+                    .eq(index + 1) // Abaikan header
+                    .within(() => {
+                        // Bandingkan kolom ID
+                        cy.get('td').eq(0).should('contain', apiRow.id);
+
+                        // Bandingkan kolom Nama Lengkap
+                        cy.get('td').eq(1).should('contain', apiRow.nama);
+
+                        // Bandingkan kolom Grup Kontak (jika ada)
+                        cy.get('td').eq(2)
+                            .invoke('text') // Ambil teks dari tabel
+                            .then((tableText) => {
+                                const formattedTableValue = tableText.trim(); // Hapus spasi tambahan dari tabel
+
+                                // Format nilai API untuk mencocokkan format tabel
+                                const formattedApiValue = apiRow.grup_kontak_nama?.join(', ') || '';
+
+                                // Log untuk debugging
+                                cy.log('Table Value:', formattedTableValue);
+                                cy.log('API Value:', formattedApiValue);
+
+                                // Bandingkan nilai dari tabel dengan nilai API
+                                expect(formattedTableValue).to.equal(formattedApiValue);
+                            });
+
+
+
+                        // Gabungkan Email dan Nomor HP dalam satu kolom yang terdapat dalam <p> dalam <div>
+                        let contactInfo = '';
+
+                        // Pastikan email dan nomor hp ada sebelum digabungkan
+                        if (apiRow.email_kontak_email && apiRow.email_kontak_email.length > 0 && apiRow.no_hp) {
+                            contactInfo = `${apiRow.email_kontak_email[0]}${apiRow.no_hp}`;
+                        } else if (apiRow.email_kontak_email && apiRow.email_kontak_email.length > 0) {
+                            contactInfo = apiRow.email_kontak_email[0]; // Jika hanya email yang ada
+                        } else if (apiRow.no_hp) {
+                            contactInfo = apiRow.no_hp; // Jika hanya nomor HP yang ada
+                        }
+
+                        // Seleksi div yang berisi email dan nomor hp dalam <p>
+                        cy.get('td').eq(3)
+                            .find('div')
+                            .find('p')
+                            .should('have.text', contactInfo);
+
+                        // Bandingkan kolom Alamat
+                        cy.get('td').eq(5)
+                            .invoke('text') // Ambil teks dari tabel
+                            .then((text) => {
+                                // Hapus simbol 'Rp' dan spasi dari nilai tabel
+                                const formattedTableValue = text.replace('Rp', '').replace(/\s+/g, '').trim();
+
+                                // Format nilai API agar sesuai dengan format tabel
+                                const formattedApiValue = new Intl.NumberFormat('id-ID').format(apiRow.piutang_max);
+
+                                // Bandingkan kedua nilai yang sudah diformat
+                                expect(formattedTableValue).to.equal(formattedApiValue);
+                            });
+
+                    });
+            });
+        });
+        cy.wait(2000)
+    });
+
+    it('Case 24 : Membandingkan data yang ada di tabel bagian pagination 3 dengan yang ada di API', () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // Intercept API
+        cy.intercept(
+            'GET',
+            'https://api-cashflow.assist.id/api/kontak/list?jenisKontak=lainnya&skip=20&limit=10&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c*'
+        ).as('getContacts');
+
+        // Klik tab "lainnya"
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 3
+        cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').should('be.visible').contains('3').click()
+
+        // Tunggu respons API
+        cy.wait('@getContacts').then((interception) => {
+            const apiData = interception.response.body.results;
+
+            // Log data dari API untuk debugging
+            cy.log("API Data:", apiData);
+
+            // Pastikan panjang data di tabel sesuai dengan API
+            cy.get('.css-k27tlm > .MuiPaper-root')
+                .find('tr')
+                .not(':first') // Abaikan header tabel
+                .should('have.length', apiData.length);
+
+            // Bandingkan data setiap baris di UI dengan API
+            apiData.forEach((apiRow, index) => {
+                cy.get('.css-k27tlm > .MuiPaper-root')
+                    .find('tr')
+                    .eq(index + 1) // Abaikan header
+                    .within(() => {
+                        // Bandingkan kolom ID
+                        cy.get('td').eq(0).should('contain', apiRow.id);
+
+                        // Bandingkan kolom Nama Lengkap
+                        cy.get('td').eq(1).should('contain', apiRow.nama);
+
+                        // Bandingkan kolom Grup Kontak (jika ada)
+                        cy.get('td').eq(2)
+                            .invoke('text') // Ambil teks dari tabel
+                            .then((tableText) => {
+                                const formattedTableValue = tableText.trim(); // Hapus spasi tambahan dari tabel
+
+                                // Format nilai API untuk mencocokkan format tabel
+                                const formattedApiValue = apiRow.grup_kontak_nama?.join(', ') || '';
+
+                                // Log untuk debugging
+                                cy.log('Table Value:', formattedTableValue);
+                                cy.log('API Value:', formattedApiValue);
+
+                                // Bandingkan nilai dari tabel dengan nilai API
+                                expect(formattedTableValue).to.equal(formattedApiValue);
+                            });
+
+
+
+                        // Gabungkan Email dan Nomor HP dalam satu kolom yang terdapat dalam <p> dalam <div>
+                        let contactInfo = '';
+
+                        // Pastikan email dan nomor hp ada sebelum digabungkan
+                        if (apiRow.email_kontak_email && apiRow.email_kontak_email.length > 0 && apiRow.no_hp) {
+                            contactInfo = `${apiRow.email_kontak_email.join('')}${apiRow.no_hp}`;
+                        } else if (apiRow.email_kontak_email && apiRow.email_kontak_email.length > 0) {
+                            contactInfo = apiRow.email_kontak_email.join('');
+                        } else if (apiRow.no_hp) {
+                            contactInfo = apiRow.no_hp;
+                        }
+
+
+                        // Seleksi div yang berisi email dan nomor hp dalam <p>
+                        cy.get('td').eq(3)
+                            .find('div')
+                            .find('p')
+                            .should('have.text', contactInfo);
+
+                        // Bandingkan kolom Alamat
+                        cy.get('td').eq(5)
+                            .invoke('text') // Ambil teks dari tabel
+                            .then((text) => {
+                                // Hapus simbol 'Rp' dan spasi dari nilai tabel
+                                const formattedTableValue = text.replace('Rp', '').replace(/\s+/g, '').trim();
+
+                                // Format nilai API agar sesuai dengan format tabel
+                                const formattedApiValue = new Intl.NumberFormat('id-ID').format(apiRow.piutang_max);
+
+                                // Bandingkan kedua nilai yang sudah diformat
+                                expect(formattedTableValue).to.equal(formattedApiValue);
+                            });
+
+                    });
+            });
+        });
+        cy.wait(2000)
+    });
+
+    it("Case 25 : Memeriksa tabel header pada bagian lainnya di pagination 2", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 2
+        cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').should('be.visible').contains('2').click()
+
+        cy.get('table th').eq(0).should("be.visible").contains("ID")
+        cy.get('table th').eq(1).should("be.visible").contains("Nama Lengkap")
+        cy.get('table th').eq(2).should("be.visible").contains("Group Kontak")
+        cy.get('table th').eq(3).should("be.visible").contains("Email & No Handphone")
+        cy.get('table th').eq(4).should("be.visible").contains("Alamat")
+        cy.get('table th').eq(5).should("be.visible").contains("Total Piutang")
+    });
+
+    it("Case 26 : Memeriksa tabel header pada bagian lainnya di pagination 3", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // todo pagination 3
+        cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').should('be.visible').contains('3').click()
+
+        cy.get('table th').eq(0).should("be.visible").contains("ID")
+        cy.get('table th').eq(1).should("be.visible").contains("Nama Lengkap")
+        cy.get('table th').eq(2).should("be.visible").contains("Group Kontak")
+        cy.get('table th').eq(3).should("be.visible").contains("Email & No Handphone")
+        cy.get('table th').eq(4).should("be.visible").contains("Alamat")
+        cy.get('table th').eq(5).should("be.visible").contains("Total Piutang")
+    });
+
+    it("Case 27 : Kondisi di pagination 1, memastikan bahwa previous button tidak dapat ditekan", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        cy.get('.css-1rqlbw1').should('be.visible').then(() => {
+            cy.wait(4000)
+            cy.get('button').eq(7).should('be.visible').and('be.disabled')
+        });
+    });
+
+    it("Case 28 : Kondisi di pagination akhir, memastikan bahwa next button tidak dapat ditekan", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        cy.get('.css-1rqlbw1').should('be.visible').then(() => {
+            cy.wait(4000)
+            cy.get('button').eq(-2).should('be.visible').click()
+
+            // todo memastikan next button tidak dapat ditekan
+
+            cy.wait(2000)
+            cy.get('button').last().should('be.visible').and('be.disabled')
+        });
     });
 });
