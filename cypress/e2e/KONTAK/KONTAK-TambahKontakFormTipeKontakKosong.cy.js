@@ -5,56 +5,54 @@ describe("Tambah kontak form kosong", () => {
     cy.visit("https://cashflow.assist.id/admin/contacts/create");
   });
 
-  context.skip("Pengujian sidenavbar", () => {
-    it("Kontak ke beranda", () => {
-      cy.get('[data-testid="drawer-item-dashboard"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/dashboard");
-      cy.get("h5").contains("Beranda");
-    });
-    it("Kontak ke laporan", () => {
-      cy.get('[data-testid="drawer-item-reports"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/reports");
-      cy.get("h5").contains("Laporan");
-    });
-    it("Kontak ke kas & bank", () => {
-      cy.get('[data-testid="drawer-item-cash-bank"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/cash-bank");
-      cy.get("h5").contains("Kas & Bank");
-    });
-    it("Kontak ke penjualan", () => {
-      cy.get('[data-testid="drawer-item-sales"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/sales");
-      cy.get("h5").contains("Penjualan");
-    });
-    it("Kontak ke pembelian", () => {
-      cy.get('[data-testid="drawer-item-purchases"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/purchases");
-      cy.get("h5").contains("Pembelian");
-    });
-    it("Kontak ke biaya", () => {
-      cy.get('[data-testid="drawer-item-expenses"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/expenses");
-      cy.get("h5").contains("Biaya");
-    });
-    it("Kontak ke produk", () => {
-      cy.get('[data-testid="drawer-item-products"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/products");
-      cy.get("h5").contains("Produk");
-    });
-    it("Kontak ke aset", () => {
-      cy.get('[data-testid="drawer-item-assets"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/assets");
-      cy.get("h5").contains("Aset");
-    });
-    it("Kontak ke daftar akun", () => {
-      cy.get('[data-testid="drawer-item-accounts"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/accounts");
-      cy.get("h5").contains("Akun");
-    });
-    it("Kontak ke pengaturan", () => {
-      cy.get('[data-testid="drawer-item-settings"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/settings");
-      cy.get("h5").contains("Pengaturan");
+  context("Pengujian SideNavbar", () => {
+    const menuItems = [
+      {
+        testId: "drawer-item-dashboard",
+        url: "/admin/dashboard",
+        title: "Beranda",
+      },
+      {
+        testId: "drawer-item-reports",
+        url: "/admin/reports",
+        title: "Laporan",
+      },
+      {
+        testId: "drawer-item-cash-bank",
+        url: "/admin/cash-bank",
+        title: "Kas & Bank",
+      },
+      { testId: "drawer-item-sales", url: "/admin/sales", title: "Penjualan" },
+      {
+        testId: "drawer-item-purchases",
+        url: "/admin/purchases",
+        title: "Pembelian",
+      },
+      {
+        testId: "drawer-item-expenses",
+        url: "/admin/expenses",
+        title: "Biaya",
+      },
+      {
+        testId: "drawer-item-products",
+        url: "/admin/products",
+        title: "Produk",
+      },
+      { testId: "drawer-item-assets", url: "/admin/assets", title: "Aset" },
+      { testId: "drawer-item-accounts", url: "/admin/accounts", title: "Akun" },
+      {
+        testId: "drawer-item-settings",
+        url: "/admin/settings",
+        title: "Pengaturan",
+      },
+    ];
+
+    menuItems.forEach(({ testId, url, title }) => {
+      it(`Navigasi ke ${title}`, () => {
+        cy.get(`[data-testid="${testId}"]`).click();
+        cy.url().should("eq", `https://cashflow.assist.id${url}`);
+        cy.get("h5").contains(title);
+      });
     });
   });
 
@@ -716,7 +714,7 @@ describe("Tambah kontak form kosong", () => {
         cy.contains("li", "vendor obat asist 2").click();
         cy.get("#fk_grup").should("have.text", "vendor obat asist 2");
         cy.contains("li", "Tambah Baru").click();
-        cy.get('[data-testid="CloseIcon"]').click();
+        cy.get(".MuiIconButton-colorError").click(); 
         cy.get("#tipe_kontak").click();
         cy.contains("li", "Pilih Tipe Kontak").click();
         cy.get("#fk_grup").should("have.text", "​");

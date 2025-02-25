@@ -24,3 +24,7 @@ Fitur search lebih memprioritaskan pengambilan data dari alamat email dibandingk
 9. Jika selesai menambahkan kontak baru semisal pada kontak suplier seharusnya ketika sudah selesai maka dikembalikan ke halaman tab suplier
 
 10. Inkonsistensi pada label yang berperan sebagai pengganti placeholder pada halaman tambah kontak: 1.NITKU seharusnya berwarna hitam,2. no telepon dan no hp tidak memiliki label placeholder, 3.Alamat penagihan dan alamat pengiriman tidak memiliki label placeholder,4. Label placeholder No rekening berwarna hitam.5. Label placeholder piutang maksimum berwarna hitam
+
+11. Penulisan Grup yang tidak konsisten pada Form input dan form edit (Pada Atur Group Kontak menggunakan kata Group)
+
+12. Ketika menggunakan fitur Atur Group Kontak. value pada cari group bertuliskan undefined

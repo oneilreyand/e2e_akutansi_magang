@@ -6,52 +6,52 @@ describe("Check Komponen Tab Pelanggan", () => {
   });
 
   context('Pengujian sidebar', () => {
-    it('Kontak ke beranda', () => {
+    it('Case 1 : Kontak ke beranda', () => {
       cy.get('[data-testid="drawer-item-dashboard"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/dashboard')
       cy.get('h5').contains('Beranda')
     });
-    it('Kontak ke laporan', () => {
+    it('Case 2 : Kontak ke laporan', () => {
       cy.get('[data-testid="drawer-item-reports"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/reports')
       cy.get('h5').contains('Laporan')
     });
-    it('Kontak ke kas & bank', () => {
+    it('Case 3 : Kontak ke kas & bank', () => {
       cy.get('[data-testid="drawer-item-cash-bank"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/cash-bank')
       cy.get('h5').contains('Kas & Bank')
     });
-    it('Kontak ke penjualan', () => {
+    it('Case 4 : Kontak ke penjualan', () => {
       cy.get('[data-testid="drawer-item-sales"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/sales')
       cy.get('h5').contains('Penjualan')
     });
-    it('Kontak ke pembelian', () => {
+    it('Case 5 : Kontak ke pembelian', () => {
       cy.get('[data-testid="drawer-item-purchases"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/purchases')
       cy.get('h5').contains('Pembelian')
     });
-    it('Kontak ke biaya', () => {
+    it('Case 6 : Kontak ke biaya', () => {
       cy.get('[data-testid="drawer-item-expenses"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/expenses')
       cy.get('h5').contains('Biaya')
     });
-    it('Kontak ke produk', () => {
+    it('Case 7 : Kontak ke produk', () => {
       cy.get('[data-testid="drawer-item-products"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/products')
       cy.get('h5').contains('Produk')
     });
-    it('Kontak ke aset', () => {
+    it('Case 8 : Kontak ke aset', () => {
       cy.get('[data-testid="drawer-item-assets"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/assets')
       cy.get('h5').contains('Aset')
     });
-    it('Kontak ke daftar akun', () => {
+    it('Case 9 : Kontak ke daftar akun', () => {
       cy.get('[data-testid="drawer-item-accounts"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/accounts')
       cy.get('h5').contains('Akun')
     });
-    it('Kontak ke pengaturan', () => {
+    it('Case 10 : Kontak ke pengaturan', () => {
       cy.get('[data-testid="drawer-item-settings"]').click()
       cy.url().should('eq','https://cashflow.assist.id/admin/settings')
       cy.get('h5').contains('Pengaturan')
@@ -138,7 +138,7 @@ describe("Check Komponen Tab Pelanggan", () => {
   context("Validasi tombol atur grup kontak dan import kontak", () => {
     it("Case 1 : Validasi keberadaan tombol atur grup kontak", () => {
       cy.get(".css-1avq450 > .MuiGrid2-container > :nth-child(1)")
-        .should("have.text", "Atur Grup Kontak")
+        .should("have.text", "Atur Group Kontak")
         .click();
       cy.get("#modal-title").should("have.text", "Pengaturan Group Kontak");
     });
@@ -274,7 +274,7 @@ describe("Check Komponen Tab Pelanggan", () => {
       });
     });
 
-    it('Case 3 : Validasi konten dengan ekspektasi setiap objek memiliki key "tipe_kontak" dengan value "pelanggan"', () => {
+    it('Case 3 : Validasi objek memiliki key "tipe_kontak" dengan value "pelanggan"', () => {
       // Memastikan token valid sebelum melanjutkan
       cy.getCookie("authToken").then((cookie) => {
         const token = cookie?.value;

@@ -7,14 +7,14 @@ describe('Check Komponen DetailKontak', () => {
         cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root',{timeout:15000}).click()
     });
 
-    it('Memastikan id pada html Kontak yang ditekan memiliki id yang sesuai dengan url yang akan digunakan ke DetailKontak', () => {
+    it('Detail kontak menuju kontak yang tepat dengan mengambil id pada tabel html dan mecocokkan dengan url', () => {
         /*====================================================
          * Memastikan id pada elemen sesuai dengan tujuan url*
         =====================================================*/
         let idFromHTML;
         cy.visit('https://cashflow.assist.id/admin/contacts')
         // Ambil ID dari elemen HTML di halaman kontak
-        cy.wait(5000);
+        cy.wait(2000);
         cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1)', { timeout: 20000 }) // Timeout 20 detik
             .invoke('text') // Ambil teks dari elemen
             .then((id) => {
@@ -67,7 +67,7 @@ describe('Check Komponen DetailKontak', () => {
         cy.get('.MuiBox-root > .MuiFormControl-root > .MuiInputBase-root > .MuiSelect-select').should('have.text', 'Pilih Tindakan')
     });
 
-    it('Tab informasi Kontak dan Semua Kontak', () => {
+    it('Tab informasi Kontak dan Tab Semua Informasi', () => {
         cy.get('#Belumsiap').should('be.exist')
             // .then(() => {
             //   cy.log('Belumsiap')
@@ -112,7 +112,7 @@ describe('Check Komponen DetailKontak', () => {
     
     
 
-    it.only('validasi tampilan ui dengan respon api sesuai', () => {
+    it('validasi tampilan ui dengan respon api sesuai', () => {
         cy.wait('@getDetail').then((interception) => {
         const data = interception.response.body.results[0];
 

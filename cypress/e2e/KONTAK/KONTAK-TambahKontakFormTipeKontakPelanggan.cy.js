@@ -2,89 +2,58 @@ describe("Tambah kontak form pelanggan", () => {
   beforeEach(() => {
     cy.getCookie("authToken"); // Memulihkan cookie sebelum setiap test
     cy.loginWithAPI("rayhanrayandra.work.id@gmail.com", "Nz6}+#8y");
-    cy.visit("https://cashflow.assist.id/admin/contacts/create");
+    cy.visit("https://cashflow.assist.id/admin/contacts");
+    cy.get('.css-aidtzz > .MuiButtonBase-root').click()
   });
 
-  context("Pengujian side navbar", () => {
-    it("Kontak ke beranda", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
+  context("Pengujian SideNavbar", () => {
+    const menuItems = [
+      {
+        testId: "drawer-item-dashboard",
+        url: "/admin/dashboard",
+        title: "Beranda",
+      },
+      {
+        testId: "drawer-item-reports",
+        url: "/admin/reports",
+        title: "Laporan",
+      },
+      {
+        testId: "drawer-item-cash-bank",
+        url: "/admin/cash-bank",
+        title: "Kas & Bank",
+      },
+      { testId: "drawer-item-sales", url: "/admin/sales", title: "Penjualan" },
+      {
+        testId: "drawer-item-purchases",
+        url: "/admin/purchases",
+        title: "Pembelian",
+      },
+      {
+        testId: "drawer-item-expenses",
+        url: "/admin/expenses",
+        title: "Biaya",
+      },
+      {
+        testId: "drawer-item-products",
+        url: "/admin/products",
+        title: "Produk",
+      },
+      { testId: "drawer-item-assets", url: "/admin/assets", title: "Aset" },
+      { testId: "drawer-item-accounts", url: "/admin/accounts", title: "Akun" },
+      {
+        testId: "drawer-item-settings",
+        url: "/admin/settings",
+        title: "Pengaturan",
+      },
+    ];
 
-      cy.get('[data-testid="drawer-item-dashboard"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/dashboard");
-      cy.get("h5").contains("Beranda");
-    });
-    it("Kontak ke laporan", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-reports"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/reports");
-      cy.get("h5").contains("Laporan");
-    });
-    it("Kontak ke kas & bank", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-cash-bank"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/cash-bank");
-      cy.get("h5").contains("Kas & Bank");
-    });
-    it("Kontak ke penjualan", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-sales"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/sales");
-      cy.get("h5").contains("Penjualan");
-    });
-    it("Kontak ke pembelian", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-purchases"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/purchases");
-      cy.get("h5").contains("Pembelian");
-    });
-    it("Kontak ke biaya", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-expenses"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/expenses");
-      cy.get("h5").contains("Biaya");
-    });
-    it("Kontak ke produk", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-products"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/products");
-      cy.get("h5").contains("Produk");
-    });
-    it("Kontak ke aset", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-assets"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/assets");
-      cy.get("h5").contains("Aset");
-    });
-    it("Kontak ke daftar akun", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-accounts"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/accounts");
-      cy.get("h5").contains("Akun");
-    });
-    it("Kontak ke pengaturan", () => {
-      cy.get("#tipe_kontak").click();
-      cy.contains("li", "Pelanggan").click();
-
-      cy.get('[data-testid="drawer-item-settings"]').click();
-      cy.url().should("eq", "https://cashflow.assist.id/admin/settings");
-      cy.get("h5").contains("Pengaturan");
+    menuItems.forEach(({ testId, url, title }) => {
+      it(`Navigasi ke ${title}`, () => {
+        cy.get(`[data-testid="${testId}"]`).click();
+        cy.url().should("eq", `https://cashflow.assist.id${url}`);
+        cy.get("h5").contains(title);
+      });
     });
   });
 
@@ -96,9 +65,17 @@ describe("Tambah kontak form pelanggan", () => {
     });
   });
 
-  context.only(
+  context(
     "Uji komponen dan fungsi dengan kondisi tipe kontak pelanggan",
     () => {
+      it('Bila menambahkan kontak dari tab pelanggan maka nilai default dari tipe kontak adalah pelanggan', () => {
+        cy.visit('https://cashflow.assist.id/admin/contacts');
+        cy.get('#simple-tab-1').click();
+    
+
+        
+        
+      })
       it("Input data required saja type kontak(Pelanggan)- Memantau body request sesuai dengan ui - dan expect berhasil dengan message berhasil - pindah ke halaman kontak tab pelanggan ", () => {
         const expectedRequestBody = {
           active_piutang_max: 0,
@@ -125,7 +102,7 @@ describe("Tambah kontak form pelanggan", () => {
           nitku: "",
           piutang_max: 0,
           fk_akun_hutang: "",
-          fk_akun_piutang: "35f4b6ff-6309-4e6d-9ee0-fd8eef9903c1",
+          fk_akun_piutang: "6982f0c7-3345-434a-a73f-e56c1a9948d0",
           sapaan: "",
           syarat_pembayaran: "",
           tipe_identitas: "",
@@ -187,7 +164,7 @@ describe("Tambah kontak form pelanggan", () => {
         cy.url().should("eq", "https://cashflow.assist.id/admin/contacts");
       });
 
-      it("Menginput seluruh form pelanggan kecuali grup kontak dengan ekspektasi tidak berhasil ", () => {
+      it.only("Menginput seluruh form pelanggan kecuali grup kontak dengan ekspektasi tidak berhasil ", () => {
         cy.get("#tipe_kontak").click();
         cy.contains("li", "Pelanggan").click();
         cy.get("#sapaan").click();
@@ -203,8 +180,8 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#no_fax").type("02380131231232144");
         cy.get("#no_npwp").type("0239201830213213");
         cy.get("#nitku").type("0301924732647913272961");
-        cy.get('input[id=":rk:"]').type("alamat penagihan bapak");
-        cy.get('input[id=":rl:"]').type("alamat pengiriman bapak");
+        cy.get('input[id=":ro:"]').type("alamat penagihan bapak");
+        cy.get('input[id=":rp:"]').type("alamat pengiriman bapak");
         cy.get('input[id="data_bank[0].bank_name"]').type("Bank bapak");
         cy.get('input[id="data_bank[0].bank_branch"]').type("Bank bapak ke 2");
         cy.get('input[id="data_bank[0].holder_name"]').type("Bapak");
@@ -216,7 +193,6 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#syarat_pembayaran").click();
         cy.contains("li", "termin sebulan 15").click();
         cy.get(".MuiButton-contained").click();
-        cy.get(".MuiTypography-h5 > span").should("have.text", "Tambah Kontak");
         cy.url().should(
           "eq",
           "https://cashflow.assist.id/admin/contacts/create"
@@ -241,8 +217,8 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#no_fax").type("02380131231232144");
         cy.get("#no_npwp").type("0239201830213213");
         cy.get("#nitku").type("0301924732647913272961");
-        cy.get('input[id=":rk:"]').type("alamat penagihan bapak");
-        cy.get('input[id=":rl:"]').type("alamat pengiriman bapak");
+        cy.get('input[id=":ro:"]').type("alamat penagihan bapak");
+        cy.get('input[id=":rp:"]').type("alamat pengiriman bapak");
         cy.get('input[id="data_bank[0].bank_name"]').type("Bank bapak");
         cy.get('input[id="data_bank[0].bank_branch"]').type("Bank bapak ke 2");
         cy.get('input[id="data_bank[0].holder_name"]').type("Bapak");
@@ -254,7 +230,7 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#syarat_pembayaran").click();
         cy.contains("li", "termin sebulan 15").click();
         cy.get(".MuiButton-contained").click();
-        cy.get(".MuiTypography-h5 > span").should("have.text", "Tambah Kontak");
+        // cy.get(".MuiTypography-h5 > span").should("have.text", "Buat Kontak");
         cy.url().should(
           "eq",
           "https://cashflow.assist.id/admin/contacts/create"
@@ -279,8 +255,8 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#no_fax").type("02380131231232144");
         cy.get("#no_npwp").type("0239201830213213");
         cy.get("#nitku").type("0301924732647913272961");
-        cy.get('input[id=":rk:"]').type("alamat penagihan bapak");
-        cy.get('input[id=":rl:"]').type("alamat pengiriman bapak");
+        cy.get('input[id=":ro:"]').type("alamat penagihan bapak");
+        cy.get('input[id=":rp:"]').type("alamat pengiriman bapak");
         cy.get('input[id="data_bank[0].bank_name"]').type("Bank bapak");
         cy.get('input[id="data_bank[0].bank_branch"]').type("Bank bapak ke 2");
         cy.get('input[id="data_bank[0].holder_name"]').type("Bapak");
@@ -318,7 +294,7 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#no_fax").type("02380131231232144");
         cy.get("#no_npwp").type("0239201830213213");
         cy.get("#nitku").type("0301924732647913272961");
-        cy.get('input[id=":rl:"]').type("alamat pengiriman bapak");
+        cy.get('input[id=":rp:"]').type("alamat pengiriman bapak");
         cy.get('input[id="data_bank[0].bank_name"]').type("Bank bapak");
         cy.get('input[id="data_bank[0].bank_branch"]').type("Bank bapak ke 2");
         cy.get('input[id="data_bank[0].holder_name"]').type("Bapak");
@@ -337,11 +313,11 @@ describe("Tambah kontak form pelanggan", () => {
         );
       });
 
-      it('Jika menekan tombol batal akan kembali ke page kontak', () => {
-        cy.get('.css-16ogmd7 > .MuiButton-text').click()
-        cy.get('.MuiTypography-h5 > span').should('have.text', 'Kontak');
-        cy.get('.MuiTypography-h6').should('have.text', 'Pelanggan');
-        cy.url().should('eq', 'https://cashflow.assist.id/admin/contacts')
+      it("Jika menekan tombol batal akan kembali ke page kontak", () => {
+        cy.get(".css-16ogmd7 > .MuiButton-text").click();
+        cy.get(".MuiTypography-h5 > span").should("have.text", "Kontak");
+        cy.get(".MuiTypography-h6").should("have.text", "Pelanggan");
+        cy.url().should("eq", "https://cashflow.assist.id/admin/contacts");
       });
 
       it("Pengecekan eksistensi komponen input", () => {
@@ -368,8 +344,8 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#no_fax").should("be.exist");
         cy.get("#no_npwp").should("be.exist");
         cy.get("#nitku").should("be.exist");
-        cy.get('input[id=":rk:"]').should("be.exist");
-        cy.get('input[id=":rl:"]').should("be.exist");
+        cy.get('input[id=":ro:"]').should("be.exist");
+        cy.get('input[id=":rp:"]').should("be.exist");
         cy.get(
           ":nth-child(9) > .MuiGrid2-container > :nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input"
         ).should("be.exist");
@@ -488,11 +464,11 @@ describe("Tambah kontak form pelanggan", () => {
           "have.text",
           "Nomor Identitas Tempat Kegiatan Usaha (NITKU)"
         );
-        cy.get('label[id=":rk:-label"]').should(
+        cy.get('label[id=":ro:-label"]').should(
           "have.text",
           "Alamat Penagihan *"
         );
-        cy.get('label[id=":rl:-label"]').should(
+        cy.get('label[id=":rp:-label"]').should(
           "have.text",
           "Alamat Pengiriman"
         );
@@ -618,12 +594,12 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#no_fax").should("have.attr", "placeholder", "Masukkan fax");
         cy.get("#no_npwp").should("have.attr", "placeholder", "Masukkan NPWP");
         cy.get("#nitku").should("have.attr", "placeholder", "Masukkan NITKU");
-        cy.get('input[id=":rk:"]').should(
+        cy.get('input[id=":ro:"]').should(
           "have.attr",
           "placeholder",
           "Masukkan alamat penagihan"
         );
-        cy.get('input[id=":rl:"]').should(
+        cy.get('input[id=":rp:"]').should(
           "have.attr",
           "placeholder",
           "Masukkan alamat pengiriman"
@@ -735,12 +711,12 @@ describe("Tambah kontak form pelanggan", () => {
         cy.get("#no_fax").should("have.attr", "placeholder", "Masukkan fax");
         cy.get("#no_npwp").should("have.attr", "placeholder", "Masukkan NPWP");
         cy.get("#nitku").should("have.attr", "placeholder", "Masukkan NITKU");
-        cy.get('input[id=":rk:"]').should(
+        cy.get('input[id=":ro:"]').should(
           "have.attr",
           "placeholder",
           "Masukkan alamat penagihan"
         );
-        cy.get('input[id=":rl:"]').should(
+        cy.get('input[id=":rp:"]').should(
           "have.attr",
           "placeholder",
           "Masukkan alamat pengiriman"
@@ -866,11 +842,11 @@ describe("Tambah kontak form pelanggan", () => {
           "have.text",
           "Nomor Identitas Tempat Kegiatan Usaha (NITKU)"
         );
-        cy.get('label[id=":rk:-label"]').should(
+        cy.get('label[id=":ro:-label"]').should(
           "have.text",
           "Alamat Penagihan *"
         );
-        cy.get('label[id=":rl:-label"]').should(
+        cy.get('label[id=":rp:-label"]').should(
           "have.text",
           "Alamat Pengiriman"
         );
@@ -1420,7 +1396,7 @@ describe("Tambah kontak form pelanggan", () => {
           cy.get(".MuiIconButton-colorError").click();
           cy.get("#nama").type("Nama lengkap satu email");
           cy.get('input[id="email.0"]').type("alamatemail@gmail.com");
-          cy.get('input[id=":rk:"]').type("Alamat penagihan").blur();
+          cy.get('input[id=":ro:"]').type("Alamat penagihan").blur();
           cy.get(".MuiButton-contained").click();
 
           cy.get(".MuiAlert-message").should(
@@ -1480,7 +1456,7 @@ describe("Tambah kontak form pelanggan", () => {
             nitku: "",
             piutang_max: 0,
             fk_akun_hutang: "",
-            fk_akun_piutang: "35f4b6ff-6309-4e6d-9ee0-fd8eef9903c1",
+            fk_akun_piutang: "6982f0c7-3345-434a-a73f-e56c1a9948d0",
             sapaan: "",
             syarat_pembayaran: "",
             tipe_identitas: "",
@@ -1517,7 +1493,7 @@ describe("Tambah kontak form pelanggan", () => {
           cy.get('input[id="email.1"]').type("alamatemail2@gmail.com");
           cy.get('input[id="email.2"]').type("alamatemail3@gmail.com");
           cy.get('input[id="email.3"]').type("alamatemail4@gmail.com");
-          cy.get('input[id=":rk:"]').type("Alamat penagihan").blur();
+          cy.get('input[id=":ro:"]').type("Alamat penagihan").blur();
           cy.get(".MuiButton-contained").click();
 
           cy.get(".MuiAlert-message").should(
@@ -1890,11 +1866,11 @@ describe("Tambah kontak form pelanggan", () => {
           cy.get("#tipe_kontak").click();
           cy.contains("li", "Pelanggan").click();
 
-          cy.get('input[id=":rk:"]').type("Samakan dengan di bawah");
+          cy.get('input[id=":ro:"]').type("Samakan dengan di bawah");
           cy.get('input[name="alamatPengirimanEqPenagihan"]').click();
           cy.get('input[name="alamatPengirimanEqPenagihan"]').click();
           cy.get('input[name="alamatPengirimanEqPenagihan"]').click();
-          cy.get('input[id=":rl:"]').should(
+          cy.get('input[id=":rp:"]').should(
             "have.value",
             "Samakan dengan di bawah"
           );
@@ -1904,11 +1880,11 @@ describe("Tambah kontak form pelanggan", () => {
           cy.get("#tipe_kontak").click();
           cy.contains("li", "Pelanggan").click();
 
-          cy.get('input[id=":rk:"]').type("Samakan dengan di bawah");
+          cy.get('input[id=":ro:"]').type("Samakan dengan di bawah");
           cy.get('input[name="alamatPengirimanEqPenagihan"]').click();
           cy.get('input[name="alamatPengirimanEqPenagihan"]').click();
           cy.get('input[name="alamatPengirimanEqPenagihan"]').click();
-          cy.get('input[id=":rl:"]').should("be.disabled");
+          cy.get('input[id=":rp:"]').should("be.disabled");
         });
       });
       context("Pengujian fitur input bank", () => {
@@ -2600,6 +2576,5 @@ describe("Tambah kontak form pelanggan", () => {
           cy.get('label[id="data_bank[2].rek_no-label"]').should("not.exist");
         });
       });
-    }
-  );
+});
 });

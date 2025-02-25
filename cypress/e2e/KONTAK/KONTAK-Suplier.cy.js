@@ -89,6 +89,10 @@ describe("Check Komponen Suplier", () => {
     cy.get("h5").should("have.text", "Tambah Kontak");
   });
 
+  it.only('Bila menambah kontak pada halaman suplier maka tipe kontak akan default suplier saat membuat kontak baru', () => {
+    cy.get('.css-aidtzz > .MuiButtonBase-root').click()
+  });
+
   context("Pengujian fungsi pada tab jenis kontak", () => {
     it("Perpindahan tab suplier ke tab pelanggan", () => {
       cy.get(".MuiTypography-h6").contains("Suplier");
