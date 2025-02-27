@@ -13,9 +13,9 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
         cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
         // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-        //cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+        //cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
-        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
         // ? tombol ke halaman edit kontak
         cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -32,7 +32,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
         cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
         // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
         // ? tombol ke halaman edit kontak
         cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -279,7 +279,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
         cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
         // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
         // ? tombol ke halaman edit kontak
         cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -301,7 +301,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
         cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
         // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
         // ? tombol ke halaman edit kontak
         cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -323,7 +323,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
         cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
         // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
         // ? tombol ke halaman edit kontak
         cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -346,7 +346,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -386,7 +386,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -413,8 +413,11 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('input[placeholder="Masukkan alamat penagihan"]').should('be.visible').clear().type('alamat penagihan')
 
             // ? bagian checkbox dan alamat pengiriman
-            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should('exist').click()
-            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should('exist').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
 
 
             // // ? alamat pengiriman
@@ -448,7 +451,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -484,7 +487,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-3').should('be.visible').contains('Lainnya').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel Lainnya
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -524,7 +527,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-3').should('be.visible').contains('Lainnya').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel lainnya
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -551,8 +554,11 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('input[placeholder="Masukkan alamat penagihan"]').should('be.visible').clear().type('alamat penagihan')
 
             // ? bagian checkbox dan alamat pengiriman
-            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should('exist').click()
-            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').should('exist').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
+            cy.get(':nth-child(2) > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click()
 
 
             // // ? alamat pengiriman
@@ -586,7 +592,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-3').should('be.visible').contains('Lainnya').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel lainnya
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -615,14 +621,14 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist').contains('Kontak berhasil disimpan')
         });
 
-        it("Case 12 : Memilih salah satu data di table karyawan kemudian diedit dengan menambahkan emailnya", () => {
+        it("Case 12 : Memilih salah satu data di table karyawan kemudian menambahkan emailnya", () => {
             cy.visit('https://cashflow.assist.id/admin/contacts')
 
             // todo pergi ke bagian karyawan
             cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -662,7 +668,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -693,7 +699,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -736,7 +742,7 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
 
             // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
-            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').click()
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
 
             // ? tombol ke halaman edit kontak
             cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
@@ -760,8 +766,178 @@ describe('Menguji halaman edit kontak pada cashflow assist id', () => {
             cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist').contains('Kontak berhasil disimpan')
         });
 
-        it.only("Case 16 : Memilih salah satu data yang ada ditable karyawan kemudian mengubah bagian nama perusahaannya", () => {
+        it("Case 16 : Memilih salah satu data yang ada ditable karyawan kemudian mengubah bagian nama perusahaannya", () => {
+            cy.visit('https://cashflow.assist.id/admin/contacts')
 
+            // todo pergi ke bagian karyawan
+            cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
+
+            // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
+
+            // ? tombol ke halaman edit kontak
+            cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
+
+            // todo memastikan bahwa halaman sudah dikunjungi
+            cy.url().should('include', 'edit')
+
+            // ? kolom nama perusahaan
+            cy.get('#nama_perusahaan').should('be.visible').clear().type("ini adalah nama perusahaan yang baru")
+
+            // ? tombol simpan
+            cy.get('.MuiButton-contained').should('be.visible').contains('Simpan').click()
+        });
+
+        it("Case 17 : Memilih salah satu data yang ada ditable karyawan kemudian mengubah bagian tipe identitas yang awalnya ktp menjadi sim serta mengubah nomor identitasnya juga", () => {
+            cy.visit('https://cashflow.assist.id/admin/contacts')
+
+            // todo pergi ke bagian karyawan
+            cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
+
+            // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
+
+            // ? tombol ke halaman edit kontak
+            cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
+
+            // todo memastikan bahwa halaman sudah dikunjungi
+            cy.url().should('include', 'edit')
+
+            // ? bagian nomor identitas
+            cy.get('#tipe_identitas').should('be.visible').click()
+
+            // ? memilih bagian sim
+            cy.get('[data-value="sim"]').should('be.visible').click()
+
+            cy.get('#tipe_identitas').should('be.visible').and('have.text', 'SIM')
+
+            // ? mengubah nomor identiasnya juga
+            cy.get('#no_identitas').should('be.visible').clear().type('1234567890')
+            cy.get('#no_identitas').should('have.value', '1234567890')
+
+            // ? tombol simpan
+            cy.get('.MuiButton-contained').should('be.visible').contains('Simpan').click()
+        });
+
+        it("Case 18 : Memilih salah satu data yang ada ditable karyawan kemudian mengubah bagian tipe identitas yang awalnya ktp menjadi paspor serta mengubah nomor identitasnya juga", () => {
+            cy.visit('https://cashflow.assist.id/admin/contacts')
+
+            // todo pergi ke bagian karyawan
+            cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
+
+            // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
+
+            // ? tombol ke halaman edit kontak
+            cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
+
+            // todo memastikan bahwa halaman sudah dikunjungi
+            cy.url().should('include', 'edit')
+
+            // ? bagian nomor identitas
+            cy.get('#tipe_identitas').should('be.visible').click()
+
+            // ? memilih bagian paspor
+            cy.get('[data-value="paspor"]').should('be.visible').click()
+
+            cy.get('#tipe_identitas').should('be.visible').and('have.text', 'Paspor')
+
+            // ? mengubah nomor identiasnya juga
+            cy.get('#no_identitas').should('be.visible').clear().type('1234567890')
+            cy.get('#no_identitas').should('have.value', '1234567890')
+
+            // ? tombol simpan
+            cy.get('.MuiButton-contained').should('be.visible').contains('Simpan').click()
+        });
+
+        it("Case 19 : Memilih data yang ada di table karyawan kemudian mengubah bagian nomor telepon dan nomor hp", () => {
+            cy.visit('https://cashflow.assist.id/admin/contacts')
+
+            // todo pergi ke bagian karyawan
+            cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
+
+            // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
+
+            // ? tombol ke halaman edit kontak
+            cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
+
+            // todo memastikan bahwa halaman sudah dikunjungi
+            cy.url().should('include', 'edit')
+
+            // ? nomor hp
+            cy.get('#no_hp').should('be.visible').clear().type('9898989898989')
+            // cy.get('#no_hp').should('have.value', '9898989898989')
+
+            // ? nomor telpon
+            cy.get('#no_telp').should('be.visible').clear().type('0101010101011')
+            // cy.get('#no_telp').should('have.value', '0101010101011')
+
+            // ? tombol simpan
+            cy.get('.MuiButton-contained').should('be.visible').contains('Simpan').click()
+        });
+
+        it("Case 20 : memilih data yang ada di table karyawan kemudian mengubah fax dan npwp", () => {
+            cy.visit('https://cashflow.assist.id/admin/contacts')
+
+            // todo pergi ke bagian karyawan
+            cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
+
+            // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
+
+            // ? tombol ke halaman edit kontak
+            cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
+
+            // todo memastikan bahwa halaman sudah dikunjungi
+            cy.url().should('include', 'edit')
+
+            // todo nomor fax
+            cy.get('#no_fax').should('be.visible').clear().type('1212121212')
+
+            // todo nomor npwp
+            cy.get('#no_npwp').should('be.visible').clear().type('1212121212')
+
+            // todo tombol simpan
+            cy.get('.MuiButton-contained').should('be.visible').contains('Simpan').click()
+        });
+
+        it("Case 21 : memililih data yang ada di table karyawan kemudian mengubah nitku", () => {
+            cy.visit('https://cashflow.assist.id/admin/contacts')
+
+            // todo pergi ke bagian karyawan
+            cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
+
+            // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
+            cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
+
+            // ? tombol ke halaman edit kontak
+            cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
+
+            // todo memastikan bahwa halaman sudah dikunjungi
+            cy.url().should('include', 'edit')
+
+            // ? nitku
+            cy.get('#nitku').should('be.visible').clear().type('01928369882377')
+
+            // ? tombol simpan
+            cy.get('.MuiButton-contained').should('be.visible').contains("Simpan").click()
         })
+    });
+
+    it("Case 22 : mencoba menggunakan fitur dark mode dihalaman edit kontak", () => {
+        cy.visit('https://cashflow.assist.id/admin/contacts')
+
+        // todo pergi ke bagian karyawan
+        cy.get('#simple-tab-2').should('be.visible').contains('Karyawan').click();
+
+        // todo pergi kehalaman detail kontak dengan menggunakan salah satu data di tabel karyawan
+        cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiButtonBase-root').should('be.visible').click()
+
+        // ? tombol ke halaman edit kontak
+        cy.get('.MuiStack-root > .MuiButtonBase-root').should('be.visible').contains('Ubah Profil Kontak').click();
+
+        // ? memastikan bahwa sudah berubah ke dark mode
+        cy.get('body').should('not.have.css', 'background-color', 'rgb(255, 255, 255)')
     });
 });
