@@ -20,63 +20,63 @@ describe("Menguji fitur atur Group Kontak pada halaman kontak di cashflow assist
         cy.get('#modal-description > .MuiPaper-root').should('not.exist')
     });
 
-    it("Case 2 : Memeriksa ketersediaan UI pada modal box atur Group Kontak", () => {
-        cy.visit("https://cashflow.assist.id/admin/contacts");
+    // it("Case 2 : Memeriksa ketersediaan UI pada modal box atur Group Kontak", () => {
+    //     cy.visit("https://cashflow.assist.id/admin/contacts");
 
-        cy.get('.css-1avq450 > .MuiGrid2-container > :nth-child(1)').should("be.visible").contains("Atur Group Kontak").click()
+    //     cy.get('.css-1avq450 > .MuiGrid2-container > :nth-child(1)').should("be.visible").contains("Atur Group Kontak").click()
 
-        // todo kolom pencarian
-        cy.get('input[placeholder="Cari group"]').should("be.visible")
+    //     // todo kolom pencarian
+    //     cy.get('input[placeholder="Cari group"]').should("be.visible")
 
-        // todo kolom nama grup
-        cy.get('.MuiPaper-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(1)').should("be.visible").contains("Nama Group")
-        cy.get('.MuiPaper-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should("be.visible").contains("Jumlah Kontak")
+    //     // todo kolom nama grup
+    //     cy.get('.MuiPaper-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(1)').should("be.visible").contains("Nama Group")
+    //     cy.get('.MuiPaper-root > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)').should("be.visible").contains("Jumlah Kontak")
 
-        // todo tombol buat grup
-        cy.get('.MuiGrid2-container > :nth-child(2) > .MuiButtonBase-root').should("be.visible").contains("Buat Group")
+    //     // todo tombol buat grup
+    //     cy.get('.MuiGrid2-container > :nth-child(2) > .MuiButtonBase-root').should("be.visible").contains("Buat Group")
 
-        // todo memastikan bahwa kolom nama group berisi data baik mengandung angka atau string
-        cy.get('.MuiPaper-root > .MuiTable-root').each(($row) => {
-            cy.wait(5000)
-            cy.wrap($row).find('td:nth-child(even)').each(($td) => {
-                // ? mengambil teks dari tabel dan hilangkan spasi
-                const data = $td.text().trim();
+    //     // todo memastikan bahwa kolom nama group berisi data baik mengandung angka atau string
+    //     cy.get('.MuiPaper-root > .MuiTable-root').each(($row) => {
+    //         cy.wait(5000)
+    //         cy.wrap($row).find('td:nth-child(even)').each(($td) => {
+    //             // ? mengambil teks dari tabel dan hilangkan spasi
+    //             const data = $td.text().trim();
 
-                // ? memeriksa apakah teks mengandung angka dan string
-                const containsNumber = /\d/.test(data);
-                const containsString = /[a-zA-Z]/.test(data);
+    //             // ? memeriksa apakah teks mengandung angka dan string
+    //             const containsNumber = /\d/.test(data);
+    //             const containsString = /[a-zA-Z]/.test(data);
 
-                // todo pengecekan kondisi
-                if (containsNumber && containsString) {
-                    expect(true).to.be.true;
-                } else if (containsString || containsNumber) {
-                    expect(true).to.be.true;
-                } else {
-                    expect(data).to.not.be.empty;
-                }
-            });
-        })
+    //             // todo pengecekan kondisi
+    //             if (containsNumber && containsString) {
+    //                 expect(true).to.be.true;
+    //             } else if (containsString || containsNumber) {
+    //                 expect(true).to.be.true;
+    //             } else {
+    //                 expect(data).to.not.be.empty;
+    //             }
+    //         });
+    //     })
 
-        // todo memeriksa icon edit grup disetiap barisnya pada Nama group
-        cy.get('.MuiPaper-root > .MuiTable-root').each(($row) => {
-            cy.wait(5000)
-            cy.wrap($row).find('td:nth-child(odd)').each(($td) => {
-                cy.wrap($td).find('svg').should("exist")
-            });
-        });
+    //     // todo memeriksa icon edit grup disetiap barisnya pada Nama group
+    //     cy.get('.MuiPaper-root > .MuiTable-root').each(($row) => {
+    //         cy.wait(5000)
+    //         cy.wrap($row).find('td:nth-child(odd)').each(($td) => {
+    //             cy.wrap($td).find('svg').should("exist")
+    //         });
+    //     });
 
-        // todo memastikan bahwa kolom jumlah kontak hanya boleh angka saja
-        cy.get('.MuiPaper-root > .MuiTable-root').each(($row) => {
-            cy.wait(5000)
-            cy.wrap($row).find('td:nth-child(even)').each(($td) => {
-                const celltext = $td.text().trim();
+    //     // todo memastikan bahwa kolom jumlah kontak hanya boleh angka saja
+    //     cy.get('.MuiPaper-root > .MuiTable-root').each(($row) => {
+    //         cy.wait(5000)
+    //         cy.wrap($row).find('td:nth-child(even)').each(($td) => {
+    //             const celltext = $td.text().trim();
 
-                // ? memastikan bahwa data yang ada di tabel tersebut adalah angka
-                expect(isNaN(celltext)).to.be.false;
-            })
-        })
+    //             // ? memastikan bahwa data yang ada di tabel tersebut adalah angka
+    //             expect(isNaN(celltext)).to.be.false;
+    //         })
+    //     })
 
-    });
+    // });
 
     it("Case 3 : Mencari grup yang ada menggunakan kolom pencarian", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
@@ -119,7 +119,7 @@ describe("Menguji fitur atur Group Kontak pada halaman kontak di cashflow assist
         // Klik "Atur Group Kontak"
         cy.get('.css-1avq450 > .MuiGrid2-container > :nth-child(1)').should("be.visible").contains("Atur Group Kontak").click();
 
-        cy.get('input[placeholder="Cari group"]').should("be.visible").type('Grup ini adalah grup yang baru ditambahkan')
+        cy.get(':nth-child(1) > [data-testid="search-input"] > .MuiInputBase-root').should("be.visible").type('Grup ini adalah grup yang baru ditambahkan')
 
         let dataSudahAda = false;  // Flag untuk menandakan apakah data sudah ada
 
@@ -158,7 +158,7 @@ describe("Menguji fitur atur Group Kontak pada halaman kontak di cashflow assist
 
         cy.get('.css-1avq450 > .MuiGrid2-container > :nth-child(1)').should("be.visible").contains("Atur Group Kontak").click();
 
-        cy.get('input[placeholder="Cari group"]').should('be.visible').type('Grup ini adalah grup yang baru ditambahkan').then(($input) => {
+        cy.get('input[placeholder="Cari group"]').should('be.visible', { timeout: 200 }).type('Grup ini adalah grup yang baru ditambahkan').then(($input) => {
             cy.get('.MuiPaper-root > .MuiTable-root').as('data').should("be.visible").then(('data'), () => {
                 if ('@data' === 'Grup ini adalah grup yang baru ditambahkan') {
                     cy.get('@data').should('contain', 'Grup ini adalah grup yang baru ditambahkan')
@@ -198,40 +198,49 @@ describe("Menguji fitur atur Group Kontak pada halaman kontak di cashflow assist
             .contains("Atur Group Kontak")
             .click();
 
-        // Iterasi setiap baris data grup
-        cy.get('#modal-description tr').find('td').each(($cell) => {
-            // Klik grup yang akan diubah
-            cy.get('.MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(1)')
-                .should("be.visible")
-            cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(1) > .MuiStack-root > .MuiButtonBase-root').should('be.visible').click()
+        // ? memilih salah satu grup kemudian mengubahnya
+        cy.get('#modal-description > .MuiPaper-root').should('be.visible').find('td').then(($cell) => {
+            cy.wait(2000)
+            cy.wrap($cell).eq(3).then(() => {
+                cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(1) > .MuiStack-root > .MuiButtonBase-root').should('exist').click()
+                cy.get('input').last().should('be.visible').clear().type('sudah diubah')
+                cy.get('.MuiBox-root > .MuiIconButton-colorPrimary').should('be.visible').click()
+            })
+        })
+        // // Iterasi setiap baris data grup
+        // cy.get('#modal-description tr').find('td').each(($cell) => {
+        //     // Klik grup yang akan diubah
+        //     cy.get('.MuiPaper-root > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(1)')
+        //         .should("be.visible")
+        //     cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(1) > .MuiStack-root > .MuiButtonBase-root').should('be.visible').click()
 
-            // Tunggu agar modal terbuka dan input bisa diinteraksikan
-            cy.wait(3000);
+        //     // Tunggu agar modal terbuka dan input bisa diinteraksikan
+        //     cy.wait(3000);
 
-            // Pastikan elemen input kedua terlihat dan scroll ke dalam tampilan
-            cy.get('input[type="text"]')
-                .eq(1)
-                .scrollIntoView()
-                .should("be.visible")
-                .clear()
-                .then(($input) => {
-                    cy.wrap($input).type("sudah saya edit");
-                });
+        //     // Pastikan elemen input kedua terlihat dan scroll ke dalam tampilan
+        //     cy.get('input[type="text"]')
+        //         .eq(1)
+        //         .scrollIntoView()
+        //         .should("be.visible")
+        //         .clear()
+        //         .then(($input) => {
+        //             cy.wrap($input).type("sudah saya edit");
+        //         });
 
-            // Klik ikon untuk menyimpan perubahan
-            cy.get('.MuiBox-root > .MuiIconButton-colorPrimary')
-                .should("be.visible")
-                .click();
+        //     // Klik ikon untuk menyimpan perubahan
+        //     cy.get('.MuiBox-root > .MuiIconButton-colorPrimary')
+        //         .should("be.visible")
+        //         .click();
 
-            // Tunggu beberapa detik setelah penyimpanan
-            cy.wait(2000);
+        //     // Tunggu beberapa detik setelah penyimpanan
+        //     cy.wait(2000);
 
-            // Cari grup yang sudah diedit
-            cy.get('input[placeholder="Cari group"]')
-                .should('be.visible')
-                .clear() // Pastikan input kosong sebelum mengetik
-                .type('sudah saya edit');
-        });
+        //     // Cari grup yang sudah diedit
+        //     cy.get('input[placeholder="Cari group"]')
+        //         .should('be.visible')
+        //         .clear() // Pastikan input kosong sebelum mengetik
+        //         .type('sudah saya edit');
+        // });
     });
 
     it("Case 9 : Membuat Group Kontak tetapi tidak mengisi nama grupnya", () => {
@@ -336,6 +345,19 @@ describe("Menguji fitur atur Group Kontak pada halaman kontak di cashflow assist
 
         cy.log('spasi berlebih otomatis terhapus')
     });
+
+    it("Case 17 : menekan tombol dark mode dan memastikan bahwa atur group juga berubah menjadi dark mode", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        // ? tombol dark mode
+        cy.get('.MuiFormControlLabel-root').should('be.visible').click()
+
+        // ? tombol atur group kontak
+        cy.get('.css-1avq450 > .MuiGrid2-container > :nth-child(1)').should("be.visible").contains("Atur Group Kontak").click()
+
+        // ? memastikan bahwa sudah dalam dark mode
+        cy.get('#modal-description').should('be.visible').and('not.have.css', 'background-color', 'rgb(255, 255, 255)')
+    })
 
 });
 

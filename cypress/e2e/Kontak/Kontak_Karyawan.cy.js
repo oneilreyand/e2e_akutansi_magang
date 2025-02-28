@@ -815,6 +815,18 @@ describe("Menguji Bagian Karyawan pada website Cashflow Assist id dihalaman Kont
         });
     });
 
+    it("Case 29 : Menguji tombol dark mode di halaman kontak", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        cy.get('#simple-tab-2').should("be.visible").contains("Karyawan").click();
+
+        // ? toggle dark mode
+        cy.get('.MuiSwitch-root').should('be.visible').click()
+
+        // ? memastikan bahwa halaman sudah berada di mode gelap
+        cy.get('body').should('not.have.css', 'background-color', 'rgb(255, 255, 255)')
+    });
+
     // it.only("Case 29 : Menekan tombol import kontak dan memastikan bahwa tombol memunculkan modal box khusus import kontak", () => {
     //     cy.visit("https://cashflow.assist.id/admin/contacts");
 

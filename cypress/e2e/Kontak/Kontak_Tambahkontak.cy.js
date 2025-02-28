@@ -990,7 +990,7 @@ describe('Menguji halaman Tambah kontak pada Cashflow assist ID', () => {
             cy.get('input[placeholder="Masukkan alamat penagihan"]').should('have.value', 'Jl. Nguyễn Văn Linh')
         });
 
-        it.only("Case 42 : Menambahkan nama jalan dengan angka", () => {
+        it("Case 42 : Menambahkan nama jalan dengan angka", () => {
             // todo pergi kehalaman tambah kontak
             cy.visit('https://cashflow.assist.id/admin/contacts/create')
 
@@ -1513,4 +1513,13 @@ describe('Menguji halaman Tambah kontak pada Cashflow assist ID', () => {
         // ! helper text bahwa form sudah terkirim
         cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist').contains('Kontak berhasil disimpan')
     });
+
+    it("Case 62 : Menguji dark mode ketika dihalaman tambah kontak", () => {
+        cy.visit('https://cashflow.assist.id/admin/contacts/create')
+
+        // ? tombol dark mode
+        cy.get('[data-testid="appbar-stack"] > .MuiFormControlLabel-root').should('be.visible').click()
+
+        cy.get('body').should('be.visible').and('not.have.css', 'background-color', 'rgb(255, 255, 255)')
+    })
 });

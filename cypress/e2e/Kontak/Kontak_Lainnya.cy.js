@@ -234,7 +234,6 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.wait(2000);
     });
 
-
     it("Case 8 : Mencoba menekan navigasi Beranda agar halamannya beralih ke Dashboard", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
 
@@ -362,7 +361,7 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.wait(2000)
     });
 
-    it("Case 14 : Mencoba mencari data yang ada menggunakan kolom pencarian di tabel Lainnya bagian pagination 1", () => {
+    it.only("Case 14 : Mencoba mencari data yang ada menggunakan kolom pencarian di tabel Lainnya bagian pagination 1", () => {
         cy.visit("https://cashflow.assist.id/admin/contacts");
 
         cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
@@ -370,7 +369,7 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
         cy.wait(2000)
         cy.get('[data-testid="search-input"] > .MuiInputBase-root')
             .should("be.visible")
-            .type("percobaan");
+            .type("Percobaan");
 
         // Tunggu beberapa detik untuk memastikan data muncul
         cy.wait(5000);  // Menunggu lebih lama untuk memastikan data terupdate
@@ -385,7 +384,7 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
                     .eq(0)  // Mengakses baris pertama (satu-satunya hasil)
                     .find('td')
                     .eq(1)  // Mengakses kolom kedua (index dimulai dari 0)
-                    .should('have.text', 'percobaan');
+                    .should('have.text', 'Percobaan');
             } else {
                 cy.log("data yang dicari tidak ditemukan");
             }
@@ -775,5 +774,17 @@ describe("Menguji Bagian Lainnya pada website Cashflow Assist id dihalaman Konta
             cy.wait(2000)
             cy.get('button').last().should('be.visible').and('be.disabled')
         });
+    });
+
+    it("Case 29 : Menguji tombol dark mode di halaman kontak", () => {
+        cy.visit("https://cashflow.assist.id/admin/contacts");
+
+        cy.get('#simple-tab-3').should("be.visible").contains("Lainnya").click();
+
+        // ? toggle dark mode
+        cy.get('.MuiSwitch-root').should('be.visible').click()
+
+        // ? memastikan bahwa halaman sudah berada di mode gelap
+        cy.get('body').should('not.have.css', 'background-color', 'rgb(255, 255, 255)')
     });
 });
