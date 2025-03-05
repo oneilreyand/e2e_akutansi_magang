@@ -56,7 +56,7 @@ describe("Tambah kontak form kosong", () => {
     });
   });
 
-  context.skip("Validasi judul", () => {
+  context("Validasi judul", () => {
     it("Penulisan judul 'Tambah Kontak' ", () => {
       cy.get(".MuiTypography-h5 > span")
         .should("be.visible")
@@ -64,7 +64,7 @@ describe("Tambah kontak form kosong", () => {
     });
   });
 
-  context.skip("Validasi tab navigasi sesuai dan berfungsi", () => {
+  context("Validasi tab navigasi sesuai dan berfungsi", () => {
     it("Validasi kesesuaian penulisan pada tab", () => {
       cy.get(".MuiBreadcrumbs-ol")
         .should("be.visible")

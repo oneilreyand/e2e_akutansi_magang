@@ -189,7 +189,7 @@ describe('Testing fitur pada login page', () => {
             })
     })
 
-    it.only('006 - Alamat email valid dan terdaftar dan password benar >> Pindah halaman - Muncul notifikasi "Login Succesed" - validasi perpindahan ke halaman beranda', () => {
+    it('006 - Alamat email valid dan terdaftar dan password benar >> Pindah halaman - Muncul notifikasi "Login Succesed" - validasi perpindahan ke halaman beranda', () => {
       
         cy.get('#email')
             .should('exist')

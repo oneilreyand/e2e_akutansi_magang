@@ -78,7 +78,7 @@ describe("Check Komponen Tab Pelanggan", () => {
   });
 
   it("Case 3 : Validasi button buat kontak", () => {
-    cy.get('a[href="/admin/contacts/create"]')
+    cy.get('.css-aidtzz > .MuiButtonBase-root')
       .should("contain", "Buat Kontak")
       .and("be.visible")
       .click();
@@ -159,10 +159,10 @@ describe("Check Komponen Tab Pelanggan", () => {
     it("Case 2 : Memeriksa pagination ketika mencari data yang ditemukan hanya 1 maka pagination menyesuaikan dengan jumlah kontak yaitu 1", () => {
       cy.intercept(
         "GET",
-        "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&keyword=jangan+duplikat&skip=0*"
-      ).as("searchKontak");
+        "https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&keyword=jangan+duplikat&skip=0&limit=10&*"
+      ).as("Cari");
       cy.get('input[placeholder="Cari kontak"]').type("jangan duplikat");
-      cy.wait("@searchKontak").then((interception) => {
+      cy.wait("@Cari").then((interception) => {
         const requestUrl = new URL(interception.request.url);
         cy.log(`Intercepted URL: ${requestUrl}`);
 
@@ -205,6 +205,7 @@ describe("Check Komponen Tab Pelanggan", () => {
     });
 
     it("Case 3 : Mencari salah satu nama kontak dengan lowercase menampilkan nama dengan format yang benar", () => {
+      cy.intercept('GET', 'https://api-cashflow.assist.id/api/kontak/list?jenisKontak=pelanggan&keyword=+limbong&skip=0&limit=10*')
       cy.get('[data-testid="search-input"]').type("asriyanto candra limbong");
       cy.get(".MuiTableBody-root > :nth-child(1) > :nth-child(2)")
         .invoke("text") // Mengambil teks elemen
@@ -267,7 +268,7 @@ describe("Check Komponen Tab Pelanggan", () => {
       cy.get("table thead").within(() => {
         cy.contains("ID").should("be.visible");
         cy.contains("Nama Lengkap").should("be.visible");
-        cy.contains("Grup Kontak").should("be.visible");
+        cy.contains("Group Kontak").should("be.visible");
         cy.contains("Email & No Handphone").should("be.visible");
         cy.contains("Alamat").should("be.visible");
         cy.contains("Total Piutang").should("be.visible");
@@ -451,7 +452,7 @@ describe("Check Komponen Tab Pelanggan", () => {
                 }
 
                 const totalPiutangFromAPI = formatWithThousandSeparator(
-                  rowData.piutang_max?.toString() || "0"
+                  rowData.total_piutang?.toString() || "0"
                 );
                 const totalPiutangFromTable = $cells
                   .eq(5)
@@ -1021,7 +1022,7 @@ describe("Check Komponen Tab Pelanggan", () => {
                   }
 
                   const totalPiutangFromAPI = formatWithThousandSeparator(
-                    rowData.piutang_max?.toString() || "0"
+                    rowData.total_pi?.toString() || "0"
                   );
                   const totalPiutangFromTable = $cells
                     .eq(5)
@@ -1155,7 +1156,7 @@ describe("Check Komponen Tab Pelanggan", () => {
                   }
 
                   const totalPiutangFromAPI = formatWithThousandSeparator(
-                    rowData.piutang_max?.toString() || "0"
+                    rowData.total_piutang?.toString() || "0"
                   );
                   const totalPiutangFromTable = $cells
                     .eq(5)
@@ -1187,7 +1188,7 @@ describe("Check Komponen Tab Pelanggan", () => {
 
       cy.get(
         ".MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root"
-      ).should("have.text", "Request failed with status code 400");
+      ).should("have.text", "Terjadi Kesalahan");
 
       cy.get(".MuiAlert-message").should("have.text", ErrorMsg);
 

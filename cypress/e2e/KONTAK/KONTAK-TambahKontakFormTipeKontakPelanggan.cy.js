@@ -164,7 +164,7 @@ describe("Tambah kontak form pelanggan", () => {
         cy.url().should("eq", "https://cashflow.assist.id/admin/contacts");
       });
 
-      it.only("Menginput seluruh form pelanggan kecuali grup kontak dengan ekspektasi tidak berhasil ", () => {
+      it("Menginput seluruh form pelanggan kecuali grup kontak dengan ekspektasi tidak berhasil ", () => {
         cy.get("#tipe_kontak").click();
         cy.contains("li", "Pelanggan").click();
         cy.get("#sapaan").click();

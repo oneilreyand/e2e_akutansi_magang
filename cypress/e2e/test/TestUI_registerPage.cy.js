@@ -157,7 +157,7 @@ describe('Testing UI dasar Halaman Daftar Akun Baru', () => {
             })
         })
         
-    it.only('013 - Memverifikasi keberadaan, visibilitas, serta kesesuaian penulisan dan atribut href Button Masuk sekarang ', () => {
+    it('013 - Memverifikasi keberadaan, visibilitas, serta kesesuaian penulisan dan atribut href Button Masuk sekarang ', () => {
         cy.get('[data-testid="register-login-button"]')
             .should('exist')
             .and('be.visible')

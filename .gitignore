@@ -14,3 +14,5 @@ Thumbs.db
 
 # Ignore coverage files
 coverage/
+
+cypress/screenshots/

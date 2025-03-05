@@ -50,7 +50,7 @@ describe('Testing UI dasar Halaman Daftar Akun Baru', () => {
             })
     })
 
-    it.only('005 - Memverifikasi keberadaan, visibilitas, serta kesesuaian teks atribut type dan placeholder input Alamat Email', () => {
+    it('005 - Memverifikasi keberadaan, visibilitas, serta kesesuaian teks atribut type dan placeholder input Alamat Email', () => {
         cy.get('#email')
             .should('exist')
             .and('be.visible')

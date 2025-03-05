@@ -10,7 +10,7 @@ describe("Edit Kontak", () => {
     cy.get(".MuiStack-root > .MuiButtonBase-root").click();
   });
 
-  it.only("Pengujian penulisan label", () => {
+  it("Pengujian penulisan label", () => {
     cy.get(".MuiTypography-h5 > span").should("have.text", "Ubah Kontak");
     cy.get(".MuiBreadcrumbs-ol").should(
       "have.text",

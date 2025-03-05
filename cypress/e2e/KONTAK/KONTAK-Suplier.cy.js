@@ -81,7 +81,7 @@ describe("Check Komponen Suplier", () => {
   });
 
   it("Validasi button buat kontak", () => {
-    cy.get('a[href="/admin/contacts/create"]')
+    cy.get('.css-aidtzz > .MuiButtonBase-root')
       .should("contain", "Buat Kontak")
       .and("be.visible")
       .click();
@@ -89,7 +89,7 @@ describe("Check Komponen Suplier", () => {
     cy.get("h5").should("have.text", "Tambah Kontak");
   });
 
-  it.only('Bila menambah kontak pada halaman suplier maka tipe kontak akan default suplier saat membuat kontak baru', () => {
+  it('Bila menambah kontak pada halaman suplier maka tipe kontak akan default suplier saat membuat kontak baru', () => {
     cy.get('.css-aidtzz > .MuiButtonBase-root').click()
   });
 
@@ -471,7 +471,7 @@ describe("Check Komponen Suplier", () => {
                 }
 
                 const totalPiutangFromAPI = formatWithThousandSeparator(
-                  rowData.piutang_max?.toString() || "0"
+                  rowData.total_piutang?.toString() || "0"
                 );
                 const totalPiutangFromTable = $cells
                   .eq(5)
