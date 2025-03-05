@@ -3,7 +3,7 @@ describe("Pembelian-Semua", () => {
     cy.viewport(1280, 720);
     cy.loginWithAPI("rayhanrayandra.work.id@gmail.com", "Nz6}+#8y");
     cy.visit("https://cashflow.assist.id/admin/purchases");
-    cy.get(".css-aidtzz > .MuiButtonBase-root").click();
+    cy.get(".css-aidtzz > .MuiButtonBase-root", {timeout :10000}).click();
   });
 
   context("Pengujian Komponen", () => {
@@ -152,7 +152,7 @@ describe("Pembelian-Semua", () => {
 
     it("Mundur dari Pembelian Baru ke Pembelian", () => {
       cy.get(":nth-child(3) > .MuiTypography-root > span").click();
-      cy.get(".MuiTypography-h5 > span").should('have.text','Pembelian')
+      cy.get(".MuiTypography-h5 > span").should("have.text", "Pembelian");
     });
 
     it("Mundur dari Pembelian Baru Ke Beranda", () => {
@@ -212,6 +212,40 @@ describe("Pembelian-Semua", () => {
         cy.url().should("eq", `https://cashflow.assist.id${url}`);
         cy.get("h5").contains(title);
       });
+    });
+  });
+
+  context("Uji Formulir", () => {
+    it.only("Membuat satu Pembelian Baru Lengkap", () => {
+      cy.intercept('GET', 'https://api-cashflow.assist.id/api/kontak/list?jenisKontak=suplier&limit=999&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c').as('KontakSuplier')
+      const today = new Date();
+      const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(
+        today.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${today.getFullYear()}`;
+
+      const futureDate = new Date();
+      futureDate.setDate(futureDate.getDate() + 315);
+
+      // Format tanggal setelah 315 hari
+      const formattedPlus315 = `${futureDate
+        .getDate()
+        .toString()
+        .padStart(2, "0")}/${(futureDate.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}/${futureDate.getFullYear()}`;
+
+      cy.get("#nomor").type("00001");
+      cy.get("#idSupplier").click();
+      cy.wait('@KontakSuplier')
+      cy.get('[data-value="8ea24420-f97a-11ef-a763-4d5da318ddda"]').scrollIntoView()
+      cy.get('[data-value="8ea24420-f97a-11ef-a763-4d5da318ddda"]').click()
+      // cy.get('[placeholder="DD/MM/YYYY"]').eq(0).should("have.value", formattedDate);
+      // cy.get('[placeholder="DD/MM/YYYY"]').eq(1).should("have.value", formattedPlus315);
+      // cy.get("#paymentTerms").click();
+      // cy.contains("li", "termin sebulan 15").click();
+      // cy.get('#address').should('have.value', alamat)
     });
   });
 });

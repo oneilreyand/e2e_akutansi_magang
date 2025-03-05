@@ -4,6 +4,7 @@ describe("Pembelian-Semua", () => {
     cy.loginWithAPI("rayhanrayandra.work.id@gmail.com", "Nz6}+#8y");
     cy.visit("https://cashflow.assist.id/admin/purchases");
     cy.get('.MuiTabs-flexContainer > :nth-child(2)').click()
+    cy.get('.MuiTypography-h6').should('have.text','Penagihan Pembelian Belum Dibayar')
   });
 
   context("Pengujian Komponen", () => {
@@ -114,6 +115,58 @@ describe("Pembelian-Semua", () => {
         cy.get(`[data-testid="${testId}"]`).click();
         cy.url().should("eq", `https://cashflow.assist.id${url}`);
         cy.get("h5").contains(title);
+      });
+    });
+  });
+
+  context("Card Content", () => {
+    const cardItems = [
+      { key: "belumDibayar", title: "Belum Dibayar", index: 1 },
+      { key: "telatBayar", title: "Telat Dibayar", index: 2 },
+      {
+        key: "pelunasanDiterima",
+        title: "Pembayaran (30 Hari Terakhir)",
+        index: 3,
+      },
+    ];
+
+    it("Validasi semua card dengan data dari API", () => {
+      cy.reload()
+      cy.intercept(
+        "GET",
+        "https://api-cashflow.assist.id/api/pembelian/overview?companyId=b13e5210-8564-11ef-af27-a72e65a1d49c"
+      ).as("getCardData");
+
+      cy.wait("@getCardData").then((interception) => {
+        const data = interception.response.body;
+
+        const formatRupiah = (angka) =>
+          new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+          }).format(angka);
+
+        cardItems.forEach(({ key, title, index }) => {
+          // Validasi Title & Subtitle
+          cy.get(
+            `:nth-child(${index}) > .MuiPaper-root > .MuiCardContent-root > .css-kdbf65 > .MuiStack-root > .MuiBadge-root > .MuiTypography-root`
+          ).should("have.text", title);
+
+          cy.get(
+            `:nth-child(${index}) > .MuiPaper-root > .MuiCardContent-root > .css-kdbf65 > .MuiStack-root > .MuiTypography-body2`
+          ).should("have.text", "Total Pembelian");
+
+          // Validasi Total (jumlah transaksi)
+          cy.get(
+            `:nth-child(${index}) > .MuiPaper-root > .MuiCardContent-root > .css-kdbf65 > .MuiStack-root > .MuiBadge-root > .MuiBadge-badge`
+          ).should("have.text", data[key].total.toString());
+
+          // Validasi Nominal (format Rupiah)
+          cy.get(
+            `:nth-child(${index}) > .MuiPaper-root > .MuiCardContent-root > .css-kdbf65 > .MuiStack-root > .MuiTypography-h5`
+          ).should("have.text", formatRupiah(data[key].nominal));
+        });
       });
     });
   });

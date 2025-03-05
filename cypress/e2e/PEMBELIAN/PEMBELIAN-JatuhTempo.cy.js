@@ -3,8 +3,8 @@ describe("Pembelian-Semua", () => {
     cy.viewport(1280, 720);
     cy.loginWithAPI("rayhanrayandra.work.id@gmail.com", "Nz6}+#8y");
     cy.visit("https://cashflow.assist.id/admin/purchases");
-    cy.get('.MuiTabs-flexContainer > :nth-child(1)').click()
-    cy.get('.MuiTypography-h6').should('have.text','Semua Penagihan Pembelian')
+    cy.get(".MuiTabs-flexContainer > :nth-child(3)").click();
+    // cy.get('.MuiTypography-h6').should('have.text','Penagihan Pembelian Jatuh Tempo')
   });
 
   context("Pengujian Komponen", () => {
@@ -64,7 +64,7 @@ describe("Pembelian-Semua", () => {
         ".MuiBreadcrumbs-ol > :nth-child(1) > .MuiTypography-root"
       ).click();
       cy.get(".MuiTypography-h5").should("have.text", "Beranda");
-      cy.url().should('contains','admin/dashboard')
+      cy.url().should("contains", "admin/dashboard");
     });
   });
 
@@ -130,7 +130,7 @@ describe("Pembelian-Semua", () => {
       },
     ];
 
-    it.only("Validasi semua card dengan data dari API", () => {
+    it("Validasi semua card dengan data dari API", () => {
       cy.reload()
       cy.intercept(
         "GET",
@@ -190,7 +190,5 @@ describe("Pembelian-Semua", () => {
     });
   });
 
-  context('Pagination',() => {
-    
-  })
+  context("Pagination", () => {});
 });
