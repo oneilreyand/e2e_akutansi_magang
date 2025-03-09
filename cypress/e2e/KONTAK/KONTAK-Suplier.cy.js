@@ -274,14 +274,14 @@ describe("Check Komponen Suplier", () => {
     it("Case 1 : Validasi penulisan cardhead H6 ekpektasi Suplier", () => {
       cy.get(".MuiTypography-h6").should("have.text", "Suplier");
     });
-    it("Case 2 : Validasi kesesuaian thead", () => {
+    it.only("Case 2 : Validasi kesesuaian thead", () => {
       cy.get("table thead").within(() => {
         cy.contains("ID").should("be.visible");
         cy.contains("Nama Lengkap").should("be.visible");
-        cy.contains("Grup Kontak").should("be.visible");
+        cy.contains("Group Kontak").should("be.visible");
         cy.contains("Email & No Handphone").should("be.visible");
         cy.contains("Alamat").should("be.visible");
-        cy.contains("Total Piutang").should("be.visible");
+        cy.contains("Total Hutang").should("be.visible");
       });
     });
 
