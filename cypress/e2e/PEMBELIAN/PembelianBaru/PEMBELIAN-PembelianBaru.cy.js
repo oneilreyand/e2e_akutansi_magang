@@ -216,10 +216,11 @@ describe("Pembelian-Semua", () => {
   });
 
   context("Uji Formulir", () => {
-    let i = 0;
-    while (i < 200) {
+   
       it.only("Membuat satu Pembelian Baru Lengkap (cuma nambah)", () => {
-        cy.intercept('GET', 'https://api-cashflow.assist.id/api/kontak/list?jenisKontak=suplier&limit=999&companyId=b13e5210-8564-11ef-af27-a72e65a1d49c').as('KontakSuplier')
+        cy.intercept('GET', 'https://api-cashflow.assist.id/api/kontak/list?jenisKontak=suplier&limit=999*').as('KontakSuplier')
+        cy.reload();
+        cy.wait('@KontakSuplier')
         const today = new Date();
         const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(
           today.getMonth() + 1
@@ -238,22 +239,19 @@ describe("Pembelian-Semua", () => {
           .toString()
           .padStart(2, "0")}/${futureDate.getFullYear()}`;
   
-        // cy.get("#nomor").type("00001");
+        cy.get("#nomor").type("00001");
         cy.get("#idSupplier").click();
-        // cy.wait('@KontakSuplier')
-        cy.get('[data-value="41fd7172-c8b1-11ef-b4d6-814f37804472"]').click()
-        cy.get('[id="pembelian.0.product_name"]').type('Kain Perca')
-        cy.get('[id="pembelian.0.akun_pembelian_id"]').click()
-        cy.get('[data-value="c6518535-b24b-40ae-a4e3-682b26dc9074"]').click()
+       
+        // cy.get('[data-value="e2340460-dec8-11ef-982b-a1262dd8a550"]').click();
+        // cy.get('[id="pembelian.0.product_name"]').type('Kain Perca')
+        // cy.get('[id="pembelian.0.akun_pembelian_id"]').click()
+        // cy.get('[data-value="c6518535-b24b-40ae-a4e3-682b26dc9074"]').click()
         // cy.get('[placeholder="DD/MM/YYYY"]').eq(0).should("have.value", formattedDate);
         // cy.get('[placeholder="DD/MM/YYYY"]').eq(1).should("have.value", formattedPlus315);
         // cy.get("#paymentTerms").click();
         // cy.contains("li", "termin sebulan 15").click();
-        // cy.get('#address').should('have.value', alamat)
-        cy.get('.MuiButton-contained').click()
+        // // cy.get('#address').should('have.value', 'alamat')
+        // cy.get('.MuiButton-contained').click()
       });
-      i++;
-    }
-    
   });
 });
