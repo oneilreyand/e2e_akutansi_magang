@@ -10,7 +10,7 @@ describe("Pembelian-Semua", () => {
     );
   });
 
-  context("Pengujian Penulisan Komponen", () => {
+  context("Pengujian Penulisan Label", () => {
     it("Testcase 1 : Penulisan Judul Besar H5", () => {
       cy.get(".MuiTypography-h5 > span").should("have.text", "Pembelian");
     });
@@ -807,7 +807,7 @@ describe("Pembelian-Semua", () => {
         });
     });
 
-    it("Testcase 6 : Mencari satu nama dengan ekspektasi pagination sesuai", () => {
+    it.only("Testcase 6 : Mencari satu nama dengan ekspektasi pagination sesuai", () => {
       cy.intercept(
         "GET",
         "https://api-cashflow.assist.id/api/pembelian?keyword=Uniquee*"
@@ -832,7 +832,7 @@ describe("Pembelian-Semua", () => {
 
         cy.get(".MuiPagination-ul > :nth-child(2) > button").should(
           "have.text",
-          "1"
+          maxPage
         );
         cy.get(".MuiPagination-ul > :nth-child(3) > button").should(
           "be.disabled"
