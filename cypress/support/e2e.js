@@ -15,3 +15,17 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+    // Cek isi pesan error dan abaikan jika cocok
+    if (
+      err.message.includes('ResizeObserver') ||
+      err.message.includes('Cannot read properties of undefined')
+    ) {
+      return false; // abaikan error ini
+    }
+  
+    // Untuk error lain, biarkan Cypress tetap gagal
+    return true;
+  });

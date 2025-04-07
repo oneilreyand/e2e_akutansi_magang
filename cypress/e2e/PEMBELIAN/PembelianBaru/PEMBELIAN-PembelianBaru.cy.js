@@ -241,7 +241,13 @@ describe("Pembelian-Semua", () => {
   
         cy.get("#nomor").type("00001");
         cy.get("#idSupplier").click();
-        cy.get('#menu-idSupplier > .MuiPaper-root').scrollTo('bottom').should('be.visible').click()
+        cy.get('#menu-idSupplier > .MuiPaper-root').scrollTo('bottom').should('be.visible')
+        cy.get('[data-value="8ea24420-f97a-11ef-a763-4d5da318ddda"]')
+            .should('be.visible')
+            .click({force: true})
+        cy.get('[data-value="8ea24420-f97a-11ef-a763-4d5da318ddda"]')
+            .should('be.visible')
+            .click({force: true})
         // cy.get('[data-value="8ea24420-f97a-11ef-a763-4d5da318ddda"]').click();
         // cy.get('[id="pembelian.0.product_name"]').type('Kain Perca')
         // cy.get('[id="pembelian.0.akun_pembelian_id"]').click()
