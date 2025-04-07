@@ -52,7 +52,7 @@ describe("Detail Pembelian", () => {
     });
   });
 
-  context.only("Pengujian data dengan Tampilan", () => {
+  context("Pengujian data dengan Tampilan", () => {
     it("Pencocokan data yang diambil dengan tampilan yang ada", () => {
       cy.intercept(
         "GET",
@@ -91,8 +91,10 @@ describe("Detail Pembelian", () => {
           month: "2-digit",
           year: "numeric",
         });
-        const Catatan = data.deskripsi;
-        const Lampiran = data.attachments.file_url;
+        const Catatan = data.deskripsi.trim() === '' ? '-' : data.deskripsi;
+        const Lampiran = data.attachments?.[0]?.file_url
+          ? data.attachments[0].file_url.replace(/^\d+_/, "")
+          : "-";
 
         // Pengecekan header tabel
         cy.get("table thead tr").within(() => {
@@ -196,11 +198,24 @@ describe("Detail Pembelian", () => {
           ":nth-child(5) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-body2"
         ).should("have.text", TanggalJatuhTempo);
 
-        cy.get('.css-gaz4pg > .MuiList-root > .MuiGrid2-container > :nth-child(1) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-h6').should('have.text', 'Catatan')
-        cy.get('.css-gaz4pg > .MuiList-root > .MuiGrid2-container > :nth-child(1) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-body2').should('have.text', Catatan)
+        cy.get(
+          ".css-gaz4pg > .MuiList-root > .MuiGrid2-container > :nth-child(1) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-h6"
+        ).should("have.text", "Catatan");
+        cy.get(
+          ".css-gaz4pg > .MuiList-root > .MuiGrid2-container > :nth-child(1) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-body2"
+        ).should("have.text", Catatan);
 
-        cy.get('.css-gaz4pg > .MuiList-root > .MuiGrid2-container > :nth-child(2) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-h6').should('have.text', 'Lampiran')
-        cy.get('.MuiTypography-body2 > .MuiButtonBase-root').should('have.text', Lamp)
+        cy.get(
+          ".css-gaz4pg > .MuiList-root > .MuiGrid2-container > :nth-child(2) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-h6"
+        ).should("have.text", "Lampiran");
+        if (data.attachments?.[0]?.file_url) {
+          cy.get(".MuiTypography-body2 > .MuiButtonBase-root")
+            .should("have.text", Lampiran);
+        } else {
+          cy.get(".MuiTypography-body2 > .MuiButtonBase-root")
+            .should("not.exist");
+            cy.get('.css-gaz4pg > .MuiList-root > .MuiGrid2-container > :nth-child(2) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-body2').should('have.text', Lampiran)
+        }
       });
     });
   });

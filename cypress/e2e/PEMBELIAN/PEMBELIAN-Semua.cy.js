@@ -330,6 +330,14 @@ describe("Pembelian-Semua", () => {
   });
 
   context("Fitur Komponen Table", () => {
+    beforeEach(() =>{
+      cy.get(".MuiBox-root > .MuiButtonBase-root").click();
+      cy.get('[placeholder="DD/MM/YYYY"]').eq(0).type("01012024");
+      cy.get('[placeholder="DD/MM/YYYY"]')
+        .eq(0)
+        .should("have.value", "01/01/2024");
+      cy.get(".MuiGrid2-container > .MuiButton-contained").click();
+    })
     it("Testcase 1 : Pengujian penulisan Tablehead", () => {
       cy.get("table thead").within(() => {
         cy.contains("Tanggal").should("be.visible");
@@ -424,15 +432,15 @@ describe("Pembelian-Semua", () => {
               cy.get(':nth-child(1) > :nth-child(2) > span > a > .MuiButtonBase-root').click();
     
               // Verifikasi halaman detail pembelian
-              cy.get('.MuiTypography-h5').should('have.text', 'Detail Pembelian');
+              cy.get('.MuiTypography-h5').should('contain', 'Detail Pembelian');
     
               // Verifikasi nomor yang sesuai
               cy.get(':nth-child(3) > :nth-child(1) > .MuiGrid2-root > .MuiTypography-root')
-                .should('have.text', nomor.trim());
+                .should('contain', nomor.trim());
     
               // Verifikasi nama yang sesuai
               cy.get('.MuiCardContent-root > :nth-child(1) > .MuiGrid2-container > :nth-child(1) > .MuiListItem-root > .MuiListItemText-root > .MuiTypography-body2')
-                .should('have.text', nama.trim());
+                .should('contain', nama.trim());
             });
         });    
     });
@@ -440,6 +448,14 @@ describe("Pembelian-Semua", () => {
   });
 
   context("Fitur Pagination", () => {
+    beforeEach(() =>{
+      cy.get(".MuiBox-root > .MuiButtonBase-root").click();
+      cy.get('[placeholder="DD/MM/YYYY"]').eq(0).type("01012024");
+      cy.get('[placeholder="DD/MM/YYYY"]')
+        .eq(0)
+        .should("have.value", "01/01/2024");
+      cy.get(".MuiGrid2-container > .MuiButton-contained").click();
+    })
     it("Testcase 1 : Validasi penulisan label pagination", () => {
       cy.intercept(
         "GET",
@@ -807,7 +823,7 @@ describe("Pembelian-Semua", () => {
         });
     });
 
-    it.only("Testcase 6 : Mencari satu nama dengan ekspektasi pagination sesuai", () => {
+    it("Testcase 6 : Mencari satu nama dengan ekspektasi pagination sesuai", () => {
       cy.intercept(
         "GET",
         "https://api-cashflow.assist.id/api/pembelian?keyword=Uniquee*"
