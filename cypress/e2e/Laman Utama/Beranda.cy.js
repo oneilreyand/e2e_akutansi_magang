@@ -1,8 +1,5 @@
 describe('Pengujian Laman Beranda Assist.id', () => {
-  const baseUrl = 'https://uat-cashbook.assist.id/';
-  const validEmail = 'raska23si@mahasiswa.pcr.ac.id';
-  const validPassword = '12345678';
-
+  
   beforeEach(() => {
     // Login fresh setiap test untuk menghindari state dependency
   cy.request({
