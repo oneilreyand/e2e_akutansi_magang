@@ -61,29 +61,50 @@ describe("Menu Penjualan", () => {
     cy.wait("@getPenjualan");
   });
 
-  it.only("Tab semua di tabel penjualan menampilkan data valid", () => {
+  // it("Tab Penjualan menampilkan data dari API /penjualan", () => {
+  //   cy.intercept("GET", "**/api/penjualan*").as("getPenjualan");
+  //   cy.contains("Penjualan").click();
+  //   cy.wait("@getPenjualan").its("response.statusCode").should("eq", 200);
+  // });
+
+  it.only("Tab Semua di tabel penjualan menampilkan data API nya sendiri.", () => {
     cy.visit(penjualan);
     cy.intercept("GET", "**api/penjualan?**").as("getSemuaPenjualan");
     cy.contains("button", "Semua").click();
-    cy.wait("@getSemuaPenjualan");
+    cy.wait("@getSemuaPenjualan").its("response.statusCode").should("eq", 200);
   });
 
-  it.only("Tab belum bayar di tabel penjualan menampilkan data valid", () => {
+  it.only("Tab Belum Dibayar di tabel penjualan menampilkan data API nya sendiri.", () => {
     cy.visit(penjualan);
     cy.intercept("GET", "**/api/penjualan?*status=Belum+Dibayar*").as(
       "getBelumBayarPenjualan"
     );
     cy.contains("button", "Belum Dibayar").click();
-    cy.wait("@getBelumBayarPenjualan");
+    cy.wait("@getBelumBayarPenjualan")
+      .its("respone.statusCode")
+      .should("eq", 200);
   });
 
-  it.only("Tab jatuh tempo di tabel penjualan menampilkan data valid", () => {
+  it.only("Tab Jatuh Tempo di tabel penjualan menampilkan data API nya sendiri.", () => {
     cy.visit(penjualan);
     cy.intercept("GET", "**/api/penjualan?*status=Jatuh+Tempo*").as(
       "getJatuhTempoPenjualan"
     );
     cy.contains("button", "Jatuh Tempo").click();
-    cy.wait("@getJatuhTempoPenjualan");
+    cy.wait("@getJatuhTempoPenjualan")
+      .its("response.statusCode")
+      .should("eq", 200);
+  });
+
+  it.only("Tab Jatuh Tempo di tabel penjualan menampilkan data API nya sendiri.", () => {
+    cy.visit(penjualan);
+    cy.intercept("GET", "**/api/penjualan?*status=Jatuh+Tempo*").as(
+      "getJatuhTempoPenjualan"
+    );
+    cy.contains("button", "Jatuh Tempo").click();
+    cy.wait("@getJatuhTempoPenjualan")
+      .its("response.statusCode")
+      .should("eq", 200);
   });
 
   it("Manipulasi Tabel Penjualan Produk", () => {
